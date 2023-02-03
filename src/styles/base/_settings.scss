@@ -1,0 +1,31 @@
+// font sizes 
+$font-size-xlarge: 4rem;
+$font-size-large: 3rem;
+$font-size-medium: 2rem;
+$font-size-small: 1rem;
+
+// colors
+$light-grey: #D3D3D3;
+$dark-grey: #444244;
+$off-white: #f7f7f7;
+$dem-orange: #F25520;
+
+// spaces
+$footer-section-one-height: 20vh;
+$footer-section-two-height: 5vh;
+$footer-height: calc($footer-section-one-height + $footer-section-two-height);
+$header-height: 5vh;
+$footer-and-header-height: calc($footer-height + $header-height);
+$padding-smallest: 2rem;
+$padding-small: 4rem;
+$padding-medium: 6rem;
+$padding-large: 8rem;
+$padding-xlarge: 12rem;
+$padding-page-container-sides: 10vw;
+$padding-page-container-topbot: 10vh;
+$margin-smallest-sides: 2vw;
+$margin-xxlarge-sides: 20vw;
+
+
+//image sizes
+$header-logo-image-width: 14vw;

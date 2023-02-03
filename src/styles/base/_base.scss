@@ -1,0 +1,16 @@
+html {
+    font-size: 62.5%;
+    scroll-behavior: smooth;
+    height: 100vh;
+}
+
+body {
+    height: 100vh;
+    margin: 0;
+}
+
+.top-anchor{
+    position: absolute;
+    top: - calc($header-height + $padding-page-container-topbot);
+    visibility: hidden;
+}
