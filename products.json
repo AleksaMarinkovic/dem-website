@@ -1,0 +1,33 @@
+[
+  {
+    "productName": "HeartScreen 112 C-1",
+    "productDescription": "Strujno-baterijski 12-kanalni EKG aparat, napredne tehnologije, za prikaz i štampu svih 12 odvoda sa opcijom ekomomične štampe. Touch-screen ekran pruža mogućnost jednostavnog upravljanja funkcijama i prikazima. Uređaj je jednostavan za upotrebu. Poseduje mogućnost analize EKG sa predlogom dijagnoze i analizom srčanog ritma a na raspolaganju je 100 dijagnostičkih kategorija. Može se povezati sa CardioPC programom za test opterećenja i informacionim sistemom ustanove.",
+    "productCategory": "EKG",
+    "productImageUrl": ""
+  },
+  {
+    "productName": "HeartScreen 80G-L1",
+    "productDescription": "HeartScreen 80G-L1 savremeni, simultani, 12-kanalni EKG aparat strujno-baterijski, čiji je rad  jednostavan.Touch-screen ekran kao i simboli na tasterima pomažu pri upotrebi. U osnovnoj konfiguraciji uređaj može biti spojen na računar što omogućava dodatno skladištenje, obradu i analizu podataka kao i bluetooth komunikaciju. Sadrži intergrisan štampač sa 80 mm termoosetljivim papirom na kome se štampa po tri odvoda istovremeno.",
+    "productCategory": "EKG",
+    "productImageUrl": ""
+  },
+  {
+    "productName": "AED3",
+    "productDescription": "AED 3 je automatski eksterni defibrilator sa ekranom visoke rezolucije osetljivim na dodir. Namenjen je za upotrebu kod odraslih i dece koji su žrtve iznenadnog srčanog zastoja. Pruža audio i vizuelne poruke koje vode spasioca kroz defibrilaciju i kardiopulmonalnu  reanimaciju (Real CPR-pomoć u vidu korekcije brzine i dubine kompresija). Pouzdanost aparata leži i u funkciji samotestiranja zasnovanom na intervalu od nekoliko dana prema sopstvenom izboru i prikazuje potvrdu o ispravnosti na indikatoru. Zoll AED 3 poseduje univerzalne elektrode kao i taster za izbor pacijenta (odrasli / deca). Na ekranu može biti prikazana kriva ritma, dubine i brzine kompresija, dužina trajanja reanimacije i broj isporučenih šokova",
+    "productCategory": "Defibrillator",
+    "productImageUrl": ""
+  },
+
+  {
+    "productName": "Zaštitni ormar za AED defibrilator",
+    "productDescription": "Od osnovne AED zaštitnih ormara do sveobuhvatnih terminala za spoljnu instalaciju sa višestrukim funkcionalnostima kao što su regulisano grejanje i ventilacija, praćenje statusa AED-a, pozivanje pomoći pa i foto nadzor. AIVIA uvek može da ponudi bar jedno rešenje za sve vaše potrebe.",
+    "productCategory": "Defibrillator",
+    "productImageUrl": ""
+  },
+  {
+    "productName": "Defibrilator R Series",
+    "productDescription": "Klinički bifazni defibrilator za svakodnevnu upotrebu. Konstruisan da uvek bude spreman za upotrebu. Izvršava dnevne automatske testove funkcionalnosti koji umanjuju potrebno vreme korisniku da bi utvrdili ispravnost uređaja. Poseduje mogućnost povezivanja na internu mrežu putem WiFi, i kontinualnog praćenja statusa funkcionalnosti uređaja.",
+    "productCategory": "Defibrilator",
+    "productImageUrl": ""
+  }
+]
