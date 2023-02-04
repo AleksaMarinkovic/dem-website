@@ -17,8 +17,8 @@
 .footer-section-one{
     display: flex;
     flex-flow: row wrap;
-    background-color: lighten($dark-grey, 1);
-    color: lighten($dark-grey, 40);
+    background-color: darken($dark-grey, 10);
+    color: lighten($dark-grey, 20);
     padding: 0 $padding-xlarge 0 $padding-xlarge;
     justify-content: space-between;
     font-size: $font-size-medium;
@@ -28,8 +28,8 @@
 .footer-section-two{
     display: flex;
     flex-flow: row wrap;
-    background-color: darken($dark-grey, 5);
-    color: lighten($dark-grey, 30);
+    background-color: darken($dark-grey, 20);
+    color: lighten($dark-grey, 5);
     padding: 0 $padding-xlarge 0 $padding-xlarge;
     justify-content: center;
     align-items: center;

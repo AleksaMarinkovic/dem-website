@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client';
 import './styles/styles.scss';
 import reportWebVitals from './reportWebVitals';
 import AppRouter from './router/AppRouter';
+import './fonts/Roboto/Roboto-Light.ttf';
+import './fonts/Roboto/Roboto-Regular.ttf';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
