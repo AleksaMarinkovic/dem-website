@@ -6,6 +6,7 @@ import Info from "../components/Info";
 import Blog from "../components/Blog";
 import { useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
+import AdminPage from "../components/AdminPage";
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -16,6 +17,7 @@ function AnimatedRoutes() {
         <Route path="/products" element={<Products />} exact></Route>
         <Route path="/info" element={<Info />} exact></Route>
         <Route path="/blog" element={<Blog />} exact></Route>
+        <Route path="/admin" element={<AdminPage />} exact></Route>
       </Routes>
     </AnimatePresence>
   );

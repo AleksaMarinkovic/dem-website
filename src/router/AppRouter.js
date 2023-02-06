@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter } from "react-router-dom";
+import { HashRouter } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import AnimatedRoutes from "./AnimatedRoutes";
@@ -7,13 +7,13 @@ import AnimatedRoutes from "./AnimatedRoutes";
 const AppRouter = () => {
   return (
     <div>
-      <BrowserRouter>
+      <HashRouter>
         <Header />
         <div className="page-container">
           <AnimatedRoutes />
         </div>
         <Footer />
-      </BrowserRouter>
+      </HashRouter>
     </div>
   );
 };

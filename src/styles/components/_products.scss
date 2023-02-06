@@ -1,18 +1,4 @@
-.product-item{
-    font-size: $font-size-large;
-}
-.product-item-name{
-    background-color: $light-grey;
-    border-bottom: 1px solid darken($light-grey,10);
-}
-.product-item-description{
-    background-color: lighten($light-grey,10);
-    border-bottom: 1px solid darken($light-grey,10);
-    font-size: $font-size-small;
-}
-
-.product-item-category{
-    background-color: lighten($light-grey,10);
-    border-bottom: 1px solid darken($light-grey,10);
-    font-size: $font-size-medium;
+.product-list-container{
+    display: flex;
+    flex-flow: row wrap;
 }

@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import Axios from "axios";
 import { useState, useEffect } from "react";
+import Product from "./Product";
 
 const Products = () => {
   const [data, setData] = useState([]);
@@ -32,14 +33,10 @@ const Products = () => {
       <div id="top" className="top-anchor" />
       {isBusy && <div>Loading</div>}
       {!isBusy && (
-        <div>
+        <div className="product-list-container">
           {data.map((item) => {
-            return (
-              <ul className="product-item">
-                <div className="product-item-name">{item.productName}</div>
-                <div className="product-item-category">{item.productCategory}</div>
-                <div className="product-item-description">{item.productDescription}</div>
-              </ul>
+            return (              
+                <Product {...item}/>
             );
           })}
         </div>
