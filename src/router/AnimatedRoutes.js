@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import HomePage from "../components/HomePage";
-import Products from "../components/Products";
+import ProductsPage from "../components/ProductsPage";
 import Info from "../components/Info";
 import Blog from "../components/Blog";
 import { useLocation } from "react-router-dom";
@@ -14,10 +14,11 @@ function AnimatedRoutes() {
     <AnimatePresence mode="wait">
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<HomePage />} exact></Route>
-        <Route path="/products" element={<Products />} exact></Route>
+        <Route path="/products" element={<ProductsPage />} exact></Route>
         <Route path="/info" element={<Info />} exact></Route>
         <Route path="/blog" element={<Blog />} exact></Route>
         <Route path="/admin" element={<AdminPage />} exact></Route>
+        <Route path="/*" element={<HomePage />}></Route>
       </Routes>
     </AnimatePresence>
   );

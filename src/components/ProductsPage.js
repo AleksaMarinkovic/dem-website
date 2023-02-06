@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Axios from "axios";
-import { useState, useEffect } from "react";
 import Product from "./Product";
 
-const Products = () => {
+const ProductsPage = () => {
   const [data, setData] = useState([]);
   const [isBusy, setIsBusy] = useState(true);
   useEffect(() => {
@@ -25,7 +24,7 @@ const Products = () => {
   }, []);
   return (
     <motion.div
-      key="products"
+      key="productsPage"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -44,4 +43,4 @@ const Products = () => {
     </motion.div>
   );
 };
-export default Products;
+export default ProductsPage;

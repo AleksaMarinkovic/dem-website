@@ -31,6 +31,34 @@ app.get("/getProducts", (req, res) => {
   }
 });
 
+app.post('/updateWithId', (req, res) => {
+  try{
+    const id = req.body._id;
+    console.log(req.body);
+    const update = {
+      productName : req.body.productName,
+      productDescription : req.body.productDescription,
+      productAvailability : req.body.productAvailability,
+      productImageUrl: req.body.productImageUrl
+    }
+    const updatePromise = database.setProduct(id,update);
+    updatePromise.then((data)=>{
+      res.send({
+        success: true,
+        message: "Successfully updated data.",
+        data: data,
+      });
+    });
+  }
+  catch (error){
+    res.status(500).send({
+      success: false,
+      message: "Server error on update.",
+      data: [],
+    });
+  }
+});
+
 app.listen(port, "localhost", () => {
   console.log("server start on port " + port);
 });
