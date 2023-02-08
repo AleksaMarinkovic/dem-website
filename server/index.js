@@ -39,6 +39,7 @@ app.post('/updateWithId', (req, res) => {
       productName : req.body.productName,
       productDescription : req.body.productDescription,
       productAvailability : req.body.productAvailability,
+      productCategory: req.body.productCategory,
       productImageUrl: req.body.productImageUrl
     }
     const updatePromise = database.setProduct(id,update);

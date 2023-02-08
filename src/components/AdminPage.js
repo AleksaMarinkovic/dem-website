@@ -16,12 +16,11 @@ const AdminPage = () => {
   const [products, setProducts] = useState([]);
   const [isBusy, setIsBusy] = useState(true);
   const [productToChange, setProductToChange] = useState({
-    _id: '',
+    _id: "",
     productAvailability: false,
-    productCategory: '',
-    productDescription: '',
-    productName: 'test'
-
+    productCategory: "",
+    productDescription: "",
+    productName: "",
   });
   const [result, setResult] = useState(null);
 
@@ -69,7 +68,7 @@ const AdminPage = () => {
         });
     }
     fetchData();
-  }, []);
+  }, [productToChange]);
 
   const onRowChange = (product) => {
     setProductToChange(product);
@@ -118,6 +117,13 @@ const AdminPage = () => {
           });
         }
       });
+    setProductToChange({
+      _id: "",
+      productAvailability: false,
+      productCategory: "",
+      productDescription: "",
+      productName: "",
+    });
     console.log("Send axios request to change product: ");
   };
 
