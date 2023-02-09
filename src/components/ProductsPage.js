@@ -6,17 +6,25 @@ import Product from "./Product";
 const ProductsPage = () => {
   const [data, setData] = useState([]);
   const [isBusy, setIsBusy] = useState(true);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
     async function fetchData() {
-      await Axios.get("/getProducts")
+      await Axios.get("/getAvailableProducts")
         .then((response) => {
-          setData(response.data.data);
-          console.log(response.data.data);
-          setIsBusy(false);
+          if (response.data.success) {
+            setData(response.data.data);
+            setIsBusy(false);
+          }
         })
         .catch((error) => {
           if (error.response) {
-            console.log("ERROR: " + JSON.stringify(error.response.data));
+            setError(error.response.data.message);
+          }
+          if (error.request) {
+            setError("Error 003");
+          } else {
+            setError("Error 004");
           }
         });
     }
@@ -34,9 +42,7 @@ const ProductsPage = () => {
       {!isBusy && (
         <div className="product-list-container">
           {data.map((item) => {
-            return (              
-                <Product {...item}/>
-            );
+            return <Product {...item} />;
           })}
         </div>
       )}

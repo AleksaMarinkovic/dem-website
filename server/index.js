@@ -12,20 +12,58 @@ const port = 8080;
 
 database.connectDB();
 
-app.get("/getProducts", (req, res) => {
+app.get("/getAvailableProducts", (req, res) => {
   try {
-    const dataPromise = database.getData();
+    const dataPromise = database.getAvailableProducts();
     dataPromise.then((data) => {
-      res.send({
-        success: true,
-        message: "Got data.",
-        data: data,
-      });
+      if(data === false){
+        res.status(500).send({
+          success: false,
+          message: "Error 005",
+          data: [],
+        });
+      }
+      else{
+        res.send({
+          success: true,
+          message: "Successfully retrieved data.",
+          data: data,
+        });
+      }
+      
     });
   } catch (error) {
     res.status(500).send({
       success: false,
-      message: "Didn't get any data from server.",
+      message: "Error 006",
+      data: [],
+    });
+  }
+});
+
+app.get("/getProducts", (req, res) => {
+  try {
+    const dataPromise = database.getAllProducts();
+    dataPromise.then((data) => {
+      if(data === false){
+        res.status(500).send({
+          success: false,
+          message: "Error 005",
+          data: [],
+        });
+      }
+      else{
+        res.send({
+          success: true,
+          message: "Successfully retrieved data.",
+          data: data,
+        });
+      }
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Error 006",
       data: [],
     });
   }
@@ -33,20 +71,24 @@ app.get("/getProducts", (req, res) => {
 
 app.post('/updateWithId', (req, res) => {
   try{
-    const id = req.body._id;
-    console.log(req.body);
-    const update = {
+    const updatePromise = database.setProduct(req.body._id, {
       productName : req.body.productName,
       productDescription : req.body.productDescription,
       productAvailability : req.body.productAvailability,
       productCategory: req.body.productCategory,
       productImageUrl: req.body.productImageUrl
-    }
-    const updatePromise = database.setProduct(id,update);
+    });
     updatePromise.then((data)=>{
+      if(data === false){
+        res.status(500).send({
+          success: false,
+          message: "Error 001",
+          data: [],
+        });
+      }
       res.send({
         success: true,
-        message: "Successfully updated data.",
+        message: "Uspešno izmenjen proizvod.",
         data: data,
       });
     });
@@ -54,7 +96,7 @@ app.post('/updateWithId', (req, res) => {
   catch (error){
     res.status(500).send({
       success: false,
-      message: "Server error on update.",
+      message: "Error 002.",
       data: [],
     });
   }

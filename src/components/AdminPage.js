@@ -15,14 +15,9 @@ const AdminPage = () => {
   );
   const [products, setProducts] = useState([]);
   const [isBusy, setIsBusy] = useState(true);
-  const [productToChange, setProductToChange] = useState({
-    _id: "",
-    productAvailability: false,
-    productCategory: "",
-    productDescription: "",
-    productName: "",
-  });
-  const [result, setResult] = useState(null);
+  const [productToChange, setProductToChange] = useState();
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
 
   const columns = useMemo(
     () => [
@@ -58,12 +53,24 @@ const AdminPage = () => {
     async function fetchData() {
       await Axios.get("/getProducts")
         .then((response) => {
-          setProducts(response.data.data);
-          setIsBusy(false);
+          if (response.data.success) {
+            setProducts(response.data.data);
+            setIsBusy(false);
+          }
         })
         .catch((error) => {
           if (error.response) {
-            console.log("ERROR: " + JSON.stringify(error.response.data));
+            setError(error.response.data.message);
+            setProductToChange();
+          }
+          if (error.request) {
+            // request made no response from server
+            setError("Error 003");
+            setProductToChange();
+          } else {
+            // request setup failed
+            setError("Error 004");
+            setProductToChange();
           }
         });
     }
@@ -72,7 +79,7 @@ const AdminPage = () => {
 
   const onRowChange = (product) => {
     setProductToChange(product);
-    console.log("Logging selected row", product);
+    setSuccessMessage();
   };
 
   const onFormInputChange = (event) => {
@@ -90,41 +97,33 @@ const AdminPage = () => {
       ...productToChange,
       productAvailability: checked,
     });
-    console.log(productToChange);
   };
 
   const changeProduct = (event) => {
     event.preventDefault();
-    console.log("from changeProduct:" + JSON.stringify(productToChange));
     Axios.post("/updateWithId", { ...productToChange })
       .then((response) => {
-        setResult(response.data);
-        setProductToChange();
+        if (response.data.success) {
+          setProductToChange();
+          setSuccessMessage("Uspešno izmenjen proizvod");
+        }
       })
       .catch((error) => {
         if (error.response) {
-          console.log("ERROR: " + JSON.stringify(error.response.data));
+          // request made and server responded
+          setError(error.response.data.message);
+          setProductToChange();
         }
-        if (error.response.data.message) {
-          setResult({
-            success: false,
-            message: error.response.data.message,
-          });
+        if (error.request) {
+          // request made no response from server
+          setError("Error 003");
+          setProductToChange();
         } else {
-          setResult({
-            success: false,
-            message: "Neuspela akcija.",
-          });
+          // request setup failed
+          setError("Error 004");
+          setProductToChange();
         }
       });
-    setProductToChange({
-      _id: "",
-      productAvailability: false,
-      productCategory: "",
-      productDescription: "",
-      productName: "",
-    });
-    console.log("Send axios request to change product: ");
   };
 
   const logout = () => {
@@ -204,6 +203,11 @@ const AdminPage = () => {
             </div>
           ) : (
             <div>Kliknite na neki proizvod da ga izmenite</div>
+          )}
+          {successMessage ? (
+            <div>{successMessage}</div>
+          ) : (
+            <div style={{ visibility: "hidden" }}></div>
           )}
           <NavLink onClick={logout} to="/">
             IZLOGUJ SE

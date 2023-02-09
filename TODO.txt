@@ -1,2 +1,1 @@
-1. Find out why FindOneAndUpdate isnt updating
-2. Change password in admin page to pull from .env
+1. Change password in admin page to pull from .env

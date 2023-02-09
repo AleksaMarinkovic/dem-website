@@ -15,22 +15,33 @@ const connectDB = async () => {
   product = mongoose.model("products", productSchema);
 };
 
-const getData = async () => {
-  const data = await product.find();
-  return data;
+const getAllProducts = async () => {
+  try {
+    const data = product.find();
+    return data;
+  }catch{
+    return false;
+  }
+};
+
+const getAvailableProducts = async () => {
+  try {
+    const data = await product.find({ productAvailability: true}).exec();
+    return data;
+  }catch{
+    return false;
+  }
 };
 
 const setProduct = async (id, update) => {
-  console.log("FROM DATABASE.JS");
-  console.log(update);
-  console.log(id);
   if( !mongoose.Types.ObjectId.isValid(id) ) return false;
-  product.findByIdAndUpdate(id, update, (err,result) => {
-      if(err) console.log(err);
-      else console.log(result);
+  product.findByIdAndUpdate(id, update, (err) => {
+      if(err) return err;
+      return true
   });
 }
 
 exports.connectDB = connectDB;
-exports.getData = getData;
+exports.getAllProducts = getAllProducts;
+exports.getAvailableProducts = getAvailableProducts;
 exports.setProduct = setProduct;
