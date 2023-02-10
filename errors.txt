@@ -1,7 +1,8 @@
 001 - ObjectId nije validan pri updateu 
-002 - Server neuspesno izvrsio update (moze biti povezivanje sa bazom)
+002 - Server neuspesno izvrsio update/add (moze biti povezivanje sa bazom)
 003 - Request napravljen serveru ali server nije odgovorio
 004 - Nije uspeo da se napravi request
 005 - Baza nije vratila get za getAllProducts() ili getAvailableProducts()
 006 - Server uhvatio gresku pri okidanju getAllProducts
 007 - Axios je uhvatio gresku pri okidanju /getProducts
+008 - Insert u bazu failed

@@ -5,6 +5,7 @@ import Table from "./TableAdmin";
 import useLocalStorageState from "use-local-storage-state";
 import { redirect } from "react-router-dom";
 import { NavLink } from "react-router-dom";
+import ProductForm from "./ProductForm";
 
 const AdminPage = () => {
   const [password, setPassword, { removeItem }] = useLocalStorageState(
@@ -16,6 +17,14 @@ const AdminPage = () => {
   const [products, setProducts] = useState([]);
   const [isBusy, setIsBusy] = useState(true);
   const [productToChange, setProductToChange] = useState();
+  const productToAddDefault = {
+    productName: "",
+    productDescription: "",
+    productAvailability: true,
+    productCategory: "",
+    productImageUrl: "",
+  }
+  const [productToAdd, setProductToAdd] = useState(productToAddDefault);
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
 
@@ -50,6 +59,7 @@ const AdminPage = () => {
     if (password !== "admin") {
       setPassword(prompt("Password: "));
     }
+    console.log("Rerender");
     async function fetchData() {
       await Axios.get("/getProducts")
         .then((response) => {
@@ -75,7 +85,7 @@ const AdminPage = () => {
         });
     }
     fetchData();
-  }, [productToChange]);
+  }, [productToChange, productToAdd]);
 
   const onRowChange = (product) => {
     setProductToChange(product);
@@ -95,6 +105,22 @@ const AdminPage = () => {
     const { checked } = event.target;
     setProductToChange({
       ...productToChange,
+      productAvailability: checked,
+    });
+  };
+
+  const onAddFormInputChange = (event) => {
+    const { name, value } = event.target;
+    setProductToAdd({
+      ...productToAdd,
+      [name]: value,
+    });
+  };
+
+  const onAddFormInputChangeCheckbox = (event) => {
+    const { checked } = event.target;
+    setProductToAdd({
+      ...productToAdd,
       productAvailability: checked,
     });
   };
@@ -126,6 +152,33 @@ const AdminPage = () => {
       });
   };
 
+  const onAddProductClick = (e) => {
+    e.preventDefault();
+    Axios.post("/addProduct", { ...productToAdd })
+      .then((response) => {
+        if (response.data.success) {
+          setProductToAdd(productToAddDefault);
+          setSuccessMessage("Uspešno dodat proizvod");
+        }
+      })
+      .catch((error) => {
+        if (error.response) {
+          // request made and server responded
+          setError(error.response.data.message);
+          setProductToAdd(productToAddDefault);
+        }
+        if (error.request) {
+          // request made no response from server
+          setError("Error 003");
+          setProductToAdd(productToAddDefault);
+        } else {
+          // request setup failed
+          setError("Error 004");
+          setProductToAdd(productToAddDefault);
+        }
+      });
+  };
+
   const logout = () => {
     redirect("./");
     removeItem();
@@ -134,84 +187,56 @@ const AdminPage = () => {
   return password === "admin" ? (
     <motion.div
       key="adminPage"
-      className="horizontal-container-admin"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
       {isBusy && <div>Loading</div>}
       {!isBusy && (
-        <div style={{ maxWidth: "100%" }}>
-          <Table columns={columns} data={products} onRowSelect={onRowChange} />
-          {productToChange ? (
-            <div>
-              <form
+        <div
+          style={{ maxWidth: "100%" }}
+          className="horizontal-container-admin"
+        >
+          <div className="vertical-admin-page-container">
+            <Table
+              columns={columns}
+              data={products}
+              onRowSelect={onRowChange}
+            />
+            {productToChange ? (
+              <ProductForm
                 onSubmit={changeProduct}
-                className="vertical-admin-page-container"
-              >
-                <label className="form-text" htmlFor="naziv">
-                  Naziv:
-                </label>
-                <input
-                  className="form-input"
-                  value={productToChange.productName}
-                  type="text"
-                  id="naziv"
-                  name="productName"
-                  required
-                  onChange={onFormInputChange}
-                ></input>
-                <label className="form-text" htmlFor="kategorija">
-                  Kategorija:
-                </label>
-                <input
-                  className="form-input"
-                  value={productToChange.productCategory}
-                  type="text"
-                  id="kategorija"
-                  name="productCategory"
-                  required
-                  onChange={onFormInputChange}
-                ></input>
-                <label className="form-text" htmlFor="opis">
-                  Opis:
-                </label>
-                <input
-                  className="form-input"
-                  value={productToChange.productDescription}
-                  type="text"
-                  id="opis"
-                  name="productDescription"
-                  required
-                  onChange={onFormInputChange}
-                ></input>
-                <label className="form-text" htmlFor="dostupnost">
-                  Dostupnost:
-                </label>
-                <input
-                  className="form-input"
-                  checked={productToChange.productAvailability}
-                  onClick={onFormInputChangeCheckbox}
-                  name="productAvailability"
-                  type="checkbox"
-                  id="dostupnost"
-                ></input>
-                <button className="button-form-adminpage" type="submit">
-                  IZMENI
-                </button>
-              </form>
-            </div>
-          ) : (
-            <div>Kliknite na neki proizvod da ga izmenite</div>
-          )}
-          {successMessage ? (
-            <div>{successMessage}</div>
-          ) : (
-            <div style={{ visibility: "hidden" }}></div>
-          )}
-          <NavLink onClick={logout} to="/">
-            IZLOGUJ SE
-          </NavLink>
+                valueName={productToChange.productName}
+                valueCategory={productToChange.productCategory}
+                valueDescription={productToChange.productDescription}
+                valueAvailability={productToChange.productAvailability}
+                onFormInputChange={onFormInputChange}
+                onFormInputChangeCheckbox={onFormInputChangeCheckbox}
+              ></ProductForm>
+            ) : (
+              <div>Kliknite na neki proizvod da ga izmenite</div>
+            )}
+            {successMessage ? (
+              <div>{successMessage}</div>
+            ) : (
+              <div style={{ visibility: "hidden" }}></div>
+            )}
+            <NavLink onClick={logout} to="/">
+              IZLOGUJ SE
+            </NavLink>
+          </div>
+          <div className="vertical-admin-page-container">
+            <div>UNESITE PODATKE DA DODATE NOVI PROIZVOD NA SAJT: </div>
+            <ProductForm
+                onSubmit={onAddProductClick}
+                valueName={productToAdd.productName}
+                valueCategory={productToAdd.productCategory}
+                valueDescription={productToAdd.productDescription}
+                valueAvailability={productToAdd.productAvailability}
+                onFormInputChange={onAddFormInputChange}
+                onFormInputChangeCheckbox={onAddFormInputChangeCheckbox}
+              ></ProductForm>
+          </div>
         </div>
       )}
     </motion.div>

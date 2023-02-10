@@ -96,11 +96,49 @@ app.post('/updateWithId', (req, res) => {
   catch (error){
     res.status(500).send({
       success: false,
-      message: "Error 002.",
+      message: "Error 002",
       data: [],
     });
   }
 });
+
+app.post('/addProduct', (req, res) => {
+  try{
+    const addPromise = database.addProduct({
+      productName : req.body.productName,
+      productDescription : req.body.productDescription,
+      productAvailability : req.body.productAvailability,
+      productCategory: req.body.productCategory,
+      productImageUrl: req.body.productImageUrl
+    })
+    addPromise.then((data) => {
+      if(data===false){
+        res.status(500).send({
+          success: false,
+          message: "Error 008",
+          data: [],
+        });
+        console.log('error 008');
+      }
+      res.send({
+        success: true,
+        message: "Uspešno dodat proizvod.",
+        data: data,
+      });
+    })
+  }
+  catch(error){
+    res.status(500).send({
+      success: false,
+      message: "Error 002",
+      data: [],
+    })        
+    console.log(error);
+  }
+})
+
+
+
 
 app.listen(port, "localhost", () => {
   console.log("server start on port " + port);
