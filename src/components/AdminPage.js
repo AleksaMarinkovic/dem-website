@@ -23,7 +23,8 @@ const AdminPage = () => {
     productAvailability: true,
     productCategory: "",
     productImageUrl: "",
-  }
+  };
+  const [productToAddImageData, setProductToAddImageData] = useState();
   const [productToAdd, setProductToAdd] = useState(productToAddDefault);
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
@@ -55,11 +56,14 @@ const AdminPage = () => {
     []
   );
 
+  const addFileChangeHandler = (e) => {
+    setProductToAddImageData(e.target.files[0]);
+  }
+
   useEffect(() => {
     if (password !== "admin") {
       setPassword(prompt("Password: "));
     }
-    console.log("Rerender");
     async function fetchData() {
       await Axios.get("/getProducts")
         .then((response) => {
@@ -154,7 +158,15 @@ const AdminPage = () => {
 
   const onAddProductClick = (e) => {
     e.preventDefault();
-    Axios.post("/addProduct", { ...productToAdd })
+    const data = new FormData();
+    data.append('image', productToAddImageData);
+    data.append('productName', productToAdd.productName);
+    data.append('productCategory', productToAdd.productCategory);
+    data.append('productAvailability', productToAdd.productAvailability);
+    data.append('productDescription', productToAdd.productDescription);
+
+
+    Axios.post("/single", data)
       .then((response) => {
         if (response.data.success) {
           setProductToAdd(productToAddDefault);
@@ -212,6 +224,7 @@ const AdminPage = () => {
                 valueAvailability={productToChange.productAvailability}
                 onFormInputChange={onFormInputChange}
                 onFormInputChangeCheckbox={onFormInputChangeCheckbox}
+                buttonText="IZMENI"
               ></ProductForm>
             ) : (
               <div>Kliknite na neki proizvod da ga izmenite</div>
@@ -228,14 +241,16 @@ const AdminPage = () => {
           <div className="vertical-admin-page-container">
             <div>UNESITE PODATKE DA DODATE NOVI PROIZVOD NA SAJT: </div>
             <ProductForm
-                onSubmit={onAddProductClick}
-                valueName={productToAdd.productName}
-                valueCategory={productToAdd.productCategory}
-                valueDescription={productToAdd.productDescription}
-                valueAvailability={productToAdd.productAvailability}
-                onFormInputChange={onAddFormInputChange}
-                onFormInputChangeCheckbox={onAddFormInputChangeCheckbox}
-              ></ProductForm>
+              onSubmit={onAddProductClick}
+              valueName={productToAdd.productName}
+              valueCategory={productToAdd.productCategory}
+              valueDescription={productToAdd.productDescription}
+              valueAvailability={productToAdd.productAvailability}
+              onFormInputChange={onAddFormInputChange}
+              onFormInputChangeCheckbox={onAddFormInputChangeCheckbox}
+              buttonText="DODAJ"
+              fileChangeHandler={addFileChangeHandler}
+            ></ProductForm>
           </div>
         </div>
       )}

@@ -1,6 +1,5 @@
 .product-item-wrapper{
     max-width: 25%;
-    max-height: 20vh;
     padding: 0.5rem;
 }
 
@@ -34,4 +33,13 @@
     background-color: lighten($light-grey,10);
     border-bottom: 1px solid darken($light-grey,10);
     font-size: $font-size-medium;
+}
+
+.product-item-image-wrapper{
+    max-width: 100%;
+    max-height: auto;
+}
+
+.product-item-image{
+    max-width: 100%;
 }

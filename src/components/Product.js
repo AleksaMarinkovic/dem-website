@@ -4,6 +4,13 @@ const Product = (props) => {
   const [product, setProduct] = useState(props);
   return (
     <div className="product-item-wrapper">
+      <div className="product-item-image-wrapper">
+        <img
+          src={product.productImageUrl}
+          alt={product.productName}
+          className="product-item-image"
+        ></img>
+      </div>
       <div className="product-item">
         <div className="product-item-name">{product.productName}</div>
         <div className="product-item-category">{product.productCategory}</div>
