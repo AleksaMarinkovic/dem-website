@@ -1,1 +1,2 @@
 1. Change password in admin page to pull from .env
+2. Delete images from server on new image upload (when changing product)
