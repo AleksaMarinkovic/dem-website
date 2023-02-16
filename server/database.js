@@ -22,6 +22,20 @@ const getAllProducts = async () => {
   }
 };
 
+const getProduct = async (productId) => {
+  try {
+    //console.log(productId);
+    const data = await product.findById(productId).exec();
+    //console.log(data);
+    if(data === null){
+      return false;
+    }
+    return data;
+  }catch{
+    return false;
+  }
+}
+
 const getAvailableProducts = async () => {
   try {
     const data = await product.find({ productAvailability: true}).exec();
@@ -61,3 +75,4 @@ exports.getAllProducts = getAllProducts;
 exports.getAvailableProducts = getAvailableProducts;
 exports.setProduct = setProduct;
 exports.addProduct = addProduct;
+exports.getProduct = getProduct;

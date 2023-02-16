@@ -1,9 +1,15 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Product = (props) => {
   const [product, setProduct] = useState(props);
+  const navigate = useNavigate();
+  const onClickProduct = () => {
+    console.log(product);
+    navigate("/products/"+product._id);
+  };
   return (
-    <div className="product-item-wrapper">
+    <div className="product-item-wrapper" onClick={onClickProduct}>
       <div className="product-item-image-wrapper">
         <img
           src={product.productImageUrl}

@@ -41,7 +41,7 @@ app.post('/single', upload.single('image'), (req,res)=>{
           message: "Error 008",
           data: [],
         });
-        console.log("error 008");
+        return;
       }
       res.send({
         success: true,
@@ -74,6 +74,7 @@ app.get("/getAvailableProducts", (req, res) => {
           message: "Error 005",
           data: [],
         });
+        return;
       } else {
         res.send({
           success: true,
@@ -101,6 +102,7 @@ app.get("/getProducts", (req, res) => {
           message: "Error 005",
           data: [],
         });
+        return;
       } else {
         res.send({
           success: true,
@@ -118,14 +120,50 @@ app.get("/getProducts", (req, res) => {
   }
 });
 
-app.post("/updateWithId", (req, res) => {
+
+app.post('/single', upload.single('image'), (req,res)=>{
+  try { 
+    const addPromise = database.addProduct({
+      productName: req.body.productName,
+      productDescription: req.body.productDescription,
+      productAvailability: req.body.productAvailability,
+      productCategory: req.body.productCategory,
+      productImageUrl: req.file.path
+    });
+    addPromise.then((data) => {
+      if (data === false) {
+        res.status(500).send({
+          success: false,
+          message: "Error 008",
+          data: [],
+        });
+        return;
+      }
+      res.send({
+        success: true,
+        message: "Uspešno dodat proizvod.",
+        data: data,
+      });
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Error 002",
+      data: [],
+    });
+    console.log(error);
+  }
+});
+
+app.post('/updateWithId', upload.single('image'), (req,res)=>{
+  console.log(req.body);
   try {
     const updatePromise = database.setProduct(req.body._id, {
       productName: req.body.productName,
       productDescription: req.body.productDescription,
       productAvailability: req.body.productAvailability,
       productCategory: req.body.productCategory,
-      productImageUrl: req.body.productImageUrl,
+      productImageUrl: req.file.path
     });
     updatePromise.then((data) => {
       if (data === false) {
@@ -134,6 +172,7 @@ app.post("/updateWithId", (req, res) => {
           message: "Error 001",
           data: [],
         });
+        return;
       }
       res.send({
         success: true,
@@ -149,6 +188,33 @@ app.post("/updateWithId", (req, res) => {
     });
   }
 });
+
+app.post("/getIndividualProduct" , (req, res) => {
+  try {
+    const getPromise = database.getProduct(req.body._id);
+    getPromise.then((data) => {
+      if (data === false) {
+        res.status(500).send({
+          success: false,
+          message: "Error 009",
+          data: [],
+        });
+        return;
+      }
+      res.send({
+        success: true,
+        message: "Uspešno uhvacen proizvod.",
+        data: data,
+      });
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Error 002",
+      data: [],
+    });
+  }
+})
 
 app.post("/addProduct", (req, res) => {
   try {

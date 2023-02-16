@@ -1,0 +1,30 @@
+.product-details-page-vertical-container{
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+}
+
+.product-details-page-horizontal-container{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+}
+
+.product-details-page-vertical-content-container{
+    display: flex;
+    flex-flow: column wrap;
+    max-width: 40%;
+    justify-content: space-around;
+}
+
+.product-details-page-name{
+    font-size: $font-size-large;
+}
+
+.product-details-page-category{
+    font-size: $font-size-medium;
+}
+
+.product-details-page-description{
+    font-size: $font-size-small;
+}

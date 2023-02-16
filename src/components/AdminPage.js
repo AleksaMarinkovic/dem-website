@@ -25,6 +25,7 @@ const AdminPage = () => {
     productImageUrl: "",
   };
   const [productToAddImageData, setProductToAddImageData] = useState();
+  const [productToChangeImageData, setProductToChangeImageData] = useState();
   const [productToAdd, setProductToAdd] = useState(productToAddDefault);
   const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
@@ -58,7 +59,10 @@ const AdminPage = () => {
 
   const addFileChangeHandler = (e) => {
     setProductToAddImageData(e.target.files[0]);
-  }
+  };
+  const changeFileChangeHandler = (e) => {
+    setProductToChangeImageData(e.target.files[0]);
+  };
 
   useEffect(() => {
     if (password !== "admin") {
@@ -129,9 +133,17 @@ const AdminPage = () => {
     });
   };
 
-  const changeProduct = (event) => {
-    event.preventDefault();
-    Axios.post("/updateWithId", { ...productToChange })
+  const changeProduct = (e) => {
+    e.preventDefault();
+    const data = new FormData();
+    data.append("_id", productToChange._id)
+    data.append("image", productToChangeImageData);
+    data.append("productName", productToChange.productName);
+    data.append("productCategory", productToChange.productCategory);
+    data.append("productAvailability", productToChange.productAvailability);
+    data.append("productDescription", productToChange.productDescription);
+
+    Axios.post("/updateWithId", data)
       .then((response) => {
         if (response.data.success) {
           setProductToChange();
@@ -159,12 +171,11 @@ const AdminPage = () => {
   const onAddProductClick = (e) => {
     e.preventDefault();
     const data = new FormData();
-    data.append('image', productToAddImageData);
-    data.append('productName', productToAdd.productName);
-    data.append('productCategory', productToAdd.productCategory);
-    data.append('productAvailability', productToAdd.productAvailability);
-    data.append('productDescription', productToAdd.productDescription);
-
+    data.append("image", productToAddImageData);
+    data.append("productName", productToAdd.productName);
+    data.append("productCategory", productToAdd.productCategory);
+    data.append("productAvailability", productToAdd.productAvailability);
+    data.append("productDescription", productToAdd.productDescription);
 
     Axios.post("/single", data)
       .then((response) => {
@@ -225,6 +236,7 @@ const AdminPage = () => {
                 onFormInputChange={onFormInputChange}
                 onFormInputChangeCheckbox={onFormInputChangeCheckbox}
                 buttonText="IZMENI"
+                fileChangeHandler={changeFileChangeHandler}
               ></ProductForm>
             ) : (
               <div>Kliknite na neki proizvod da ga izmenite</div>
