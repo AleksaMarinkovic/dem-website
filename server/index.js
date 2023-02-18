@@ -8,7 +8,7 @@ const app = express();
 
 app.use(express.json());
 app.use(express.static(buildPath));
-app.use('/images', express.static('images'));
+app.use("/images", express.static("images"));
 
 const port = 8080;
 
@@ -20,19 +20,19 @@ const fileStorageEngine = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + "--" + file.originalname);
-  }
+  },
 });
 
 const upload = multer({ storage: fileStorageEngine });
 
-app.post('/single', upload.single('image'), (req,res)=>{
-  try { 
+app.post("/single", upload.single("image"), (req, res) => {
+  try {
     const addPromise = database.addProduct({
       productName: req.body.productName,
       productDescription: req.body.productDescription,
       productAvailability: req.body.productAvailability,
       productCategory: req.body.productCategory,
-      productImageUrl: req.file.path
+      productImageUrl: req.file.path,
     });
     addPromise.then((data) => {
       if (data === false) {
@@ -59,10 +59,10 @@ app.post('/single', upload.single('image'), (req,res)=>{
   }
 });
 
-app.post('/multiple', upload.array('images', 3), (req, res) => {
+app.post("/multiple", upload.array("images", 3), (req, res) => {
   console.log(req.files);
   res.send("Multiple files upload success");
-})
+});
 
 app.get("/getAvailableProducts", (req, res) => {
   try {
@@ -120,15 +120,14 @@ app.get("/getProducts", (req, res) => {
   }
 });
 
-
-app.post('/single', upload.single('image'), (req,res)=>{
-  try { 
+app.post("/single", upload.single("image"), (req, res) => {
+  try {
     const addPromise = database.addProduct({
       productName: req.body.productName,
       productDescription: req.body.productDescription,
       productAvailability: req.body.productAvailability,
       productCategory: req.body.productCategory,
-      productImageUrl: req.file.path
+      productImageUrl: req.file.path,
     });
     addPromise.then((data) => {
       if (data === false) {
@@ -155,16 +154,26 @@ app.post('/single', upload.single('image'), (req,res)=>{
   }
 });
 
-app.post('/updateWithId', upload.single('image'), (req,res)=>{
-  console.log(req.body);
+app.post("/updateWithId", upload.single("image"), (req, res) => {
   try {
-    const updatePromise = database.setProduct(req.body._id, {
-      productName: req.body.productName,
-      productDescription: req.body.productDescription,
-      productAvailability: req.body.productAvailability,
-      productCategory: req.body.productCategory,
-      productImageUrl: req.file.path
-    });
+    let updatePromise;
+    if (req.file) {
+      updatePromise = database.setProduct(req.body._id, {
+        productName: req.body.productName,
+        productDescription: req.body.productDescription,
+        productAvailability: req.body.productAvailability,
+        productCategory: req.body.productCategory,
+        productImageUrl: req.file.path
+      });
+    } else {
+      updatePromise = database.setProduct(req.body._id, {
+        productName: req.body.productName,
+        productDescription: req.body.productDescription,
+        productAvailability: req.body.productAvailability,
+        productCategory: req.body.productCategory
+      });
+    }
+
     updatePromise.then((data) => {
       if (data === false) {
         res.status(500).send({
@@ -189,7 +198,7 @@ app.post('/updateWithId', upload.single('image'), (req,res)=>{
   }
 });
 
-app.post("/getIndividualProduct" , (req, res) => {
+app.post("/getIndividualProduct", (req, res) => {
   try {
     const getPromise = database.getProduct(req.body._id);
     getPromise.then((data) => {
@@ -214,7 +223,7 @@ app.post("/getIndividualProduct" , (req, res) => {
       data: [],
     });
   }
-})
+});
 
 app.post("/addProduct", (req, res) => {
   try {

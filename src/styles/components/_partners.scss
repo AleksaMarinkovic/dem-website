@@ -1,0 +1,27 @@
+.partners-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.legend {
+    background-color: black;
+    opacity: 0.9;
+    border-radius: 1rem;
+    color: white;
+    transition: 0.2s;
+    width: 80%;
+}
+
+.legend:hover {
+    opacity: 0;
+}
+
+.partners-wrapper .carousel .control-dots .dot {
+    background-color: blue;
+}
+
+.partners-wrapper .carousel .control-arrow {
+    background-color: blue !important;
+}

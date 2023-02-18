@@ -137,7 +137,7 @@ const AdminPage = () => {
     e.preventDefault();
     const data = new FormData();
     data.append("_id", productToChange._id)
-    data.append("image", productToChangeImageData);
+    if(productToChangeImageData) data.append("image", productToChangeImageData);
     data.append("productName", productToChange.productName);
     data.append("productCategory", productToChange.productCategory);
     data.append("productAvailability", productToChange.productAvailability);

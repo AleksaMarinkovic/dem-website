@@ -8,7 +8,8 @@
     min-height: $header-height;
     z-index: 100;
     justify-content: space-between;
-    font-size: $font-size-large;
+    font-size: $font-size-medium;
+    font-weight: bold;
 }
 
 .header-container{
@@ -23,8 +24,7 @@
     margin-left: $padding-medium;
     max-width: $header-logo-image-width;
     display: flex;
-    flex-flow: column wrap;
-    
+    flex-flow: column wrap;    
     justify-content: center;
     align-items: center;
 }

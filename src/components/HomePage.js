@@ -1,5 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
+import Partners from "./Partners";
+import HomePageMain from "./HomePageMain";
 
 const HomePage = () => {
   return (
@@ -10,7 +12,8 @@ const HomePage = () => {
     exit={{opacity: 0}}
     >
       <div id="top" className="top-anchor" />
-      GLAVNA STRANA
+      <HomePageMain></HomePageMain>
+      <Partners></Partners>
     </motion.div>
   );
 };

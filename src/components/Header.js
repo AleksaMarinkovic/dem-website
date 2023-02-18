@@ -25,6 +25,13 @@ const Header = () => {
         <NavHashLink smooth to={"/info#top"} className="header-item-container">
           KONTAKT
         </NavHashLink>
+        <NavHashLink
+          smooth
+          to={"/service#top"}
+          className="header-item-container"
+        >
+          SERVIS
+        </NavHashLink>
         <NavHashLink smooth to={"/blog#top"} className="header-item-container">
           BLOG
         </NavHashLink>
