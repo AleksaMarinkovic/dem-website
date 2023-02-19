@@ -59,6 +59,37 @@ app.post("/single", upload.single("image"), (req, res) => {
   }
 });
 
+app.post("/singleCategory", upload.single("image"), (req, res) => {
+  try {
+    const addCategoryPromise = database.addCategory({
+      categoryName: req.body.categoryName,
+      categoryImageUrl: req.file.path
+    });
+    addCategoryPromise.then((data) => {
+      if (data === false) {
+        res.status(500).send({
+          success: false,
+          message: "Error 008",
+          data: [],
+        });
+        return;
+      }
+      res.send({
+        success: true,
+        message: "Uspešno dodata kategorija.",
+        data: data,
+      });
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Error 002",
+      data: [],
+    });
+    console.log(error);
+  }
+});
+
 app.post("/multiple", upload.array("images", 3), (req, res) => {
   console.log(req.files);
   res.send("Multiple files upload success");
@@ -95,6 +126,34 @@ app.get("/getAvailableProducts", (req, res) => {
 app.get("/getProducts", (req, res) => {
   try {
     const dataPromise = database.getAllProducts();
+    dataPromise.then((data) => {
+      if (data === false) {
+        res.status(500).send({
+          success: false,
+          message: "Error 005",
+          data: [],
+        });
+        return;
+      } else {
+        res.send({
+          success: true,
+          message: "Successfully retrieved data.",
+          data: data,
+        });
+      }
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Error 006",
+      data: [],
+    });
+  }
+});
+
+app.get("/getCategories", (req, res) => {
+  try {
+    const dataPromise = database.getAllCategories();
     dataPromise.then((data) => {
       if (data === false) {
         res.status(500).send({

@@ -37,7 +37,7 @@
 }
 
 .main-text {
-    color: $dem-orange;
+    color: $dark-grey;
     font-size: $font-size-large;
     font-weight: bold;
 }
@@ -52,7 +52,6 @@
 
 .homepagemain-button{
     background-color: lighten($dem-blue, 10);
-    outline: 1px solid lighten($dem-blue, 10);
     border-radius: 1rem;
     height: 8vh;
     width: 8vw;
@@ -68,5 +67,4 @@
 
 .homepagemain-button:hover{
     background-color: $dem-blue;
-    outline: 1px solid $dem-orange;
 }

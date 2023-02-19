@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 var product;
+var category;
 
 const connectDB = async () => {
   mongoose.connect("mongodb://127.0.0.1:27017/dem-website");
@@ -11,6 +12,12 @@ const connectDB = async () => {
     productAvailability: Boolean 
   });
   product = mongoose.model("products", productSchema);
+
+  const categorySchema = new mongoose.Schema({
+    categoryName: String,
+    categoryImageUrl: String
+  });
+  category = mongoose.model("categories", categorySchema);
 };
 
 const getAllProducts = async () => {
@@ -21,6 +28,15 @@ const getAllProducts = async () => {
     return false;
   }
 };
+
+const getAllCategories = async ()=>{
+  try {
+    const data = category.find();
+    return data;
+  }catch{
+    return false;
+  }
+}
 
 const getProduct = async (productId) => {
   try {
@@ -62,6 +78,20 @@ const addProduct = async (productToAdd) => {
   })
 }
 
+const addCategory = async (categoryToAdd) => {
+  const newCategory = new category({
+    categoryName : categoryToAdd.categoryName,
+    categoryImageUrl : categoryToAdd.categoryImageUrl
+  });
+  newCategory.save((err, res) => {
+    if(err) {
+      console.log(err);
+      return false;
+    }
+    return res;
+  })
+}
+
 const setProduct = async (id, update) => {
   if( !mongoose.Types.ObjectId.isValid(id) ) return false;
   product.findByIdAndUpdate(id, update, (err) => {
@@ -76,3 +106,5 @@ exports.getAvailableProducts = getAvailableProducts;
 exports.setProduct = setProduct;
 exports.addProduct = addProduct;
 exports.getProduct = getProduct;
+exports.getAllCategories = getAllCategories;
+exports.addCategory = addCategory;

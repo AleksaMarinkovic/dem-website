@@ -1,0 +1,38 @@
+import React from "react";
+
+const CategoryForm = ({
+  onSubmit,
+  valueName,
+  onFormInputChange,
+  fileChangeHandler,
+  buttonText,
+}) => {
+  return (
+    <div>
+      <form
+        onSubmit={onSubmit}
+        className="vertical-admin-page-container"
+        encType="multipart/form-data"
+      >
+        <label className="form-text" htmlFor="naziv">
+          Naziv:
+        </label>
+        <input
+          className="form-input"
+          value={valueName}
+          type="text"
+          id="naziv"
+          name="categoryName"
+          required
+          onChange={onFormInputChange}
+        ></input>
+        <input type="file" name="image" onChange={fileChangeHandler}></input>
+        <button className="button-form-adminpage" type="submit">
+          {buttonText}
+        </button>
+      </form>
+    </div>
+  );
+};
+
+export default CategoryForm;

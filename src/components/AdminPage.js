@@ -6,6 +6,7 @@ import useLocalStorageState from "use-local-storage-state";
 import { redirect } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import ProductForm from "./ProductForm";
+import AdminPageCategories from "./AdminPageCategories";
 
 const AdminPage = () => {
   const [password, setPassword, { removeItem }] = useLocalStorageState(
@@ -15,7 +16,10 @@ const AdminPage = () => {
     }
   );
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [isBusy, setIsBusy] = useState(true);
+  const [fetchedProducts, setFetchedProducts] = useState(false);
+  const [fetchedCategories, setFetchedCategories] = useState(false);
   const [productToChange, setProductToChange] = useState();
   const productToAddDefault = {
     productName: "",
@@ -68,32 +72,63 @@ const AdminPage = () => {
     if (password !== "admin") {
       setPassword(prompt("Password: "));
     }
-    async function fetchData() {
-      await Axios.get("/getProducts")
-        .then((response) => {
-          if (response.data.success) {
-            setProducts(response.data.data);
-            setIsBusy(false);
-          }
-        })
-        .catch((error) => {
-          if (error.response) {
-            setError(error.response.data.message);
-            setProductToChange();
-          }
-          if (error.request) {
-            // request made no response from server
-            setError("Error 003");
-            setProductToChange();
-          } else {
-            // request setup failed
-            setError("Error 004");
-            setProductToChange();
-          }
-        });
+    if(!fetchedProducts){
+      async function fetchData() {
+        await Axios.get("/getProducts")
+          .then((response) => {
+            if (response.data.success) {
+              setProducts(response.data.data);
+              setFetchedProducts(true);
+            }
+          })
+          .catch((error) => {
+            if (error.response) {
+              setError(error.response.data.message);
+              setProductToChange();
+            }
+            if (error.request) {
+              // request made no response from server
+              setError("Error 003");
+              setProductToChange();
+            } else {
+              // request setup failed
+              setError("Error 004");
+              setProductToChange();
+            }
+          });
+      }
+      fetchData();
     }
-    fetchData();
-  }, [productToChange, productToAdd]);
+    if(!fetchedCategories){
+      async function fetchCategoryData() {
+        await Axios.get("/getCategories")
+          .then((response) => {
+            if (response.data.success) {
+              setCategories(response.data.data);
+              setFetchedCategories(true);
+            }
+          })
+          .catch((error) => {
+            if (error.response) {
+              setError(error.response.data.message);
+            }
+            if (error.request) {
+              // request made no response from server
+              setError("Error 003");
+            } else {
+              // request setup failed
+              setError("Error 004");
+            }
+          });
+      }
+      fetchCategoryData();
+
+    }
+
+    if(fetchedCategories && fetchedProducts){
+      setIsBusy(false);
+    }
+  }, [productToChange, productToAdd, fetchedCategories, fetchedProducts]);
 
   const onRowChange = (product) => {
     setProductToChange(product);
@@ -106,7 +141,6 @@ const AdminPage = () => {
       ...productToChange,
       [name]: value,
     });
-    console.log(productToChange);
   };
 
   const onFormInputChangeCheckbox = (event) => {
@@ -119,6 +153,7 @@ const AdminPage = () => {
 
   const onAddFormInputChange = (event) => {
     const { name, value } = event.target;
+    console.log("name: " + name,"value: " + value);
     setProductToAdd({
       ...productToAdd,
       [name]: value,
@@ -136,8 +171,9 @@ const AdminPage = () => {
   const changeProduct = (e) => {
     e.preventDefault();
     const data = new FormData();
-    data.append("_id", productToChange._id)
-    if(productToChangeImageData) data.append("image", productToChangeImageData);
+    data.append("_id", productToChange._id);
+    if (productToChangeImageData)
+      data.append("image", productToChangeImageData);
     data.append("productName", productToChange.productName);
     data.append("productCategory", productToChange.productCategory);
     data.append("productAvailability", productToChange.productAvailability);
@@ -237,6 +273,8 @@ const AdminPage = () => {
                 onFormInputChangeCheckbox={onFormInputChangeCheckbox}
                 buttonText="IZMENI"
                 fileChangeHandler={changeFileChangeHandler}
+                categories={categories}
+                isAdd={false}
               ></ProductForm>
             ) : (
               <div>Kliknite na neki proizvod da ga izmenite</div>
@@ -262,8 +300,11 @@ const AdminPage = () => {
               onFormInputChangeCheckbox={onAddFormInputChangeCheckbox}
               buttonText="DODAJ"
               fileChangeHandler={addFileChangeHandler}
+              categories={categories}
+              isAdd={true}
             ></ProductForm>
           </div>
+          <AdminPageCategories></AdminPageCategories>
         </div>
       )}
     </motion.div>

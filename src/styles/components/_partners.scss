@@ -1,27 +1,31 @@
-.partners-wrapper {
+.partners-header-text {
+    font-size: $font-size-medium;
+    font-weight: bold;
+    color: $dem-blue;
     display: flex;
+    flex-flow: column wrap;
     align-items: center;
-    justify-content: center;
-    width: 100%;
+    margin-bottom: 5vh;
 }
 
-.legend {
-    background-color: black;
-    opacity: 0.9;
-    border-radius: 1rem;
-    color: white;
-    transition: 0.2s;
-    width: 80%;
+.container {
+    padding: 40px;
+    background: $light-grey;
 }
 
-.legend:hover {
-    opacity: 0;
+.slick-slide img {
+    margin: auto;
 }
 
-.partners-wrapper .carousel .control-dots .dot {
-    background-color: blue;
+.slick-slide a {
+    display: inline-block;
+    margin: auto;
+    text-align: center;
 }
 
-.partners-wrapper .carousel .control-arrow {
-    background-color: blue !important;
+.slick-slide {
+    text-align: center;
+}
+.slick-next {
+    right: 0;
 }

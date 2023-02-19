@@ -1,22 +1,44 @@
 import React from "react";
-import { Carousel } from "react-responsive-carousel";
-import innomed from '../images/INNOMED.webp';
-import zoll from '../images/ZOLL.webp';
-import "react-responsive-carousel/lib/styles/carousel.min.css"; 
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import manufacturers from "./Manufacturers";
 
 const Partners = () => {
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 5,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 4000,
+    pauseOnHover: true,
+  };
+
   return (
-    <div className="partners-wrapper">
-      <Carousel showArrows={true} autoPlay infiniteLoop showThumbs={false} stopOnHover>
-        <div>
-          <img src={zoll} alt='zoll'/>
-          <p className="legend">ZOLL</p>
-        </div>
-        <div>
-          <img src={innomed} alt='innomed'/>
-          <p className="legend">INNOMED</p>
-        </div>
-      </Carousel>
+    <div>
+      <div className="partners-header-text">
+        EKSKLUZIVNI SMO DISTRIBUTERI SLEDEĆIH PROIZVOĐAČA:
+      </div>
+      <div className="container">
+        <Slider {...settings}>
+          {manufacturers.map((item) => {
+            return (
+              <div>
+                <a
+                  href={item.website}
+                  target="_blank"
+                  rel="noreferrer"
+                  draggable={false}
+                >
+                  <img src={item.manufacturer} alt={item.name}></img>
+                </a>
+              </div>
+            );
+          })}
+        </Slider>
+      </div>
     </div>
   );
 };
