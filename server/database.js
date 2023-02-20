@@ -118,18 +118,18 @@ const setCategory = async (id, update) => {
 
 const updateCategoryOfProducts = async (oldCategoryName, newCategoryName) => {
   try {
+    //find products that have this category
     const data = await product
       .find({ productCategory: oldCategoryName })
       .exec();
     data.forEach((item) => {
       if (!mongoose.Types.ObjectId.isValid(item._id)) return false;
       const update = {
-        categoryName: newCategoryName,
+        productCategory: newCategoryName,
       };
       let updateWithNewCategoryPromise;
       updateWithNewCategoryPromise = setProduct(item._id, update);
       updateWithNewCategoryPromise.then((data1) => {
-        console.log(data1);
         if (data1 === false) {
           return;
         }
