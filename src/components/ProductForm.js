@@ -44,7 +44,7 @@ const ProductForm = ({
           value={valueCategory}
         >
           {isAdd && (
-            <option defaultValue={true} value={''}>
+            <option defaultValue={true} value={""}>
               -- izaberite kategoriju --
             </option>
           )}
@@ -68,17 +68,25 @@ const ProductForm = ({
           required
           onChange={onFormInputChange}
         ></textarea>
-        <label className="form-text" htmlFor="dostupnost">
-          Dostupnost:
-        </label>
+        <div className="form-availability-horizontal">
+          <label className="form-text" htmlFor="dostupnost">
+            Dostupnost:
+          </label>
+          <input
+            checked={valueAvailability}
+            onClick={onFormInputChangeCheckbox}
+            name="productAvailability"
+            type="checkbox"
+            id="dostupnost"
+          ></input>
+        </div>
         <input
-          checked={valueAvailability}
-          onClick={onFormInputChangeCheckbox}
-          name="productAvailability"
-          type="checkbox"
-          id="dostupnost"
+          type="file"
+          name="image"
+          onChange={fileChangeHandler}
+          className="form-image-input"
+          required={isAdd}
         ></input>
-        <input type="file" name="image" onChange={fileChangeHandler}></input>
         <button className="button-form-adminpage" type="submit">
           {buttonText}
         </button>

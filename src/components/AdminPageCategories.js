@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Axios from "axios";
 import Table from "./TableAdmin";
-import CategoryForm from './CategoryForm';
+import CategoryForm from "./CategoryForm";
 
 const AdminPageCategories = () => {
   const [categories, setCategories] = useState([]);
@@ -14,6 +14,7 @@ const AdminPageCategories = () => {
   const [error, setError] = useState(null);
   const [categoryToAddImageData, setCategoryToAddImageData] = useState();
   const [categoryToAdd, setCategoryToAdd] = useState(categoryToAddDefault);
+  const [successMessageCategory, setSuccessMessageCategory] = useState(null);
 
   const columns = useMemo(
     () => [
@@ -28,8 +29,14 @@ const AdminPageCategories = () => {
           {
             id: "col2",
             Header: "Slika",
-            Cell: (tableProps) => <img style={{maxWidth: "10vw", maxHeight: 'auto'}} src={tableProps.row.original.categoryImageUrl} alt={tableProps.row.original.categoryImageUrl}/>,
-            accessor: (row) => row.categoryImageUrl
+            Cell: (tableProps) => (
+              <img
+                style={{ maxWidth: "10vw", maxHeight: "auto" }}
+                src={tableProps.row.original.categoryImageUrl}
+                alt={tableProps.row.original.categoryImageUrl}
+              />
+            ),
+            accessor: (row) => row.categoryImageUrl,
           },
         ],
       },
@@ -83,6 +90,7 @@ const AdminPageCategories = () => {
       .then((response) => {
         if (response.data.success) {
           setCategoryToAdd(categoryToAddDefault);
+          setSuccessMessageCategory("Uspešno dodata nova kategorija.")
         }
       })
       .catch((error) => {
@@ -111,16 +119,27 @@ const AdminPageCategories = () => {
           style={{ maxWidth: "100%" }}
           className="horizontal-container-admin"
         >
-          <Table columns={columns} data={categories} />
-          <div>UNESITE PODATKE DA DODATE NOVU KATEGORIJU</div>
-            <CategoryForm
-              onSubmit={onAddCategoryClick}
-              valueName={categoryToAdd.categoryName}
-              onFormInputChange={onAddFormInputChange}
-              buttonText="DODAJ KATEGORIJU"
-              fileChangeHandler={addFileChangeHandler}
-            ></CategoryForm>
+          <div className="form-container">
+            <div className="form-header-text">
+              UNESITE PODATKE DA DODATE NOVU KATEGORIJU
+            </div>
+            <Table columns={columns} data={categories} />
+            <div>
+              <CategoryForm
+                onSubmit={onAddCategoryClick}
+                valueName={categoryToAdd.categoryName}
+                onFormInputChange={onAddFormInputChange}
+                buttonText="DODAJ KATEGORIJU"
+                fileChangeHandler={addFileChangeHandler}
+              ></CategoryForm>
+            </div>
           </div>
+          {successMessageCategory ? (
+            <div className="success-message">{successMessageCategory}</div>
+          ) : (
+            <div style={{ visibility: "hidden" }}></div>
+          )}
+        </div>
       )}
     </div>
   );

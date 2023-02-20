@@ -1,12 +1,67 @@
-.horizontal-container-admin{
+.vertical-container-admin{
     display: flex;
-    flex-flow: row wrap;
-    margin: 10vh 10vw 10vh 10vw;
+    flex-flow: column wrap;
+    justify-content: center;
+    align-items: center;
     gap: 5vw;
+    margin-top: 10vh;
+    margin-bottom: 10vh;
+
 }
 
 .vertical-admin-page-container{
     display: flex;
     flex-flow: column wrap;
-    
+}
+
+.form-container{
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.logout-adminpage{
+    background-color: $dem-blue;
+    border-radius: 0.5rem;
+    color: $off-white;
+    width: 20vw;
+    align-self: center;
+    text-decoration: none;
+    font-size: $font-size-medium;
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    justify-content: center;    
+    height: $font-size-xlarge;
+}
+
+.logout-adminpage:hover{
+    background-color: lighten($dem-blue,10);
+    box-shadow: 1rem;
+}
+
+.form-header-text{
+    font-size: $font-size-large;
+    color: $dem-blue;
+    font-weight: bold;
+    margin-bottom: 5vh;
+}
+.separator{
+    background-color: $dem-blue;
+    width: 80%;
+    height: 2px;
+}
+
+.admin-table{
+    width: 80vw;
+}
+
+.success-message{
+    font-size: $font-size-medium;
+    color: green;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+    align-items: center;
 }

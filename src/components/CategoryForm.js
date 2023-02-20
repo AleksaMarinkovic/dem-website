@@ -26,8 +26,8 @@ const CategoryForm = ({
           required
           onChange={onFormInputChange}
         ></input>
-        <input type="file" name="image" onChange={fileChangeHandler}></input>
-        <button className="button-form-adminpage" type="submit">
+        <input type="file" name="image" onChange={fileChangeHandler} className="category-form-image-input" required></input>
+        <button className="button-category-form-adminpage" type="submit">
           {buttonText}
         </button>
       </form>

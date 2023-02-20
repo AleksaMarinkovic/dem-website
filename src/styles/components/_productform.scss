@@ -1,9 +1,27 @@
 .form-textarea{
     min-height: 30vh;
     min-width: 30vw;
+    margin-bottom: $font-size-small;
 }
 
 .form-text{
     font-size: $font-size-medium;
     color: $dem-blue;
+    margin-bottom: $font-size-small;
+    margin-top: $font-size-small;
+}
+
+.form-image-input{
+    margin-bottom: $font-size-small;
+    margin-top: $font-size-small;
+}
+
+.button-form-adminpage{
+    margin-bottom: $font-size-small;
+    margin-top: $font-size-small;
+}
+
+.form-availability-horizontal{
+    display: flex;
+    flex-flow: row wrap;
 }
