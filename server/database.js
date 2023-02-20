@@ -33,7 +33,7 @@ const getAllProducts = async () => {
 function sleep(milliseconds) {
   var start = new Date().getTime();
   for (var i = 0; i < 1e7; i++) {
-    if ((new Date().getTime() - start) > milliseconds){
+    if (new Date().getTime() - start > milliseconds) {
       break;
     }
   }
@@ -43,7 +43,7 @@ const getAllCategories = async () => {
   try {
     const data = category.find();
     return data;
-  }catch{
+  } catch {
     return false;
   }
 };
@@ -109,12 +109,36 @@ const setProduct = async (id, update) => {
 };
 
 const setCategory = async (id, update) => {
-  console.log(id, update);
   if (!mongoose.Types.ObjectId.isValid(id)) return false;
   category.findByIdAndUpdate(id, update, (err) => {
     if (err) return err;
     return true;
   });
+};
+
+const updateCategoryOfProducts = async (oldCategoryName, newCategoryName) => {
+  try {
+    const data = await product
+      .find({ productCategory: oldCategoryName })
+      .exec();
+    data.forEach((item) => {
+      if (!mongoose.Types.ObjectId.isValid(item._id)) return false;
+      const update = {
+        categoryName: newCategoryName,
+      };
+      let updateWithNewCategoryPromise;
+      updateWithNewCategoryPromise = setProduct(item._id, update);
+      updateWithNewCategoryPromise.then((data1) => {
+        console.log(data1);
+        if (data1 === false) {
+          return;
+        }
+      });
+    });
+    return data;
+  } catch {
+    return false;
+  }
 };
 
 exports.connectDB = connectDB;
@@ -126,3 +150,4 @@ exports.getProduct = getProduct;
 exports.getAllCategories = getAllCategories;
 exports.addCategory = addCategory;
 exports.setCategory = setCategory;
+exports.updateCategoryOfProducts = updateCategoryOfProducts;

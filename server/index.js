@@ -269,6 +269,22 @@ app.post("/updateWithId", upload.single("image"), (req, res) => {
 
 app.post("/updateWithIdCategory", upload.single("image"), (req, res) => {
   try {
+
+    //update all products to have new category
+    let changeCategoryPromise;
+    changeCategoryPromise = database.updateCategoryOfProducts(req.body.oldCategoryName, req.body.categoryName)
+    changeCategoryPromise.then((data) => {
+      if (data === false) {
+        res.status(500).send({
+          success: false,
+          message: "Error 001",
+          data: [],
+        });
+        return;
+      }
+    });
+    
+    //update category itself
     let updatePromise;
     if (req.file) {
       updatePromise = database.setCategory(req.body._id, {
