@@ -32,9 +32,11 @@ const AdminPage = () => {
   const [productToChangeImageData, setProductToChangeImageData] = useState();
   const [productToAdd, setProductToAdd] = useState(productToAddDefault);
   const [error, setError] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(null);  
+  const [addError, setAddError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
   const [successMessageAdd, setSuccessMessageAdd] = useState(null);
-
+  const [fetchError, setFetchError] = useState(null);
+  const [fetchErrorCategories, setFetchErrorCategories] = useState(null);
 
   const columns = useMemo(
     () => [
@@ -81,20 +83,20 @@ const AdminPage = () => {
             if (response.data.success) {
               setProducts(response.data.data);
               setFetchedProducts(true);
+              console.log("Fetched products");
             }
           })
           .catch((error) => {
             if (error.response) {
-              setError(error.response.data.message);
+              setFetchError(error.response.data.message + ' - proizvodi');
               setProductToChange();
-            }
-            if (error.request) {
+            } else if (error.request) {
               // request made no response from server
-              setError("Error 003");
+              setFetchError("Error 003 - proizvodi");
               setProductToChange();
             } else {
               // request setup failed
-              setError("Error 004");
+              setFetchError("Error 004 - proizvodi");
               setProductToChange();
             }
           });
@@ -108,18 +110,18 @@ const AdminPage = () => {
             if (response.data.success) {
               setCategories(response.data.data);
               setFetchedCategories(true);
+              console.log("Fetched categories");
             }
           })
           .catch((error) => {
             if (error.response) {
-              setError(error.response.data.message);
-            }
-            if (error.request) {
+              setFetchErrorCategories(error.response.data.message + ' - kategorije');
+            } else if (error.request) {
               // request made no response from server
-              setError("Error 003");
+              setFetchErrorCategories("Error 003 - kategorije");
             } else {
               // request setup failed
-              setError("Error 004");
+              setFetchErrorCategories("Error 004 - kategorije");
             }
           });
       }
@@ -134,6 +136,7 @@ const AdminPage = () => {
   const onRowChange = (product) => {
     setProductToChange(product);
     setSuccessMessage();
+    setError();
   };
 
   const onFormInputChange = (event) => {
@@ -154,7 +157,6 @@ const AdminPage = () => {
 
   const onAddFormInputChange = (event) => {
     const { name, value } = event.target;
-    console.log("name: " + name, "value: " + value);
     setProductToAdd({
       ...productToAdd,
       [name]: value,
@@ -192,8 +194,7 @@ const AdminPage = () => {
           // request made and server responded
           setError(error.response.data.message);
           setProductToChange();
-        }
-        if (error.request) {
+        } else if (error.request) {
           // request made no response from server
           setError("Error 003");
           setProductToChange();
@@ -224,16 +225,15 @@ const AdminPage = () => {
       .catch((error) => {
         if (error.response) {
           // request made and server responded
-          setError(error.response.data.message);
+          setAddError(error.response.data.message);
           setProductToAdd(productToAddDefault);
-        }
-        if (error.request) {
+        } else if (error.request) {
           // request made no response from server
-          setError("Error 003");
+          setAddError("Error 003");
           setProductToAdd(productToAddDefault);
         } else {
           // request setup failed
-          setError("Error 004");
+          setAddError("Error 004");
           setProductToAdd(productToAddDefault);
         }
       });
@@ -251,7 +251,17 @@ const AdminPage = () => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      {isBusy && <div>Loading</div>}
+      {isBusy && !fetchError && !fetchErrorCategories && <div>Loading</div>}
+      {fetchError ? (
+        <div className="error-message">{fetchError}</div>
+      ) : (
+        <div style={{ visibility: "hidden" }}></div>
+      )}
+      {fetchErrorCategories ? (
+        <div className="error-message">{fetchErrorCategories}</div>
+      ) : (
+        <div style={{ visibility: "hidden" }}></div>
+      )}
       {!isBusy && (
         <div style={{ maxWidth: "100%" }} className="vertical-container-admin">
           <div className="vertical-admin-page-container">
@@ -282,7 +292,7 @@ const AdminPage = () => {
                 </div>
               ) : (
                 <div className="form-header-text">
-                  Kliknite na neki proizvod da ga izmenite
+                  Kliknite na proizvod u tabeli da ga izmenite
                 </div>
               )}
             </div>
@@ -291,12 +301,17 @@ const AdminPage = () => {
             ) : (
               <div style={{ visibility: "hidden" }}></div>
             )}
+            {error ? (
+              <div className="error-message">{error}</div>
+            ) : (
+              <div style={{ visibility: "hidden" }}></div>
+            )}
           </div>
           <div className="separator"></div>
           <div className="vertical-admin-page-container">
             <div className="form-container">
               <div className="form-header-text">
-                UNESITE PODATKE DA DODATE NOVI PROIZVOD NA SAJT:{" "}
+                UNESITE PODATKE DA DODATE NOVI PROIZVOD:{" "}
               </div>
               <ProductForm
                 onSubmit={onAddProductClick}
@@ -316,10 +331,15 @@ const AdminPage = () => {
               ) : (
                 <div style={{ visibility: "hidden" }}></div>
               )}
+              {addError ? (
+                <div className="error-message">{addError}</div>
+              ) : (
+                <div style={{ visibility: "hidden" }}></div>
+              )}
             </div>
           </div>
           <div className="separator"></div>
-          <AdminPageCategories></AdminPageCategories>       
+          <AdminPageCategories></AdminPageCategories>
           <div className="separator"></div>
           <NavLink onClick={logout} to="/" className="logout-adminpage">
             IZLOGUJ SE

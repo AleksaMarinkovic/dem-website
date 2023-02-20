@@ -7,6 +7,7 @@ const ProductPage = () => {
   let { id } = useParams();
   const [product, setProduct] = useState();
   const [isBusy, setIsBusy] = useState(true);
+  const [fetchError, setFetchError] = useState();
 
   useEffect(() => {
     async function fetchData() {
@@ -24,33 +25,44 @@ const ProductPage = () => {
           if (error.response) {
             // request made and server responded
             setProduct();
-            console.log(error.response.data.message);
-          }
-          if (error.request) {
+            setFetchError(error.response.data.message);
+          } else if (error.request) {
             // request made no response from server
             setProduct();
-            console.log("Error 003");
+            setFetchError("Error 003");
           } else {
             // request setup failed
-            console.log("Error 004");
+            setFetchError("Error 004");
             setProduct();
           }
         });
     }
     fetchData();
   }, []);
-  return isBusy ? (
-    <motion.div>Loading</motion.div>
-  ) : (
-    <motion.div className="product-details-page-vertical-container">
-      <div className="product-details-page-name">{product.productName}</div>
-      <div className="product-details-page-horizontal-container">
-        <img src={product.productImageUrl} alt={product.productName}></img>
-        <div className="product-details-page-vertical-content-container">
-          <div className="product-details-page-category">Kategorija: {product.productCategory}</div>
-          <div className="product-details-page-description">Opis: {product.productDescription}</div>
+  return (
+    <motion.div>
+      {isBusy && !fetchError && !fetchError && <div>Loading</div>}
+      {fetchError ? (
+        <div className="error-message">{fetchError}</div>
+      ) : (
+        <div style={{ visibility: "hidden" }}></div>
+      )}
+      {!isBusy && (
+        <div className="product-details-page-vertical-container">
+          <div className="product-details-page-name">{product.productName}</div>
+          <div className="product-details-page-horizontal-container">
+            <img src={product.productImageUrl} alt={product.productName}></img>
+            <div className="product-details-page-vertical-content-container">
+              <div className="product-details-page-category">
+                Kategorija: {product.productCategory}
+              </div>
+              <div className="product-details-page-description">
+                Opis: {product.productDescription}
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
     </motion.div>
   );
 };

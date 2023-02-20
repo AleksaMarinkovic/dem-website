@@ -6,7 +6,7 @@ import Product from "./Product";
 const ProductsPage = () => {
   const [data, setData] = useState([]);
   const [isBusy, setIsBusy] = useState(true);
-  const [error, setError] = useState(null);
+  const [fetchError, setFetchError] = useState();
 
   useEffect(() => {
     async function fetchData() {
@@ -19,12 +19,12 @@ const ProductsPage = () => {
         })
         .catch((error) => {
           if (error.response) {
-            setError(error.response.data.message);
+            setFetchError(error.response.data.message);
           }
-          if (error.request) {
-            setError("Error 003");
+          else if (error.request) {
+            setFetchError("Error 003");
           } else {
-            setError("Error 004");
+            setFetchError("Error 004");
           }
         });
     }
@@ -38,7 +38,12 @@ const ProductsPage = () => {
       exit={{ opacity: 0 }}
     >
       <div id="top" className="top-anchor" />
-      {isBusy && <div>Loading</div>}
+      {isBusy && !fetchError && <div>Loading</div>}
+      {fetchError ? (
+        <div className="error-message">{fetchError}</div>
+      ) : (
+        <div style={{ visibility: "hidden" }}></div>
+      )}
       {!isBusy && (
         <div className="product-list-container">
           {data.map((item) => {

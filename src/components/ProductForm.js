@@ -13,7 +13,6 @@ const ProductForm = ({
   categories,
   isAdd,
 }) => {
-  console.log(categories);
   return (
     <div>
       <form

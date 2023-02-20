@@ -25,6 +25,16 @@ const fileStorageEngine = multer.diskStorage({
 
 const upload = multer({ storage: fileStorageEngine });
 
+// for simulating delay in server
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if ((new Date().getTime() - start) > milliseconds){
+      break;
+    }
+  }
+}
+
 app.post("/single", upload.single("image"), (req, res) => {
   try {
     const addPromise = database.addProduct({
@@ -245,6 +255,44 @@ app.post("/updateWithId", upload.single("image"), (req, res) => {
       res.send({
         success: true,
         message: "Uspešno izmenjen proizvod.",
+        data: data,
+      });
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Error 002",
+      data: [],
+    });
+  }
+});
+
+app.post("/updateWithIdCategory", upload.single("image"), (req, res) => {
+  try {
+    let updatePromise;
+    if (req.file) {
+      updatePromise = database.setCategory(req.body._id, {
+        categoryName: req.body.categoryName,
+        categoryImageUrl: req.file.path
+      });
+    } else {
+      updatePromise = database.setCategory(req.body._id, {
+        categoryName: req.body.categoryName
+      });
+    }
+
+    updatePromise.then((data) => {
+      if (data === false) {
+        res.status(500).send({
+          success: false,
+          message: "Error 001",
+          data: [],
+        });
+        return;
+      }
+      res.send({
+        success: true,
+        message: "Uspešno izmenjena kategorija.",
         data: data,
       });
     });

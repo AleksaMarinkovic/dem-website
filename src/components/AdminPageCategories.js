@@ -60,7 +60,7 @@ const AdminPageCategories = () => {
           if (error.response) {
             setError(error.response.data.message);
           }
-          if (error.request) {
+          else if (error.request) {
             // request made no response from server
             setError("Error 003");
           } else {
@@ -94,12 +94,13 @@ const AdminPageCategories = () => {
         }
       })
       .catch((error) => {
+        console.log(error);
         if (error.response) {
           // request made and server responded
           setError(error.response.data.message);
           setCategoryToAdd(categoryToAddDefault);
         }
-        if (error.request) {
+        else if (error.request) {
           // request made no response from server
           setError("Error 003");
           setCategoryToAdd(categoryToAddDefault);
@@ -136,6 +137,11 @@ const AdminPageCategories = () => {
           </div>
           {successMessageCategory ? (
             <div className="success-message">{successMessageCategory}</div>
+          ) : (
+            <div style={{ visibility: "hidden" }}></div>
+          )}
+          {error ? (
+            <div className="error-message">{error}</div>
           ) : (
             <div style={{ visibility: "hidden" }}></div>
           )}

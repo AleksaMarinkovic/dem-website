@@ -6,4 +6,4 @@
 006 - Server uhvatio gresku pri okidanju getAllProducts
 007 - Axios je uhvatio gresku pri okidanju /getProducts
 008 - Insert u bazu failed
-009 - Ne postoji taj object id za get 
+009 - Get za individualni product nije prosao (mozda id nije adekvatan)
