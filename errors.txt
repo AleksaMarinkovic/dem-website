@@ -7,3 +7,5 @@
 007 - Axios je uhvatio gresku pri okidanju /getProducts
 008 - Insert u bazu failed
 009 - Get za individualni product nije prosao (mozda id nije adekvatan)
+010 - Delete nije prosao
+011 - Server je uhvatio gresku pri okidanju remove proizvodjaca

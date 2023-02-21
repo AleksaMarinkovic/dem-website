@@ -107,7 +107,7 @@ const AdminPageCategories = () => {
     data.append("image", categoryToAddImageData);
     data.append("categoryName", categoryToAdd.categoryName);
 
-    Axios.post("/singleCategory", data)
+    Axios.post("/addCategory", data)
       .then((response) => {
         if (response.data.success) {
           setCategoryToAdd(categoryToAddDefault);

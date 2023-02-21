@@ -181,7 +181,7 @@ const AdminPage = () => {
     data.append("productAvailability", productToAdd.productAvailability);
     data.append("productDescription", productToAdd.productDescription);
 
-    Axios.post("/single", data)
+    Axios.post("/addProduct", data)
       .then((response) => {
         if (response.data.success) {
           setProductToAdd(productToAddDefault);
@@ -240,7 +240,7 @@ const AdminPage = () => {
     data.append("productAvailability", productToChange.productAvailability);
     data.append("productDescription", productToChange.productDescription);
 
-    Axios.post("/updateWithId", data)
+    Axios.post("/updateProductWithId", data)
       .then((response) => {
         if (response.data.success) {
           setProductToChange();

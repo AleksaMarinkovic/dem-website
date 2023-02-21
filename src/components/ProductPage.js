@@ -11,7 +11,7 @@ const ProductPage = () => {
 
   useEffect(() => {
     async function fetchData() {
-      await Axios.post("/getIndividualProduct", {
+      await Axios.post("/getProductById", {
         _id: id,
       })
         .then((response) => {

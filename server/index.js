@@ -3,27 +3,8 @@ const path = require("path");
 const express = require("express");
 const buildPath = path.join(__dirname, "..", "build");
 const multer = require("multer");
-
-const app = express();
-
-app.use(express.json());
-app.use(express.static(buildPath));
-app.use("/images", express.static("images"));
-
 const port = 8080;
-
-database.connectDB();
-
-const fileStorageEngine = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "./images");
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + "--" + file.originalname);
-  },
-});
-
-const upload = multer({ storage: fileStorageEngine });
+const app = express();
 
 // for simulating delay in server
 function sleep(milliseconds) {
@@ -35,7 +16,34 @@ function sleep(milliseconds) {
   }
 }
 
-app.post("/single", upload.single("image"), (req, res) => {
+app.use(express.json());
+app.use(express.static(buildPath));
+app.use("/images", express.static("images"));
+
+database.connectDB();
+
+// multer middleware for storing an image on upload
+const fileStorageEngine = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "./images");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "--" + file.originalname);
+  },
+});
+const upload = multer({ storage: fileStorageEngine });
+
+
+// potential further implementation with multer middleware for supporting multimple images
+app.post("/multiple", upload.array("images", 3), (req, res) => {
+  res.send("Multiple files upload success");
+});
+
+
+// PRODUCTS
+// adding product with multer middleware for image storing
+// image url after storing is sent to db on productImageUrl field
+app.post("/addProduct", upload.single("image"), (req, res) => {
   try {
     const addPromise = database.addProduct({
       productName: req.body.productName,
@@ -68,40 +76,7 @@ app.post("/single", upload.single("image"), (req, res) => {
   }
 });
 
-app.post("/singleCategory", upload.single("image"), (req, res) => {
-  try {
-    const addCategoryPromise = database.addCategory({
-      categoryName: req.body.categoryName,
-      categoryImageUrl: req.file.path
-    });
-    addCategoryPromise.then((data) => {
-      if (data === false) {
-        res.status(500).send({
-          success: false,
-          message: "Error 008",
-          data: [],
-        });
-        return;
-      }
-      res.send({
-        success: true,
-        message: "Uspešno dodata kategorija.",
-        data: data,
-      });
-    });
-  } catch (error) {
-    res.status(500).send({
-      success: false,
-      message: "Error 002",
-      data: [],
-    });
-  }
-});
-
-app.post("/multiple", upload.array("images", 3), (req, res) => {
-  res.send("Multiple files upload success");
-});
-
+// get all products which should be available on website (productAvailability is true)
 app.get("/getAvailableProducts", (req, res) => {
   try {
     const dataPromise = database.getAvailableProducts();
@@ -130,6 +105,7 @@ app.get("/getAvailableProducts", (req, res) => {
   }
 });
 
+// get all products in db
 app.get("/getProducts", (req, res) => {
   try {
     const dataPromise = database.getAllProducts();
@@ -158,68 +134,9 @@ app.get("/getProducts", (req, res) => {
   }
 });
 
-app.get("/getCategories", (req, res) => {
-  try {
-    const dataPromise = database.getAllCategories();
-    dataPromise.then((data) => {
-      if (data === false) {
-        res.status(500).send({
-          success: false,
-          message: "Error 005",
-          data: [],
-        });
-        return;
-      } else {
-        res.send({
-          success: true,
-          message: "Successfully retrieved data.",
-          data: data,
-        });
-      }
-    });
-  } catch (error) {
-    res.status(500).send({
-      success: false,
-      message: "Error 006",
-      data: [],
-    });
-  }
-});
-
-app.post("/single", upload.single("image"), (req, res) => {
-  try {
-    const addPromise = database.addProduct({
-      productName: req.body.productName,
-      productDescription: req.body.productDescription,
-      productAvailability: req.body.productAvailability,
-      productCategory: req.body.productCategory,
-      productImageUrl: req.file.path,
-    });
-    addPromise.then((data) => {
-      if (data === false) {
-        res.status(500).send({
-          success: false,
-          message: "Error 008",
-          data: [],
-        });
-        return;
-      }
-      res.send({
-        success: true,
-        message: "Uspešno dodat proizvod.",
-        data: data,
-      });
-    });
-  } catch (error) {
-    res.status(500).send({
-      success: false,
-      message: "Error 002",
-      data: [],
-    });
-  }
-});
-
-app.post("/updateWithId", upload.single("image"), (req, res) => {
+// update a product with certain id with or without a new image
+// if image is not provided, current image remains
+app.post("/updateProductWithId", upload.single("image"), (req, res) => {
   try {
     let updatePromise;
     if (req.file) {
@@ -263,6 +180,130 @@ app.post("/updateWithId", upload.single("image"), (req, res) => {
   }
 });
 
+// get a specific product with a given id
+app.post("/getProductById", (req, res) => {
+  try {
+    const getPromise = database.getProduct(req.body._id);
+    getPromise.then((data) => {
+      if (data === false) {
+        res.status(500).send({
+          success: false,
+          message: "Error 009",
+          data: [],
+        });
+        return;
+      }
+      res.send({
+        success: true,
+        message: "Uspešno uhvacen proizvod.",
+        data: data,
+      });
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Error 002",
+      data: [],
+    });
+  }
+});
+
+// add a product (must have an image: frontend doesn't allow not uploading image)
+app.post("/addProduct", (req, res) => {
+  try {
+    const addPromise = database.addProduct({
+      productName: req.body.productName,
+      productDescription: req.body.productDescription,
+      productAvailability: req.body.productAvailability,
+      productCategory: req.body.productCategory,
+      productImageUrl: req.body.productImageUrl,
+    });
+    addPromise.then((data) => {
+      if (data === false) {
+        res.status(500).send({
+          success: false,
+          message: "Error 008",
+          data: [],
+        });
+      }
+      res.send({
+        success: true,
+        message: "Uspešno dodat proizvod.",
+        data: data,
+      });
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Error 002",
+      data: [],
+    });
+  }
+});
+
+// CATEGORIES
+// adding category with multer middleware for image storing
+// image url after storing is sent to db on categoryImageUrl field
+app.post("/addCategory", upload.single("image"), (req, res) => {
+  try {
+    const addCategoryPromise = database.addCategory({
+      categoryName: req.body.categoryName,
+      categoryImageUrl: req.file.path
+    });
+    addCategoryPromise.then((data) => {
+      if (data === false) {
+        res.status(500).send({
+          success: false,
+          message: "Error 008",
+          data: [],
+        });
+        return;
+      }
+      res.send({
+        success: true,
+        message: "Uspešno dodata kategorija.",
+        data: data,
+      });
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Error 002",
+      data: [],
+    });
+  }
+});
+
+// get all categories
+app.get("/getCategories", (req, res) => {
+  try {
+    const dataPromise = database.getAllCategories();
+    dataPromise.then((data) => {
+      if (data === false) {
+        res.status(500).send({
+          success: false,
+          message: "Error 005",
+          data: [],
+        });
+        return;
+      } else {
+        res.send({
+          success: true,
+          message: "Successfully retrieved data.",
+          data: data,
+        });
+      }
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Error 006",
+      data: [],
+    });
+  }
+});
+
+// update category and alter all products that have that category to have new category
 app.post("/updateWithIdCategory", upload.single("image"), (req, res) => {
   try {
 
@@ -317,21 +358,28 @@ app.post("/updateWithIdCategory", upload.single("image"), (req, res) => {
   }
 });
 
-app.post("/getIndividualProduct", (req, res) => {
+// MANUFACTURERS
+// adding manufacturer with multer middleware for image storing
+// image url after storing is sent to db on manufacturerImageUrl field
+app.post("/addManufacturer", upload.single("image"), (req, res) => {
   try {
-    const getPromise = database.getProduct(req.body._id);
-    getPromise.then((data) => {
+    const addManufacturerPromise = database.addManufacturer({
+      manufacturerName: req.body.manufacturerName,
+      manufacturerWebsiteUrl : req.body.manufacturerWebsiteUrl,
+      manufacturerImageUrl: req.file.path
+    });
+    addManufacturerPromise.then((data) => {
       if (data === false) {
         res.status(500).send({
           success: false,
-          message: "Error 009",
+          message: "Error 008",
           data: [],
         });
         return;
       }
       res.send({
         success: true,
-        message: "Uspešno uhvacen proizvod.",
+        message: "Uspešno dodat proizvođač.",
         data: data,
       });
     });
@@ -344,36 +392,39 @@ app.post("/getIndividualProduct", (req, res) => {
   }
 });
 
-app.post("/addProduct", (req, res) => {
+// get all manufacturers
+app.get("/getManufacturers", (req, res) => {
   try {
-    const addPromise = database.addProduct({
-      productName: req.body.productName,
-      productDescription: req.body.productDescription,
-      productAvailability: req.body.productAvailability,
-      productCategory: req.body.productCategory,
-      productImageUrl: req.body.productImageUrl,
-    });
-    addPromise.then((data) => {
+    const dataPromise = database.getAllManufacturers();
+    dataPromise.then((data) => {
       if (data === false) {
         res.status(500).send({
           success: false,
-          message: "Error 008",
+          message: "Error 005",
           data: [],
         });
+        return;
+      } else {
+        res.send({
+          success: true,
+          message: "Successfully retrieved data.",
+          data: data,
+        });
       }
-      res.send({
-        success: true,
-        message: "Uspešno dodat proizvod.",
-        data: data,
-      });
     });
   } catch (error) {
     res.status(500).send({
       success: false,
-      message: "Error 002",
+      message: "Error 006",
       data: [],
     });
   }
+});
+
+// remove a manufacturer
+app.post("/removeManufacturer", (req, res) => {
+  // first remove all products with manufacturer name
+  // then remove the manufacturer itself
 });
 
 app.listen(port, "localhost", () => {
