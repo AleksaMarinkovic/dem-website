@@ -8,19 +8,13 @@ import { NavLink } from "react-router-dom";
 import ProductForm from "./ProductForm";
 import AdminPageCategories from "./AdminPageCategories";
 
-const AdminPage = () => {
+const AdminPage = () => {  
   const [password, setPassword, { removeItem }] = useLocalStorageState(
     "password",
     {
       defaultValue: "",
     }
-  );
-  const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [isBusy, setIsBusy] = useState(true);
-  const [fetchedProducts, setFetchedProducts] = useState(false);
-  const [fetchedCategories, setFetchedCategories] = useState(false);
-  const [productToChange, setProductToChange] = useState();
+  );  
   const productToAddDefault = {
     productName: "",
     productDescription: "",
@@ -28,16 +22,37 @@ const AdminPage = () => {
     productCategory: "",
     productImageUrl: "",
   };
+  //fetched products
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+
+  //busy means its in process of fetching data
+  //fetchedProducts and Categories means data has been successfully fetched
+  const [isBusy, setIsBusy] = useState(true);
+  const [fetchedProducts, setFetchedProducts] = useState(false);
+  const [fetchedCategories, setFetchedCategories] = useState(false);
+
+  //state for adding or changing products
+  const [productToChange, setProductToChange] = useState();  
+  const [productToAdd, setProductToAdd] = useState(productToAddDefault);
+
+  //state for image data for adding or changing products
   const [productToAddImageData, setProductToAddImageData] = useState();
   const [productToChangeImageData, setProductToChangeImageData] = useState();
-  const [productToAdd, setProductToAdd] = useState(productToAddDefault);
-  const [error, setError] = useState(null);
+
+  //error message if change or add didn't execute properly
+  const [changeError, setChangeError] = useState(null);
   const [addError, setAddError] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(null);
-  const [successMessageAdd, setSuccessMessageAdd] = useState(null);
-  const [fetchError, setFetchError] = useState(null);
+
+  //error message if fetch products/categories didn't execute properly
+  const [fetchErrorProducts, setFetchErrorProducts] = useState(null);
   const [fetchErrorCategories, setFetchErrorCategories] = useState(null);
 
+  //success message if change or add executed properly
+  const [successMessageChange, setSuccessMessageChange] = useState(null);
+  const [successMessageAdd, setSuccessMessageAdd] = useState(null);
+
+  //setup columns for table
   const columns = useMemo(
     () => [
       {
@@ -64,14 +79,7 @@ const AdminPage = () => {
     ],
     []
   );
-
-  const addFileChangeHandler = (e) => {
-    setProductToAddImageData(e.target.files[0]);
-  };
-  const changeFileChangeHandler = (e) => {
-    setProductToChangeImageData(e.target.files[0]);
-  };
-
+  //On first load ask for password if its not in local storage, otherwise fetch data
   useEffect(() => {
     if (password !== "admin") {
       setPassword(prompt("Password: "));
@@ -83,20 +91,19 @@ const AdminPage = () => {
             if (response.data.success) {
               setProducts(response.data.data);
               setFetchedProducts(true);
-              console.log("Fetched products");
             }
           })
           .catch((error) => {
             if (error.response) {
-              setFetchError(error.response.data.message + ' - proizvodi');
+              setFetchErrorProducts(error.response.data.message + ' - proizvodi');
               setProductToChange();
             } else if (error.request) {
               // request made no response from server
-              setFetchError("Error 003 - proizvodi");
+              setFetchErrorProducts("Error 003 - proizvodi");
               setProductToChange();
             } else {
               // request setup failed
-              setFetchError("Error 004 - proizvodi");
+              setFetchErrorProducts("Error 004 - proizvodi");
               setProductToChange();
             }
           });
@@ -110,7 +117,6 @@ const AdminPage = () => {
             if (response.data.success) {
               setCategories(response.data.data);
               setFetchedCategories(true);
-              console.log("Fetched categories");
             }
           })
           .catch((error) => {
@@ -133,28 +139,20 @@ const AdminPage = () => {
     }
   }, [productToChange, productToAdd, fetchedCategories, fetchedProducts]);
 
+  // When a row in the table of categories is selected, set ProductToChange state to the row values
   const onRowChange = (product) => {
     setProductToChange(product);
-    setSuccessMessage();
-    setError();
+    setSuccessMessageChange();
+    setChangeError();
   };
 
-  const onFormInputChange = (event) => {
-    const { name, value } = event.target;
-    setProductToChange({
-      ...productToChange,
-      [name]: value,
-    });
+
+  // When a product image is uploaded in add product form, sets state to uploaded image
+  const addFileChangeHandler = (e) => {
+    setProductToAddImageData(e.target.files[0]);
   };
 
-  const onFormInputChangeCheckbox = (event) => {
-    const { checked } = event.target;
-    setProductToChange({
-      ...productToChange,
-      productAvailability: checked,
-    });
-  };
-
+  // When something changes in add product form, set state to new input value
   const onAddFormInputChange = (event) => {
     const { name, value } = event.target;
     setProductToAdd({
@@ -163,6 +161,7 @@ const AdminPage = () => {
     });
   };
 
+  // When something changes in add category form CHECKBOX, set state to new input value
   const onAddFormInputChangeCheckbox = (event) => {
     const { checked } = event.target;
     setProductToAdd({
@@ -171,43 +170,10 @@ const AdminPage = () => {
     });
   };
 
-  const changeProduct = (e) => {
-    e.preventDefault();
-    const data = new FormData();
-    data.append("_id", productToChange._id);
-    if (productToChangeImageData)
-      data.append("image", productToChangeImageData);
-    data.append("productName", productToChange.productName);
-    data.append("productCategory", productToChange.productCategory);
-    data.append("productAvailability", productToChange.productAvailability);
-    data.append("productDescription", productToChange.productDescription);
-
-    Axios.post("/updateWithId", data)
-      .then((response) => {
-        if (response.data.success) {
-          setProductToChange();
-          setSuccessMessage("Uspešno izmenjen proizvod");
-        }
-      })
-      .catch((error) => {
-        if (error.response) {
-          // request made and server responded
-          setError(error.response.data.message);
-          setProductToChange();
-        } else if (error.request) {
-          // request made no response from server
-          setError("Error 003");
-          setProductToChange();
-        } else {
-          // request setup failed
-          setError("Error 004");
-          setProductToChange();
-        }
-      });
-  };
-
+  // Triggers when submit is pressed on add product form
   const onAddProductClick = (e) => {
     e.preventDefault();
+
     const data = new FormData();
     data.append("image", productToAddImageData);
     data.append("productName", productToAdd.productName);
@@ -239,6 +205,66 @@ const AdminPage = () => {
       });
   };
 
+  // When a product image is uploaded in change product form, sets state to uploaded image
+  const changeFileChangeHandler = (e) => {
+    setProductToChangeImageData(e.target.files[0]);
+  };
+
+  // When something changes in change product form, set state to new input value
+  const onChangeFormInputChange = (event) => {
+    const { name, value } = event.target;
+    setProductToChange({
+      ...productToChange,
+      [name]: value,
+    });
+  };
+
+  // When something changes in change category form CHECKBOX, set state to new input value
+  const onChangeFormInputChangeCheckbox = (event) => {
+    const { checked } = event.target;
+    setProductToChange({
+      ...productToChange,
+      productAvailability: checked,
+    });
+  };
+  
+  // Triggers when submit is pressed on change product form
+  const onChangeProductClick = (e) => {
+    e.preventDefault();
+
+    const data = new FormData();
+    data.append("_id", productToChange._id);
+    if (productToChangeImageData) data.append("image", productToChangeImageData);
+    data.append("productName", productToChange.productName);
+    data.append("productCategory", productToChange.productCategory);
+    data.append("productAvailability", productToChange.productAvailability);
+    data.append("productDescription", productToChange.productDescription);
+
+    Axios.post("/updateWithId", data)
+      .then((response) => {
+        if (response.data.success) {
+          setProductToChange();
+          setSuccessMessageChange("Uspešno izmenjen proizvod");
+        }
+      })
+      .catch((error) => {
+        if (error.response) {
+          // request made and server responded
+          setChangeError(error.response.data.message);
+          setProductToChange();
+        } else if (error.request) {
+          // request made no response from server
+          setChangeError("Error 003");
+          setProductToChange();
+        } else {
+          // request setup failed
+          setChangeError("Error 004");
+          setProductToChange();
+        }
+      });
+  };
+
+  // Triggers when logout button is pressed. Removes password from localstorage
   const logout = () => {
     redirect("./");
     removeItem();
@@ -251,9 +277,9 @@ const AdminPage = () => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      {isBusy && !fetchError && !fetchErrorCategories && <div>Loading</div>}
-      {fetchError ? (
-        <div className="error-message">{fetchError}</div>
+      {isBusy && !fetchErrorProducts && !fetchErrorCategories && <div>Loading</div>}
+      {fetchErrorProducts ? (
+        <div className="error-message">{fetchErrorProducts}</div>
       ) : (
         <div style={{ visibility: "hidden" }}></div>
       )}
@@ -277,13 +303,13 @@ const AdminPage = () => {
               {productToChange ? (
                 <div className="form-container-inner">
                   <ProductForm
-                    onSubmit={changeProduct}
+                    onSubmit={onChangeProductClick}
                     valueName={productToChange.productName}
                     valueCategory={productToChange.productCategory}
                     valueDescription={productToChange.productDescription}
                     valueAvailability={productToChange.productAvailability}
-                    onFormInputChange={onFormInputChange}
-                    onFormInputChangeCheckbox={onFormInputChangeCheckbox}
+                    onFormInputChange={onChangeFormInputChange}
+                    onFormInputChangeCheckbox={onChangeFormInputChangeCheckbox}
                     buttonText="IZMENI"
                     fileChangeHandler={changeFileChangeHandler}
                     categories={categories}
@@ -296,13 +322,13 @@ const AdminPage = () => {
                 </div>
               )}
             </div>
-            {successMessage ? (
-              <div className="success-message">{successMessage}</div>
+            {categories ? (
+              <div className="success-message">{successMessageChange}</div>
             ) : (
               <div style={{ visibility: "hidden" }}></div>
             )}
-            {error ? (
-              <div className="error-message">{error}</div>
+            {changeError ? (
+              <div className="error-message">{changeError}</div>
             ) : (
               <div style={{ visibility: "hidden" }}></div>
             )}
