@@ -19,6 +19,21 @@
     flex-flow: column wrap;
     align-items: center;
     justify-content: center;
+    background-color: $light-grey;
+    border: 1px solid darken($light-grey, 5);
+    border-radius: 1rem;
+    padding: $font-size-xlarge;
+}
+
+.form-container-inner{
+    display: flex;
+    flex-flow: column wrap;
+    align-items: center;
+    justify-content: center;
+    background-color: $off-white;
+    border: 1px solid darken($light-grey, 10);
+    border-radius: 1rem;
+    padding: 1rem;
 }
 
 .logout-adminpage{
@@ -58,7 +73,7 @@
 }
 
 .success-message{
-    font-size: $font-size-medium;
+    font-size: $font-size-xlarge;
     color: green;
     display: flex;
     flex-flow: column wrap;
@@ -67,7 +82,7 @@
 }
 
 .error-message{
-    font-size: $font-size-medium;
+    font-size: $font-size-xlarge;
     color: red;
     display: flex;
     flex-flow: column wrap;

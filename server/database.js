@@ -79,7 +79,6 @@ const addProduct = async (productToAdd) => {
   });
   newProduct.save((err, res) => {
     if (err) {
-      console.log(err);
       return false;
     }
     return res;
@@ -93,7 +92,6 @@ const addCategory = async (categoryToAdd) => {
   });
   newCategory.save((err, res) => {
     if (err) {
-      console.log(err);
       return false;
     }
     return res;

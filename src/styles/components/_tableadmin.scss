@@ -1,7 +1,7 @@
 table {
     border-spacing: 0;
     border: 1px solid black;
-    background-color: $light-grey;
+    background-color: darken($light-grey, 8);
     width: 60vw;
     margin-bottom: 5vh;
     tr {
@@ -31,14 +31,12 @@ table {
 
 .clickable-table-row{
   font-size: $font-size-medium;
+  font-weight: bold;
   color: $dem-blue;
+  background-color: $off-white
 }
 
 .clickable-table-row:hover{
-  background-color: lighten($dark-grey,10);
-}
-
-.clickable-table-row:hover{
-  background-color: $dark-grey;
+  background-color: darken($off-white, 10);
   cursor: pointer;
 }

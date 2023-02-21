@@ -65,7 +65,6 @@ app.post("/single", upload.single("image"), (req, res) => {
       message: "Error 002",
       data: [],
     });
-    console.log(error);
   }
 });
 
@@ -96,12 +95,10 @@ app.post("/singleCategory", upload.single("image"), (req, res) => {
       message: "Error 002",
       data: [],
     });
-    console.log(error);
   }
 });
 
 app.post("/multiple", upload.array("images", 3), (req, res) => {
-  console.log(req.files);
   res.send("Multiple files upload success");
 });
 
@@ -219,7 +216,6 @@ app.post("/single", upload.single("image"), (req, res) => {
       message: "Error 002",
       data: [],
     });
-    console.log(error);
   }
 });
 
@@ -364,7 +360,6 @@ app.post("/addProduct", (req, res) => {
           message: "Error 008",
           data: [],
         });
-        console.log("error 008");
       }
       res.send({
         success: true,
@@ -378,7 +373,6 @@ app.post("/addProduct", (req, res) => {
       message: "Error 002",
       data: [],
     });
-    console.log(error);
   }
 });
 

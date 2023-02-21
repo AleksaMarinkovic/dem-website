@@ -275,7 +275,7 @@ const AdminPage = () => {
                 onRowSelect={onRowChange}
               />
               {productToChange ? (
-                <div className="form-container">
+                <div className="form-container-inner">
                   <ProductForm
                     onSubmit={changeProduct}
                     valueName={productToChange.productName}
@@ -311,7 +311,7 @@ const AdminPage = () => {
           <div className="vertical-admin-page-container">
             <div className="form-container">
               <div className="form-header-text">
-                UNESITE PODATKE DA DODATE NOVI PROIZVOD:{" "}
+                UNESITE PODATKE DA DODATE NOVI PROIZVOD:
               </div>
               <ProductForm
                 onSubmit={onAddProductClick}
