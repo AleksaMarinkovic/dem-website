@@ -7,6 +7,7 @@ import { redirect } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import ProductForm from "./ProductForm";
 import AdminPageCategories from "./AdminPageCategories";
+import AdminPageManufacturers from "./AdminPageManufacturers";
 
 const AdminPage = () => {  
   const [password, setPassword, { removeItem }] = useLocalStorageState(
@@ -25,12 +26,14 @@ const AdminPage = () => {
   //fetched products
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [manufacturers, setManufacturers] = useState([]);
 
   //busy means its in process of fetching data
   //fetchedProducts and Categories means data has been successfully fetched
   const [isBusy, setIsBusy] = useState(true);
   const [fetchedProducts, setFetchedProducts] = useState(false);
   const [fetchedCategories, setFetchedCategories] = useState(false);
+  const [fetchedManufacturers, setFetchedManufacturers] = useState(false);
 
   //state for adding or changing products
   const [productToChange, setProductToChange] = useState();  
@@ -47,6 +50,7 @@ const AdminPage = () => {
   //error message if fetch products/categories didn't execute properly
   const [fetchErrorProducts, setFetchErrorProducts] = useState(null);
   const [fetchErrorCategories, setFetchErrorCategories] = useState(null);
+  const [fetchErrorManufacturers, setFetchErrorManufacturers] = useState(null);
 
   //success message if change or add executed properly
   const [successMessageChange, setSuccessMessageChange] = useState(null);
@@ -70,6 +74,11 @@ const AdminPage = () => {
           },
           {
             id: "col3",
+            Header: "Proizvođač",
+            accessor: (row) => row.productManufacturer,
+          },
+          {
+            id: "col4",
             Header: "Dostupnost",
             accessor: (row) =>
               row.productAvailability ? "Dostupan" : "Nije dostupan",
@@ -134,10 +143,33 @@ const AdminPage = () => {
       fetchCategoryData();
     }
 
-    if (fetchedCategories && fetchedProducts) {
+    if (!fetchedManufacturers) {
+      async function fetchManufacturerData() {
+        await Axios.get("/getManufacturers")
+          .then((response) => {
+            if (response.data.success) {
+              setManufacturers(response.data.data);
+              setFetchedManufacturers(true);
+            }
+          })
+          .catch((error) => {
+            if (error.response) {
+              setFetchErrorManufacturers(error.response.data.message + ' - proizvođači');
+            } else if (error.request) {
+              // request made no response from server
+              setFetchErrorManufacturers("Error 003 - proizvođači");
+            } else {
+              // request setup failed
+              setFetchErrorManufacturers("Error 004 - proizvođači");
+            }
+          });
+      }
+      fetchManufacturerData();
+    }
+    if (fetchedCategories && fetchedProducts && fetchedManufacturers) {
       setIsBusy(false);
     }
-  }, [productToChange, productToAdd, fetchedCategories, fetchedProducts]);
+  }, [productToChange, productToAdd, fetchedCategories, fetchedProducts, fetchedManufacturers]);
 
   // When a row in the table of categories is selected, set ProductToChange state to the row values
   const onRowChange = (product) => {
@@ -180,6 +212,8 @@ const AdminPage = () => {
     data.append("productCategory", productToAdd.productCategory);
     data.append("productAvailability", productToAdd.productAvailability);
     data.append("productDescription", productToAdd.productDescription);
+    data.append("productManufacturer", productToAdd.productManufacturer);
+
 
     Axios.post("/addProduct", data)
       .then((response) => {
@@ -239,6 +273,7 @@ const AdminPage = () => {
     data.append("productCategory", productToChange.productCategory);
     data.append("productAvailability", productToChange.productAvailability);
     data.append("productDescription", productToChange.productDescription);
+    data.append("productManufacturer", productToChange.productManufacturer);
 
     Axios.post("/updateProductWithId", data)
       .then((response) => {
@@ -277,7 +312,7 @@ const AdminPage = () => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      {isBusy && !fetchErrorProducts && !fetchErrorCategories && <div>Loading</div>}
+      {isBusy && !fetchErrorProducts && !fetchErrorCategories && !fetchErrorManufacturers && <div>Loading</div>}
       {fetchErrorProducts ? (
         <div className="error-message">{fetchErrorProducts}</div>
       ) : (
@@ -285,6 +320,11 @@ const AdminPage = () => {
       )}
       {fetchErrorCategories ? (
         <div className="error-message">{fetchErrorCategories}</div>
+      ) : (
+        <div style={{ visibility: "hidden" }}></div>
+      )}
+      {fetchErrorManufacturers ? (
+        <div className="error-message">{fetchErrorManufacturers}</div>
       ) : (
         <div style={{ visibility: "hidden" }}></div>
       )}
@@ -308,11 +348,13 @@ const AdminPage = () => {
                     valueCategory={productToChange.productCategory}
                     valueDescription={productToChange.productDescription}
                     valueAvailability={productToChange.productAvailability}
+                    valueManufacturer={productToChange.productManufacturer}
                     onFormInputChange={onChangeFormInputChange}
                     onFormInputChangeCheckbox={onChangeFormInputChangeCheckbox}
                     buttonText="IZMENI"
                     fileChangeHandler={changeFileChangeHandler}
                     categories={categories}
+                    manufacturers={manufacturers}
                     isAdd={false}
                   ></ProductForm>
                 </div>
@@ -322,7 +364,7 @@ const AdminPage = () => {
                 </div>
               )}
             </div>
-            {categories ? (
+            {successMessageChange ? (
               <div className="success-message">{successMessageChange}</div>
             ) : (
               <div style={{ visibility: "hidden" }}></div>
@@ -345,11 +387,13 @@ const AdminPage = () => {
                 valueCategory={productToAdd.productCategory}
                 valueDescription={productToAdd.productDescription}
                 valueAvailability={productToAdd.productAvailability}
+                valueManufacturer={productToAdd.productManufacturer}
                 onFormInputChange={onAddFormInputChange}
                 onFormInputChangeCheckbox={onAddFormInputChangeCheckbox}
                 buttonText="DODAJ"
                 fileChangeHandler={addFileChangeHandler}
                 categories={categories}
+                manufacturers={manufacturers}
                 isAdd={true}
               ></ProductForm>
               {successMessageAdd ? (
@@ -366,6 +410,8 @@ const AdminPage = () => {
           </div>
           <div className="separator"></div>
           <AdminPageCategories></AdminPageCategories>
+          <div className="separator"></div>
+          <AdminPageManufacturers></AdminPageManufacturers>
           <div className="separator"></div>
           <NavLink onClick={logout} to="/" className="logout-adminpage">
             IZLOGUJ SE

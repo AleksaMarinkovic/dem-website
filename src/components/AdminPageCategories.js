@@ -16,10 +16,8 @@ const AdminPageCategories = () => {
   const [changeError, setChangeError] = useState(null);
   const [categoryToAddImageData, setCategoryToAddImageData] = useState();
   const [categoryToAdd, setCategoryToAdd] = useState(categoryToAddDefault);
-  const [successMessageCategoryAdd, setSuccessMessageCategoryAdd] =
-    useState(null);
-  const [successMessageCategoryChange, setSuccessMessageCategoryChange] =
-    useState(null);
+  const [successMessageCategoryAdd, setSuccessMessageCategoryAdd] = useState(null);
+  const [successMessageCategoryChange, setSuccessMessageCategoryChange] = useState(null);
   const [categoryToChange, setCategoryToChange] = useState();
   const [categoryToChangeImageData, setCategoryToChangeImageData] = useState();
   const [oldCategoryName, setOldCategoryName] = useState();

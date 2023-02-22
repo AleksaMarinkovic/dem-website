@@ -50,6 +50,7 @@ app.post("/addProduct", upload.single("image"), (req, res) => {
       productDescription: req.body.productDescription,
       productAvailability: req.body.productAvailability,
       productCategory: req.body.productCategory,
+      productManufacturer: req.body.productManufacturer,
       productImageUrl: req.file.path,
     });
     addPromise.then((data) => {
@@ -145,6 +146,7 @@ app.post("/updateProductWithId", upload.single("image"), (req, res) => {
         productDescription: req.body.productDescription,
         productAvailability: req.body.productAvailability,
         productCategory: req.body.productCategory,
+        productManufacturer: req.body.productManufacturer,
         productImageUrl: req.file.path
       });
     } else {
@@ -152,6 +154,7 @@ app.post("/updateProductWithId", upload.single("image"), (req, res) => {
         productName: req.body.productName,
         productDescription: req.body.productDescription,
         productAvailability: req.body.productAvailability,
+        productManufacturer: req.body.productManufacturer,
         productCategory: req.body.productCategory
       });
     }
@@ -181,7 +184,7 @@ app.post("/updateProductWithId", upload.single("image"), (req, res) => {
 });
 
 // get a specific product with a given id
-app.post("/getProductById", (req, res) => {
+app.post("/getProductById", upload.none(), (req, res) => {
   try {
     const getPromise = database.getProduct(req.body._id);
     getPromise.then((data) => {
@@ -196,39 +199,6 @@ app.post("/getProductById", (req, res) => {
       res.send({
         success: true,
         message: "Uspešno uhvacen proizvod.",
-        data: data,
-      });
-    });
-  } catch (error) {
-    res.status(500).send({
-      success: false,
-      message: "Error 002",
-      data: [],
-    });
-  }
-});
-
-// add a product (must have an image: frontend doesn't allow not uploading image)
-app.post("/addProduct", (req, res) => {
-  try {
-    const addPromise = database.addProduct({
-      productName: req.body.productName,
-      productDescription: req.body.productDescription,
-      productAvailability: req.body.productAvailability,
-      productCategory: req.body.productCategory,
-      productImageUrl: req.body.productImageUrl,
-    });
-    addPromise.then((data) => {
-      if (data === false) {
-        res.status(500).send({
-          success: false,
-          message: "Error 008",
-          data: [],
-        });
-      }
-      res.send({
-        success: true,
-        message: "Uspešno dodat proizvod.",
         data: data,
       });
     });
@@ -422,9 +392,107 @@ app.get("/getManufacturers", (req, res) => {
 });
 
 // remove a manufacturer
-app.post("/removeManufacturer", (req, res) => {
-  // first remove all products with manufacturer name
-  // then remove the manufacturer itself
+app.post("/removeManufacturer", upload.none(), (req, res) => {
+  try{
+    const dataPromise = database.removeProductsByManufacturer(req.body.manufacturerName);
+    dataPromise.then((data) => {
+      if (data === false) {
+        res.status(500).send({
+          success: false,
+          message: "Error 012",
+          data: [],
+        });
+        return;
+      }
+    });
+  }
+  catch(error){
+    res.status(500).send({
+      success: false,
+      message: "Error 013",
+      data: [],
+    });
+  }
+  try{
+    const dataPromise = database.removeManufacturer(req.body._id);
+    dataPromise.then((data) => {
+      if (data === false) {
+        res.status(500).send({
+          success: false,
+          message: "Error 014",
+          data: [],
+        });
+        return;
+      }
+      res.send({
+        success: true,
+        message: "Uspešno izbrisan proizvođač.",
+        data: data,
+      });
+    });
+  }
+  catch{
+    res.status(500).send({
+      success: false,
+      message: "Error 015",
+      data: [],
+    });
+  }
+});
+
+// update manufacturer and alter all manufacturers that have that manufacturer to have new manufacturer
+app.post("/updateWithIdManufacturer", upload.single("image"), (req, res) => {
+  try {
+    //update all products to have new manufacturer
+    let changeManufacturerPromise;
+    changeManufacturerPromise = database.updateManufacturerOfProducts(req.body.oldManufacturerName, req.body.manufacturerName)
+    changeManufacturerPromise.then((data) => {
+      if (data === false) {
+        res.status(500).send({
+          success: false,
+          message: "Error 0001",
+          data: [],
+        });
+        return;
+      }
+    });    
+    //update manufacturer itself
+    let updatePromise;
+    if (req.file) {
+      updatePromise = database.setManufacturer(req.body._id, {
+        manufacturerName: req.body.manufacturerName,
+        manufacturerWebsiteUrl: req.body.manufacturerWebsiteUrl,
+        manufacturerImageUrl: req.file.path
+      });
+    } else {
+      updatePromise = database.setManufacturer(req.body._id, {
+        manufacturerName: req.body.manufacturerName,
+        manufacturerWebsiteUrl: req.body.manufacturerWebsiteUrl
+      });
+    }
+
+    updatePromise.then((data) => {
+      if (data === false) {
+        res.status(500).send({
+          success: false,
+          message: "Error 00001",
+          data: [],
+        });
+        return;
+      }
+      res.send({
+        success: true,
+        message: "Uspešno izmenjen proizvođač.",
+        data: data,
+      });
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Error 002",
+      data: [],
+    });
+  }
 });
 
 app.listen(port, "localhost", () => {

@@ -23,6 +23,7 @@ const connectDB = async () => {
     productCategory: String,
     productImageUrl: String,
     productAvailability: Boolean,
+    productManufacturer: String,
   });
   product = mongoose.model("products", productSchema);
 
@@ -37,12 +38,13 @@ const connectDB = async () => {
   const manufacturerSchema = new mongoose.Schema({
     manufacturerName: String,
     manufacturerImageUrl: String,
-    manufacturerWebsiteUrl: String
+    manufacturerWebsiteUrl: String,
   });
   manufacturer = mongoose.model("manufacturer", manufacturerSchema);
 };
 
 // PRODUCTS
+
 // get all products in database
 const getAllProducts = async () => {
   try {
@@ -66,13 +68,18 @@ const getAvailableProducts = async () => {
 // remove all products that are manufactured by a specific manufacturer
 const removeProductsByManufacturer = async (manufacturer) => {
   try {
-    //find products that have this category
+    //find array of products that have this category
     const data = await product
       .find({ productManufacturer: manufacturer })
       .exec();
+    //delete all products in this array
     data.forEach((item) => {
       if (!mongoose.Types.ObjectId.isValid(item._id)) return false;
-      //remove the product
+      product.findOneAndDelete({ _id: item._id }, (err) => {
+        if (err) {
+          return false;
+        }
+      });
     });
     return data;
   } catch {
@@ -101,6 +108,7 @@ const addProduct = async (productToAdd) => {
     productCategory: productToAdd.productCategory,
     productImageUrl: productToAdd.productImageUrl,
     productAvailability: productToAdd.productAvailability,
+    productManufacturer: productToAdd.productManufacturer,
   });
   newProduct.save((err, res) => {
     if (err) {
@@ -118,6 +126,33 @@ const setProduct = async (id, update) => {
     return true;
   });
 };
+
+// update all products manufacturer field
+const updateManufacturerOfProducts = async (oldManufacturerName, newManufacturerName) => {
+  try{
+    //find products that have this manufacturer
+    const data = await product
+      .find({ productManufacturer: oldManufacturerName })
+      .exec();
+    data.forEach((item) => {
+      if (!mongoose.Types.ObjectId.isValid(item._id)) return false;
+      const update = {
+        productManufacturer: newManufacturerName,
+      };
+      let updateWithNewManufacturerPromise;
+      updateWithNewManufacturerPromise = setProduct(item._id, update);
+      updateWithNewManufacturerPromise.then((data1) => {
+        if (data1 === false) {
+          return;
+        }
+      });
+    });
+    return data;
+  }
+  catch {
+    return false;
+  }
+}
 
 // update all products category field
 const updateCategoryOfProducts = async (oldCategoryName, newCategoryName) => {
@@ -146,6 +181,7 @@ const updateCategoryOfProducts = async (oldCategoryName, newCategoryName) => {
 };
 
 // CATEGORIES
+
 // get all categories
 const getAllCategories = async () => {
   try {
@@ -180,6 +216,7 @@ const setCategory = async (id, update) => {
 };
 
 // MANUFACTURERS
+
 // get all manufacturer
 const getAllManufacturers = async () => {
   try {
@@ -195,7 +232,7 @@ const addManufacturer = async (manufacturerToAdd) => {
   const newManufacturer = new manufacturer({
     manufacturerName: manufacturerToAdd.manufacturerName,
     manufacturerImageUrl: manufacturerToAdd.manufacturerImageUrl,
-    manufacturerWebsiteUrl: manufacturerToAdd.manufacturerWebsiteUrl
+    manufacturerWebsiteUrl: manufacturerToAdd.manufacturerWebsiteUrl,
   });
   newManufacturer.save((err, res) => {
     if (err) {
@@ -205,17 +242,25 @@ const addManufacturer = async (manufacturerToAdd) => {
   });
 };
 
+// update a manufacturer by ID with update object
+const setManufacturer = async (id, update) => {
+  if (!mongoose.Types.ObjectId.isValid(id)) return false;
+  manufacturer.findByIdAndUpdate(id, update, (err) => {
+    if (err) return err;
+    return true;
+  });
+};
+
 // remove a manufacturer
 const removeManufacturer = async (manufacturerId) => {
-  manufacturer.findOneAndDelete({ _id : manufacturerId}, (err) => {
-    if(err){
+  manufacturer.findOneAndDelete({ _id: manufacturerId }, (err) => {
+    if (err) {
       return false;
-    }
-    else{
+    } else {
       return true;
     }
   });
-}
+};
 
 exports.connectDB = connectDB;
 
@@ -227,6 +272,7 @@ exports.addProduct = addProduct;
 exports.getProduct = getProduct;
 exports.updateCategoryOfProducts = updateCategoryOfProducts;
 exports.removeProductsByManufacturer = removeProductsByManufacturer;
+exports.updateManufacturerOfProducts = updateManufacturerOfProducts;
 
 // categories
 exports.getAllCategories = getAllCategories;
@@ -236,4 +282,5 @@ exports.setCategory = setCategory;
 // manufacturers
 exports.getAllManufacturers = getAllManufacturers;
 exports.addManufacturer = addManufacturer;
+exports.setManufacturer = setManufacturer;
 exports.removeManufacturer = removeManufacturer;

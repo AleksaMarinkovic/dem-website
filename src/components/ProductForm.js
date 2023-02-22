@@ -5,12 +5,14 @@ const ProductForm = ({
   valueName,
   valueCategory,
   valueDescription,
+  valueManufacturer,
   valueAvailability,
   onFormInputChange,
   onFormInputChangeCheckbox,
   fileChangeHandler,
   buttonText,
   categories,
+  manufacturers,
   isAdd,
 }) => {
   return (
@@ -55,6 +57,32 @@ const ProductForm = ({
             );
           })}
         </select>
+
+
+        <label className="form-text" htmlFor="proizvodjac">
+        Proizvođač:
+      </label>
+      <select
+        id="proizvodjac"
+        name="productManufacturer"
+        required
+        onChange={onFormInputChange}
+        value={valueManufacturer}
+      >
+        {isAdd && (
+          <option defaultValue={true} value={""}>
+            -- izaberite proizvođača --
+          </option>
+        )}
+        {manufacturers.map((manufacturer) => {
+          return (
+            <option value={manufacturer.manufacturerName} key={manufacturer.manufacturerName}>
+              {manufacturer.manufacturerName}
+            </option>
+          );
+        })}
+      </select>
+
         <label className="form-text" htmlFor="opis">
           Opis:
         </label>
