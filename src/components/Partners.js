@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import manufacturers from "./Manufacturers";
+import Axios from "axios";
 
 const Partners = () => {
   const settings = {
@@ -15,30 +15,63 @@ const Partners = () => {
     autoplaySpeed: 4000,
     pauseOnHover: true,
   };
+  const [isBusy, setIsBusy] = useState(true);
+  const [manufacturers, setManufacturers] = useState([]);
+  const [fetchError, setFetchError] = useState(null);
+
+  useEffect(() => {
+    async function fetchData() {
+      await Axios.get("/getManufacturers")
+        .then((response) => {
+          if (response.data.success) {
+            setManufacturers(response.data.data);
+            setIsBusy(false);
+          }
+        })
+        .catch((error) => {
+          if (error.response) {
+            setFetchError(error.response.data.message);
+          } else if (error.request) {
+            // request made no response from server
+            setFetchError("Error 003");
+          } else {
+            // request setup failed
+            setFetchError("Error 004");
+          }
+        });
+    }
+    fetchData();
+  }, []);
 
   return (
     <div>
-      <div className="partners-header-text">
-        EKSKLUZIVNI SMO DISTRIBUTERI SLEDEĆIH PROIZVOĐAČA:
-      </div>
-      <div className="container">
-        <Slider {...settings}>
-          {manufacturers.map((item) => {
-            return (
-              <div>
-                <a
-                  href={item.website}
-                  target="_blank"
-                  rel="noreferrer"
-                  draggable={false}
-                >
-                  <img src={item.manufacturer} alt={item.name}></img>
-                </a>
-              </div>
-            );
-          })}
-        </Slider>
-      </div>
+      {isBusy && !fetchError && <div>Loading manufacturers</div>}
+      {fetchError && <div className="error-message">{fetchError}</div>}
+      {!isBusy && (
+        <div>
+          <div className="partners-header-text">
+            EKSKLUZIVNI SMO DISTRIBUTERI SLEDEĆIH PROIZVOĐAČA:
+          </div>
+          <div className="container">
+            <Slider {...settings}>
+              {manufacturers.map((item) => {
+                return (
+                  <div>
+                    <a
+                      href={item.manufacturerWebsiteUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      draggable={false}
+                    >
+                      <img src={item.manufacturerImageUrl} alt={item.manufacturerName}></img>
+                    </a>
+                  </div>
+                );
+              })}
+            </Slider>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

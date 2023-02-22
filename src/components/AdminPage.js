@@ -176,6 +176,7 @@ const AdminPage = () => {
     setProductToChange(product);
     setSuccessMessageChange();
     setChangeError();
+    document.getElementById("izmenaProduct").scrollIntoView({behavior: "smooth", block:"center"});
   };
 
 
@@ -340,6 +341,7 @@ const AdminPage = () => {
                 data={products}
                 onRowSelect={onRowChange}
               />
+              <div id="izmenaProduct" visibility="hidden"></div>
               {productToChange ? (
                 <div className="form-container-inner">
                   <ProductForm

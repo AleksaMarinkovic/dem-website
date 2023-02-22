@@ -42,8 +42,6 @@ const AdminPageManufacturers = () => {
   const [oldManufacturerName, setOldManufacturerName] = useState();
   const [oldManufacturerWebsiteUrl, setOldManufacturerWebsiteUrl] = useState();
 
-
-
   //setup columns for table
   const columns = useMemo(
     () => [
@@ -110,6 +108,7 @@ const AdminPageManufacturers = () => {
     setSuccessMessageManufacturerAdd();
     setSuccessMessageManufacturerChange();
     setAddError();
+    document.getElementById("izmenaProizvodjac").scrollIntoView({behavior: "smooth", block:"center"});
   };
 
   // When a manufacturer image is uploaded in add manufacturer form, sets state to uploaded image
@@ -258,6 +257,7 @@ const AdminPageManufacturers = () => {
                 data={manufacturers}
                 onRowSelect={onRowChange}
               />
+              <div id="izmenaProizvodjac" visibility="hidden"></div>
               {manufacturerToChange ? (
                 <div className="form-container-inner">
                   <ManufacturerForm

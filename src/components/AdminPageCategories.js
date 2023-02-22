@@ -84,6 +84,8 @@ const AdminPageCategories = () => {
     setSuccessMessageCategoryAdd();
     setSuccessMessageCategoryChange();
     setAddError();
+    document.getElementById("izmenaKategorija").scrollIntoView({behavior: "smooth", block:"center"});
+
   };
 
   // When a category image is uploaded in add category form, sets state to uploaded image
@@ -192,6 +194,7 @@ const AdminPageCategories = () => {
                 data={categories}
                 onRowSelect={onRowChange}
               />
+              <div id="izmenaKategorija" visibility="hidden"></div>
               {categoryToChange ? (
                 <div className="form-container-inner">
                   <CategoryForm
