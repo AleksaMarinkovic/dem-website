@@ -135,6 +135,35 @@ app.get("/getProducts", (req, res) => {
   }
 });
 
+// get all products in db by filter
+app.post("/getProductsByFilter", upload.none() ,(req, res) => {
+  try {
+    const dataPromise = database.getProductsByFilter(req.body.filter);
+    dataPromise.then((data) => {
+      if (data === false) {
+        res.status(500).send({
+          success: false,
+          message: "Error 005",
+          data: [],
+        });
+        return;
+      } else {
+        res.send({
+          success: true,
+          message: "Successfully retrieved data.",
+          data: data,
+        });
+      }
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Error 006",
+      data: [],
+    });
+  }
+});
+
 // update a product with certain id with or without a new image
 // if image is not provided, current image remains
 app.post("/updateProductWithId", upload.single("image"), (req, res) => {

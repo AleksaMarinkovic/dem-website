@@ -65,6 +65,16 @@ const getAvailableProducts = async () => {
   }
 };
 
+// get all products that should be available on website
+const getProductsByFilter = async (filter) => {
+  try {
+    const data = await product.find(filter).exec();
+    return data;
+  } catch {
+    return false;
+  }
+};
+
 // remove all products that are manufactured by a specific manufacturer
 const removeProductsByManufacturer = async (manufacturer) => {
   try {
@@ -267,6 +277,7 @@ exports.connectDB = connectDB;
 // products
 exports.getAllProducts = getAllProducts;
 exports.getAvailableProducts = getAvailableProducts;
+exports.getProductsByFilter = getProductsByFilter;
 exports.setProduct = setProduct;
 exports.addProduct = addProduct;
 exports.getProduct = getProduct;
