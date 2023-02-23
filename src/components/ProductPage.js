@@ -18,7 +18,6 @@ const ProductPage = () => {
           if (response.data.success) {
             setProduct(response.data.data);
             setIsBusy(false);
-            console.log(response.data.data);
           }
         })
         .catch((error) => {

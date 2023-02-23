@@ -9,6 +9,7 @@ import { AnimatePresence } from "framer-motion";
 import AdminPage from "../components/AdminPage";
 import ProductPage from "../components/ProductPage";
 import ServicePage from "../components/ServicePage";
+import ProductsByCategoryPage from "../components/ProductsByCategoryPage";
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -22,6 +23,7 @@ function AnimatedRoutes() {
         <Route path="/admin" element={<AdminPage />} exact></Route>
         <Route path="/service" element={<ServicePage />} exact></Route>
         <Route path="/products/:id" element={<ProductPage />}></Route>
+        <Route path="/products/categories/:category" element={<ProductsByCategoryPage />}></Route>
         <Route path="/*" element={<HomePage />}></Route>
       </Routes>
     </AnimatePresence>

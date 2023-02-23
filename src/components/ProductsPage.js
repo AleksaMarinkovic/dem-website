@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Axios from "axios";
 import Product from "./Product";
+import Category from "./Category";
 
 const ProductsPage = () => {
   const [data, setData] = useState([]);
@@ -10,7 +11,7 @@ const ProductsPage = () => {
 
   useEffect(() => {
     async function fetchData() {
-      await Axios.get("/getAvailableProducts")
+      await Axios.get("/getCategories")
         .then((response) => {
           if (response.data.success) {
             setData(response.data.data);
@@ -47,7 +48,7 @@ const ProductsPage = () => {
       {!isBusy && (
         <div className="product-list-container">
           {data.map((item) => {
-            return <Product {...item} />;
+            return <Category {...item} />;
           })}
         </div>
       )}

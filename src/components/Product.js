@@ -5,7 +5,6 @@ const Product = (props) => {
   const [product, setProduct] = useState(props);
   const navigate = useNavigate();
   const onClickProduct = () => {
-    console.log(product);
     navigate("/products/"+product._id);
   };
   return (

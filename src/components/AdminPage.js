@@ -20,6 +20,7 @@ const AdminPage = () => {
     productName: "",
     productDescription: "",
     productAvailability: true,
+    productManufacturer: "",
     productCategory: "",
     productImageUrl: "",
   };
