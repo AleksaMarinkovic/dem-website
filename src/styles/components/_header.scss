@@ -92,3 +92,19 @@
     border-bottom: 1px solid $dem-orange;
     margin-bottom: -1px;
 }
+
+.header-item-container-collapsable{    
+    font-size: $font-size-medium !important;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+    text-decoration: none !important;    
+    color: $dark-grey;
+}
+
+.header-item-container-collapsable:hover{ 
+    color: $dem-orange;
+}
+.dropdown-menu {
+    min-width: auto !important;
+}

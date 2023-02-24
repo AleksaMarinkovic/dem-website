@@ -14,11 +14,20 @@
     padding: $padding-small $padding-medium $padding-small $padding-medium;
 }
 
+.footer-horizontal-container{
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: space-between;
+    min-width: auto;
+    gap: $padding-smaller;
+}
+
 .footer-section-one{
     display: flex;
     flex-flow: row wrap;
     background-color: darken($dark-grey, 10);
-    color: lighten($dark-grey, 20);
+    color: $light-grey;
     padding: 0 $padding-xlarge 0 $padding-xlarge;
     justify-content: space-between;
     font-size: $font-size-medium;
@@ -40,4 +49,24 @@
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
+}
+
+.footer-icon{
+    width: 3vw;
+    height: auto;
+}
+
+.footer-logo-image{
+    max-width:100%;
+}
+
+.horizontal-certificate-container{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+}
+.footer-logo-image-certificate{
+    width: 3vw;
+    height: auto;
 }

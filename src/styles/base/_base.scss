@@ -8,7 +8,8 @@ body {
     height: 100vh;
     margin: 0;
     background-color: $off-white;
-    font-family: "Roboto";
+    font-family: "Roboto";    
+    overflow: overlay;
 }
 
 .top-anchor{
@@ -19,4 +20,23 @@ body {
 
 .page-padding{
     padding: $padding-medium;
+}
+@media (min-width:1025px) {
+    ::-webkit-scrollbar {
+        width: 15px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    body::-webkit-scrollbar-track-piece {
+        display: none;
+    }
+
+    body::-webkit-scrollbar-thumb {
+        background: $dark-grey;
+        border-radius: 0.5rem;
+        height: 30px;
+    }
 }

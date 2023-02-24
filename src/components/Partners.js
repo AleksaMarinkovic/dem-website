@@ -52,7 +52,7 @@ const Partners = () => {
           <div className="partners-header-text">
             EKSKLUZIVNI SMO DISTRIBUTERI SLEDEĆIH PROIZVOĐAČA:
           </div>
-          <div className="container">
+          <div className="container-partners">
             <Slider {...settings}>
               {manufacturers.map((item) => {
                 return (
