@@ -4,3 +4,4 @@
 4. Clear image input on form submit
 5. Change loading to gif loading
 6. Add wrapper to every page so that the footer is at the bottom
+7. Change "Svi proizvodi" in dropdown menu to lead to all products page, not category page
