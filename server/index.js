@@ -138,7 +138,6 @@ app.get("/getProducts", (req, res) => {
 // get all products in db by filter
 app.post("/getProductsByFilter", upload.none() ,(req, res) => {
   try {
-    console.log(req.body);
     const dataPromise = database.getProductsByFilter(req.body.filter);
     dataPromise.then((data) => {
       if (data === false) {

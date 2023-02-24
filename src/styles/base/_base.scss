@@ -16,3 +16,7 @@ body {
     top: - calc($header-height + $padding-page-container-topbot);
     visibility: hidden;
 }
+
+.page-padding{
+    padding: $padding-medium;
+}

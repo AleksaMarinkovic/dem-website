@@ -39,7 +39,12 @@ const ProductPage = () => {
     fetchData();
   }, []);
   return (
-    <motion.div>
+    <motion.div 
+    key="productsPage"
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    className="page-padding">
       {isBusy && !fetchError && !fetchError && <div>Loading</div>}
       {fetchError ? (
         <div className="error-message">{fetchError}</div>

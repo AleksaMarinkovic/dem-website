@@ -15,7 +15,7 @@
 .product-item-name{
     background-color: $light-grey;
     border-bottom: 1px solid darken($light-grey,10);
-    min-height: 5vh;
+    font-size: $font-size-large;
     display: flex;
     align-items: center;
     justify-content: center;

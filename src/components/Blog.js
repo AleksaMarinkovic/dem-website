@@ -8,6 +8,7 @@ const Blog = () => {
     initial={{opacity: 0}}
     animate={{opacity: 1}}
     exit={{opacity: 0}}
+    className="page-padding"
     >
       <div id="top" className="top-anchor" />
       BLOG 

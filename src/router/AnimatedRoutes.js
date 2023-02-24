@@ -19,7 +19,6 @@ function AnimatedRoutes() {
         <Route path="/" element={<HomePage />} exact></Route>
         <Route path="/products" element={<ProductsPage />} exact></Route>
         <Route path="/info" element={<Info />} exact></Route>
-        <Route path="/blog" element={<Blog />} exact></Route>
         <Route path="/admin" element={<AdminPage />} exact></Route>
         <Route path="/service" element={<ServicePage />} exact></Route>
         <Route path="/products/:id" element={<ProductPage />}></Route>

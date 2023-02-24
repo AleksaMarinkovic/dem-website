@@ -21,12 +21,6 @@ const Footer = () => {
           <div>Test Footer 3.3</div>
           <div>Test Footer 3.4</div>
         </div>
-        <div className="footer-vertical-container">
-          <div>Test Footer 4.1</div>
-          <div>Test Footer 4.2</div>
-          <div>Test Footer 4.3</div>
-          <div>Test Footer 4.4</div>
-        </div>
       </div>
       <div className="footer-section-two">
         <div>Copyright {new Date().getFullYear()} DEM | All Rights Reserved</div>

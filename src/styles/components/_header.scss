@@ -1,36 +1,81 @@
 .header-container-wrapper{
     display: flex;
     flex-flow: row wrap;
-    background-color: rgba(darken($off-white, 30), 0.30);
+    background-color: rgba(lighten($light-grey, 30), 0.4);
+    position: sticky;
+    width: 100%;
+    top: 0;
+    z-index: 100;
+    justify-content: space-between;
+    font-size: $font-size-ml;
+    backdrop-filter: blur(6px);
+    font-weight: bold;
+    transition: 0.4s;
+    -webkit-box-shadow: 0 3px 7px rgba(57, 63, 72, 0.3);
+    -moz-box-shadow: 0 3px 7px rgba(57, 63, 72, 0.3);
+    box-shadow: 0 3px 7px rgba(57, 63, 72, 0.3);
+}
+
+.header-container-wrapper-small{
+    display: flex;
+    flex-flow: row wrap;
+    width: 100%;
+    background-color: rgba(lighten($light-grey, 30), 0.4);
     position: sticky;
     top: 0;
-    backdrop-filter: blur(6px);
-    min-height: $header-height;
     z-index: 100;
     justify-content: space-between;
     font-size: $font-size-medium;
     font-weight: bold;
+    transition: 0.4s;
+    -webkit-box-shadow: 0 3px 7px rgba(57, 63, 72, 0.3);
+    -moz-box-shadow: 0 3px 7px rgba(57, 63, 72, 0.3);
+    box-shadow: 0 3px 7px rgba(57, 63, 72, 0.3);
+}
+@supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)){
+    .header-container-wrapper{
+        -webkit-backdrop-filter: blur(6px);
+        backdrop-filter: blur(6px);
+    }
+    .header-container-wrapper-small{
+        -webkit-backdrop-filter: blur(6px);
+        backdrop-filter: blur(6px);
+
+    }
 }
 
-.header-container{
+.header-horizontal-container{
     display: flex;
     flex-flow: row wrap;
     justify-content: space-evenly;
-    padding: $padding-smallest $padding-medium $padding-smallest $padding-smallest;
+    height: auto;
+    padding: $padding-smallest-header $padding-medium $padding-smallest-header $padding-smallest-header;
 }
 
 .header-image-container{
-    padding: $padding-smallest 0 $padding-smallest 0;
+    padding: $padding-smallest-header 0 $padding-smallest-header 0;
     margin-left: $padding-medium;
-    max-width: $header-logo-image-width;
+    max-height: $header-logo-image-height;
     display: flex;
     flex-flow: column wrap;    
     justify-content: center;
     align-items: center;
+    transition: 0.4s;
+}
+
+.header-image-container-small{
+    padding: $padding-smallest-header 0 $padding-smallest-header 0;
+    margin-left: $padding-medium;
+    max-height: $header-logo-image-height-small;
+    display: flex;
+    flex-flow: column wrap;    
+    justify-content: center;
+    align-items: center;
+    transition: 0.4s;
 }
 
 .header-logo-image{
-    max-width: $header-logo-image-width;
+    height: 100%;
 }
 
 .header-item-container{

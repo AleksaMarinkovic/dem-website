@@ -10,6 +10,7 @@
     url("../fonts/Roboto/Roboto-Regular.ttf") format("truetype");
     font-weight: bold;
 }
+@import "~bootstrap/scss/bootstrap";
 @import "~slick-carousel/slick/slick.css";
 @import "~slick-carousel/slick/slick-theme.css";
 @import './base/settings';

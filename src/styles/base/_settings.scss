@@ -1,6 +1,7 @@
 // font sizes 
 $font-size-xlarge: 4rem;
 $font-size-large: 3rem;
+$font-size-ml: 2.5rem;
 $font-size-medium: 2rem;
 $font-size-small: 1rem;
 
@@ -17,8 +18,11 @@ $footer-section-one-height: 20vh;
 $footer-section-two-height: 5vh;
 $footer-height: calc($footer-section-one-height + $footer-section-two-height);
 $header-height: 5vh;
+$header-height-small: 2vh;
 $footer-and-header-height: calc($footer-height + $header-height);
-$padding-smallest: 2rem;
+$padding-smallest-header: 1vh;
+$padding-smallest: 0.5rem;
+$padding-smaller: 2rem;
 $padding-small: 4rem;
 $padding-medium: 6rem;
 $padding-large: 8rem;
@@ -30,4 +34,5 @@ $margin-xxlarge-sides: 20vw;
 
 
 //image sizes
-$header-logo-image-width: 14vw;
+$header-logo-image-height: 10vh;
+$header-logo-image-height-small: 7vh;
