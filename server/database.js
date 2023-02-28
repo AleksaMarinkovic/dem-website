@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 var product;
 var category;
 var manufacturer;
+var album;
 
 // for simulating delay in db acess
 function sleep(milliseconds) {
@@ -41,6 +42,14 @@ const connectDB = async () => {
     manufacturerWebsiteUrl: String,
   });
   manufacturer = mongoose.model("manufacturer", manufacturerSchema);
+
+  const albumSchema = new mongoose.Schema({
+    albumName: String,
+    albumImagesUrls: String,
+    albumProduct: String,
+    albumProductName: String,
+  });
+  album = mongoose.model("albums", albumSchema);
 };
 
 // PRODUCTS
@@ -138,8 +147,11 @@ const setProduct = async (id, update) => {
 };
 
 // update all products manufacturer field
-const updateManufacturerOfProducts = async (oldManufacturerName, newManufacturerName) => {
-  try{
+const updateManufacturerOfProducts = async (
+  oldManufacturerName,
+  newManufacturerName
+) => {
+  try {
     //find products that have this manufacturer
     const data = await product
       .find({ productManufacturer: oldManufacturerName })
@@ -158,11 +170,10 @@ const updateManufacturerOfProducts = async (oldManufacturerName, newManufacturer
       });
     });
     return data;
-  }
-  catch {
+  } catch {
     return false;
   }
-}
+};
 
 // update all products category field
 const updateCategoryOfProducts = async (oldCategoryName, newCategoryName) => {
@@ -272,6 +283,76 @@ const removeManufacturer = async (manufacturerId) => {
   });
 };
 
+// ALBUMS
+
+// add an album
+const addAlbum = async (albumToAdd) => {
+  let productName;
+  try {
+    const data = await getProduct(albumToAdd.albumProduct);
+    if (data === false) {
+      return false;
+    } else {
+      productName = data.productName;
+      const newAlbum = new album({
+        albumName: albumToAdd.albumName,
+        albumImagesUrls: albumToAdd.albumImagesUrls,
+        albumProduct: albumToAdd.albumProduct,
+        albumProductName: productName,
+      });
+      newAlbum.save((err, res) => {
+        if (err) {
+          return false;
+        }
+        console.log(res);
+        return res;
+      });
+    }
+  } catch (error) {
+    return error;
+  }
+};
+
+// remove an album
+const removeAlbum = async (albumId) => {
+  album.findOneAndDelete({ _id: albumId }, (err) => {
+    if (err) {
+      return false;
+    } else {
+      return true;
+    }
+  });
+};
+
+// get an album by product id
+const getAlbumByProductId = async (productId) => {
+  try {
+    const data = await album.find({ albumProduct: productId }).exec();
+    let newData;
+    if (typeof data === "undefined" || data.length === 0) {
+      return false;
+    } else {
+      let imageUrlArray = [];
+      data[0].albumImagesUrls
+        .split("|")
+        .filter((i) => i)
+        .forEach((url) => {
+          imageUrlArray.push(url);
+        });
+      newData = {
+        _id: data[0]._id,
+        albumName: data[0].albumName,
+        albumProduct: data[0].albumProduct,
+        albumImagesUrls: imageUrlArray,
+      };
+      console.log(newData);
+      return newData;
+    }
+  } catch (error) {
+    return error;
+  }
+};
+
 exports.connectDB = connectDB;
 
 // products
@@ -295,3 +376,8 @@ exports.getAllManufacturers = getAllManufacturers;
 exports.addManufacturer = addManufacturer;
 exports.setManufacturer = setManufacturer;
 exports.removeManufacturer = removeManufacturer;
+
+// albums
+exports.addAlbum = addAlbum;
+exports.removeAlbum = removeAlbum;
+exports.getAlbumByProductId = getAlbumByProductId;
