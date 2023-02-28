@@ -78,7 +78,7 @@ app.post("/addAlbum", upload.array("images", 5), (req, res) => {
 });
 
 // get album by productId
-app.post("/getProductsByFilter", upload.none(), (req, res) => {
+app.post("/getAlbumByProductId", upload.none(), (req, res) => {
   try {
     const dataPromise = database.getAlbumByProductId(req.body.productId);
     dataPromise.then((data) => {
