@@ -1,5 +1,6 @@
-const database = require("../server/database");
 const path = require("path");
+require("dotenv").config({ path: "../.env" });
+const database = require("../server/database");
 const express = require("express");
 const buildPath = path.join(__dirname, "..", "build");
 const multer = require("multer");
@@ -41,7 +42,7 @@ app.post("/multiple", upload.array("images", 3), (req, res) => {
 //ALBUMS
 app.post("/addAlbum", upload.array("images", 5), (req, res) => {
   try {
-    let imagesUrls = '';
+    let imagesUrls = "";
     if (req.files) {
       req.files.forEach((image) => {
         imagesUrls += image.path + "|";
@@ -105,31 +106,27 @@ app.post("/getAlbumByProductId", upload.none(), (req, res) => {
   }
 });
 
-
 // remove album by id
 app.post("/removeAlbumById", upload.none(), (req, res) => {
-  try{
+  try {
     const removePromise = database.removeAlbum(req.body.albumId);
     removePromise.then((data) => {
       console.log(data);
-          if(data === false){
-            res.status(500).send({
-              success: false,
-              message: "Error 017",
-              data: [],
-            });
-          }
-          else{
-            res.send({
-              success: true,
-              message: "Uspešno izbrisan album.",
-              data: data,
-            });
-          }
+      if (data === false) {
+        res.status(500).send({
+          success: false,
+          message: "Error 017",
+          data: [],
+        });
+      } else {
+        res.send({
+          success: true,
+          message: "Uspešno izbrisan album.",
+          data: data,
+        });
       }
-    )
-  }
-  catch(error){
+    });
+  } catch (error) {
     res.status(500).send({
       success: false,
       message: "Error 016",
@@ -629,4 +626,7 @@ app.post("/updateWithIdManufacturer", upload.single("image"), (req, res) => {
 
 app.listen(port, "localhost", () => {
   console.log("server start on port " + port);
+  console.log(process.env.REACT_APP_EMAIL);
+  console.log(process.env.REACT_APP_PASSWORD);
+  console.log(process.env.REACT_APP_ADMIN);
 });
