@@ -84,6 +84,18 @@ const AdminPage = () => {
             accessor: (row) =>
               row.productAvailability ? "Dostupan" : "Nije dostupan",
           },
+          {
+            id: "col5",
+            Header: "Naslovna slika",
+            Cell: (tableProps) => (
+              <img
+                style={{ maxWidth: "10vw", maxHeight: "auto" }}
+                src={tableProps.row.original.productImageUrl}
+                alt={tableProps.row.original.productName}
+              />
+            ),
+            accessor: (row) => row.productImageUrl,
+          },
         ],
       },
     ],

@@ -37,7 +37,7 @@ const ProductsPage = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="page-padding"
+      className="products-page-wrapper"
     >
       <div id="top" className="top-anchor" />
       {isBusy && !fetchError && <div>Loading</div>}

@@ -10,7 +10,7 @@ const app = express();
 function sleep(milliseconds) {
   var start = new Date().getTime();
   for (var i = 0; i < 1e7; i++) {
-    if ((new Date().getTime() - start) > milliseconds){
+    if (new Date().getTime() - start > milliseconds) {
       break;
     }
   }
@@ -33,10 +33,77 @@ const fileStorageEngine = multer.diskStorage({
 });
 const upload = multer({ storage: fileStorageEngine });
 
-
 // potential further implementation with multer middleware for supporting multimple images
 app.post("/multiple", upload.array("images", 3), (req, res) => {
   res.send("Multiple files upload success");
+});
+
+//ALBUMS
+app.post("/addAlbum", upload.array("images", 5), (req, res) => {
+  try {
+    let imagesUrls = '';
+    if (req.files) {
+      req.files.forEach((image) => {
+        imagesUrls += image.path + "|";
+      });
+    }
+    const addPromise = database.addAlbum({
+      albumName: req.body.albumName,
+      albumProduct: req.body.albumProduct,
+      albumImagesUrls: imagesUrls,
+    });
+    addPromise.then((data) => {
+      if (data === false) {
+        res.status(500).send({
+          success: false,
+          message: "Error 008",
+          data: [],
+        });
+        return;
+      }
+      console.log(data);
+      res.send({
+        success: true,
+        message: "Uspešno dodat album.",
+        data: data,
+      });
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Error 002",
+      data: [],
+    });
+  }
+});
+
+// get album by productId
+app.post("/getAlbumByProductId", upload.none(), (req, res) => {
+  try {
+    const dataPromise = database.getAlbumByProductId(req.body.productId);
+    dataPromise.then((data) => {
+      if (data === false) {
+        res.status(500).send({
+          success: false,
+          message: "Nema albuma za dati proizvod",
+          data: [],
+        });
+        return;
+      } else {
+        res.send({
+          success: true,
+          message: "Successfully retrieved data.",
+          data: data,
+        });
+      }
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Error 006",
+      data: [],
+    });
+  }
 });
 
 
@@ -136,7 +203,7 @@ app.get("/getProducts", (req, res) => {
 });
 
 // get all products in db by filter
-app.post("/getProductsByFilter", upload.none() ,(req, res) => {
+app.post("/getProductsByFilter", upload.none(), (req, res) => {
   try {
     const dataPromise = database.getProductsByFilter(req.body.filter);
     dataPromise.then((data) => {
@@ -176,7 +243,7 @@ app.post("/updateProductWithId", upload.single("image"), (req, res) => {
         productAvailability: req.body.productAvailability,
         productCategory: req.body.productCategory,
         productManufacturer: req.body.productManufacturer,
-        productImageUrl: req.file.path
+        productImageUrl: req.file.path,
       });
     } else {
       updatePromise = database.setProduct(req.body._id, {
@@ -184,7 +251,7 @@ app.post("/updateProductWithId", upload.single("image"), (req, res) => {
         productDescription: req.body.productDescription,
         productAvailability: req.body.productAvailability,
         productManufacturer: req.body.productManufacturer,
-        productCategory: req.body.productCategory
+        productCategory: req.body.productCategory,
       });
     }
 
@@ -247,7 +314,7 @@ app.post("/addCategory", upload.single("image"), (req, res) => {
   try {
     const addCategoryPromise = database.addCategory({
       categoryName: req.body.categoryName,
-      categoryImageUrl: req.file.path
+      categoryImageUrl: req.file.path,
     });
     addCategoryPromise.then((data) => {
       if (data === false) {
@@ -305,10 +372,12 @@ app.get("/getCategories", (req, res) => {
 // update category and alter all products that have that category to have new category
 app.post("/updateWithIdCategory", upload.single("image"), (req, res) => {
   try {
-
     //update all products to have new category
     let changeCategoryPromise;
-    changeCategoryPromise = database.updateCategoryOfProducts(req.body.oldCategoryName, req.body.categoryName)
+    changeCategoryPromise = database.updateCategoryOfProducts(
+      req.body.oldCategoryName,
+      req.body.categoryName
+    );
     changeCategoryPromise.then((data) => {
       if (data === false) {
         res.status(500).send({
@@ -319,17 +388,17 @@ app.post("/updateWithIdCategory", upload.single("image"), (req, res) => {
         return;
       }
     });
-    
+
     //update category itself
     let updatePromise;
     if (req.file) {
       updatePromise = database.setCategory(req.body._id, {
         categoryName: req.body.categoryName,
-        categoryImageUrl: req.file.path
+        categoryImageUrl: req.file.path,
       });
     } else {
       updatePromise = database.setCategory(req.body._id, {
-        categoryName: req.body.categoryName
+        categoryName: req.body.categoryName,
       });
     }
 
@@ -364,8 +433,8 @@ app.post("/addManufacturer", upload.single("image"), (req, res) => {
   try {
     const addManufacturerPromise = database.addManufacturer({
       manufacturerName: req.body.manufacturerName,
-      manufacturerWebsiteUrl : req.body.manufacturerWebsiteUrl,
-      manufacturerImageUrl: req.file.path
+      manufacturerWebsiteUrl: req.body.manufacturerWebsiteUrl,
+      manufacturerImageUrl: req.file.path,
     });
     addManufacturerPromise.then((data) => {
       if (data === false) {
@@ -422,8 +491,10 @@ app.get("/getManufacturers", (req, res) => {
 
 // remove a manufacturer
 app.post("/removeManufacturer", upload.none(), (req, res) => {
-  try{
-    const dataPromise = database.removeProductsByManufacturer(req.body.manufacturerName);
+  try {
+    const dataPromise = database.removeProductsByManufacturer(
+      req.body.manufacturerName
+    );
     dataPromise.then((data) => {
       if (data === false) {
         res.status(500).send({
@@ -434,15 +505,14 @@ app.post("/removeManufacturer", upload.none(), (req, res) => {
         return;
       }
     });
-  }
-  catch(error){
+  } catch (error) {
     res.status(500).send({
       success: false,
       message: "Error 013",
       data: [],
     });
   }
-  try{
+  try {
     const dataPromise = database.removeManufacturer(req.body._id);
     dataPromise.then((data) => {
       if (data === false) {
@@ -459,8 +529,7 @@ app.post("/removeManufacturer", upload.none(), (req, res) => {
         data: data,
       });
     });
-  }
-  catch{
+  } catch {
     res.status(500).send({
       success: false,
       message: "Error 015",
@@ -474,7 +543,10 @@ app.post("/updateWithIdManufacturer", upload.single("image"), (req, res) => {
   try {
     //update all products to have new manufacturer
     let changeManufacturerPromise;
-    changeManufacturerPromise = database.updateManufacturerOfProducts(req.body.oldManufacturerName, req.body.manufacturerName)
+    changeManufacturerPromise = database.updateManufacturerOfProducts(
+      req.body.oldManufacturerName,
+      req.body.manufacturerName
+    );
     changeManufacturerPromise.then((data) => {
       if (data === false) {
         res.status(500).send({
@@ -484,19 +556,19 @@ app.post("/updateWithIdManufacturer", upload.single("image"), (req, res) => {
         });
         return;
       }
-    });    
+    });
     //update manufacturer itself
     let updatePromise;
     if (req.file) {
       updatePromise = database.setManufacturer(req.body._id, {
         manufacturerName: req.body.manufacturerName,
         manufacturerWebsiteUrl: req.body.manufacturerWebsiteUrl,
-        manufacturerImageUrl: req.file.path
+        manufacturerImageUrl: req.file.path,
       });
     } else {
       updatePromise = database.setManufacturer(req.body._id, {
         manufacturerName: req.body.manufacturerName,
-        manufacturerWebsiteUrl: req.body.manufacturerWebsiteUrl
+        manufacturerWebsiteUrl: req.body.manufacturerWebsiteUrl,
       });
     }
 
