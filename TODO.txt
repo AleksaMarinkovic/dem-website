@@ -1,7 +1,6 @@
 1. Change password in admin page to send password to backend to be validated
-2. Delete images from server on new image upload (when changing product)
-3. When doing mobile integration make carousel responsive (has responsive property)
-4. Clear image input on form submit
-5. Change loading to gif loading
-6. Add wrapper to every page so that the footer is at the bottom
-7. Change "Svi proizvodi" in dropdown menu to lead to all products page, not category page
+2. When doing mobile integration make carousel responsive (has responsive property)
+3. Clear image input on form submit
+4. Change loading to gif loading
+5. Add wrapper to every page so that the footer is at the bottom
+6. Change "Svi proizvodi" in dropdown menu to lead to all products page, not category page
