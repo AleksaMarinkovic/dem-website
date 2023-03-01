@@ -1,3 +1,5 @@
+const fileHandler = require("../server/fileHandler");
+
 const mongoose = require("mongoose");
 var product;
 var category;
@@ -92,13 +94,12 @@ const removeProductsByManufacturer = async (manufacturer) => {
       .find({ productManufacturer: manufacturer })
       .exec();
     //delete all products in this array
-    data.forEach((item) => {
+    data.forEach(async (item) => {
       if (!mongoose.Types.ObjectId.isValid(item._id)) return false;
-      product.findOneAndDelete({ _id: item._id }, (err) => {
-        if (err) {
-          return false;
-        }
-      });
+      let document = await product.findOneAndDelete({ _id: item._id });
+      if (document) {
+        fileHandler.deleteFile(document.productImageUrl);
+      }
     });
     return data;
   } catch {
@@ -139,11 +140,22 @@ const addProduct = async (productToAdd) => {
 
 // update product by id and with update object
 const setProduct = async (id, update) => {
-  if (!mongoose.Types.ObjectId.isValid(id)) return false;
-  product.findByIdAndUpdate(id, update, (err) => {
-    if (err) return err;
-    return true;
-  });
+  try {
+    if (!mongoose.Types.ObjectId.isValid(id)) return false;
+    await product.findByIdAndUpdate(id, update, (err, document) => {
+      if (document) {
+        if(update.productImageUrl){
+          fileHandler.deleteFile(document.productImageUrl);
+        }
+        return true;
+      }
+      if (err) {
+        return err;
+      }
+    });
+  } catch (error) {
+    return error;
+  }
 };
 
 // update all products manufacturer field
@@ -229,11 +241,21 @@ const addCategory = async (categoryToAdd) => {
 
 // update a category by ID with update object
 const setCategory = async (id, update) => {
-  if (!mongoose.Types.ObjectId.isValid(id)) return false;
-  category.findByIdAndUpdate(id, update, (err) => {
-    if (err) return err;
-    return true;
-  });
+  try{
+    if (!mongoose.Types.ObjectId.isValid(id)) return false;
+    await category.findByIdAndUpdate(id, update, (err, document) => {
+      if(document){
+        if(update.categoryImageUrl){
+          fileHandler.deleteFile(document.categoryImageUrl);
+        }
+        return true;
+      }
+      if (err) return err;
+    });
+  }
+  catch(error){
+    return error;
+  }
 };
 
 // MANUFACTURERS
@@ -265,19 +287,35 @@ const addManufacturer = async (manufacturerToAdd) => {
 
 // update a manufacturer by ID with update object
 const setManufacturer = async (id, update) => {
-  if (!mongoose.Types.ObjectId.isValid(id)) return false;
-  manufacturer.findByIdAndUpdate(id, update, (err) => {
-    if (err) return err;
-    return true;
-  });
+  try{
+    if (!mongoose.Types.ObjectId.isValid(id)) return false;
+    manufacturer.findByIdAndUpdate(id, update, (err, document) => {
+      if(document){
+        if(update.manufacturerImageUrl){
+          fileHandler.deleteFile(document.manufacturerImageUrl);
+        }
+        return true;
+      }
+      if (err) return err;
+    });
+  }
+  catch(error){
+    return error;
+  }
+  
+  
 };
 
 // remove a manufacturer
 const removeManufacturer = async (manufacturerId) => {
-  manufacturer.findOneAndDelete({ _id: manufacturerId }, (err) => {
+  manufacturer.findOneAndDelete({ _id: manufacturerId }, (err, document) => {
     if (err) {
       return false;
     } else {
+      if(document.manufacturerImageUrl){
+        fileHandler.deleteFile(document.manufacturerImageUrl);
+      }
+      console.log(document);
       return true;
     }
   });
@@ -300,13 +338,8 @@ const addAlbum = async (albumToAdd) => {
         albumProduct: albumToAdd.albumProduct,
         albumProductName: productName,
       });
-      newAlbum.save((err, res) => {
-        if (err) {
-          return false;
-        }
-        console.log(res);
-        return res;
-      });
+      let savedAlbum = await newAlbum.save();
+      return savedAlbum;
     }
   } catch (error) {
     return error;
@@ -315,13 +348,21 @@ const addAlbum = async (albumToAdd) => {
 
 // remove an album
 const removeAlbum = async (albumId) => {
-  album.findOneAndDelete({ _id: albumId }, (err) => {
-    if (err) {
-      return false;
-    } else {
+  try {
+    let document = await album.findOneAndDelete({ _id: albumId });
+    if (document) {
+      let imageUrlsArray = splitImageUrls(document.albumImagesUrls);
+      imageUrlsArray.forEach((url) => {
+        fileHandler.deleteFile(url);
+      });
+      console.log(imageUrlsArray);
       return true;
+    } else {
+      return false;
     }
-  });
+  } catch (error) {
+    return error;
+  }
 };
 
 // get an album by product id
@@ -332,25 +373,29 @@ const getAlbumByProductId = async (productId) => {
     if (typeof data === "undefined" || data.length === 0) {
       return false;
     } else {
-      let imageUrlArray = [];
-      data[0].albumImagesUrls
-        .split("|")
-        .filter((i) => i)
-        .forEach((url) => {
-          imageUrlArray.push(url);
-        });
+      let imageUrlArray = splitImageUrls(data[0].albumImagesUrls);
       newData = {
         _id: data[0]._id,
         albumName: data[0].albumName,
         albumProduct: data[0].albumProduct,
         albumImagesUrls: imageUrlArray,
       };
-      console.log(newData);
       return newData;
     }
   } catch (error) {
     return error;
   }
+};
+
+const splitImageUrls = (imagesUrls) => {
+  let imageUrlArray = [];
+  imagesUrls
+    .split("|")
+    .filter((i) => i)
+    .forEach((url) => {
+      imageUrlArray.push(url);
+    });
+  return imageUrlArray;
 };
 
 exports.connectDB = connectDB;

@@ -13,3 +13,5 @@
 013 - Server pukao na removeProductsByManufacturer
 014 - RemoveManufacturer in database didn't execute
 015 - Server pukao na RemoveManufacturer
+016 - Server pukao na removeAlbumByID
+017 - Baza nije nasla album sa tim ID-em

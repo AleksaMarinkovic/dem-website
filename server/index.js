@@ -61,7 +61,6 @@ app.post("/addAlbum", upload.array("images", 5), (req, res) => {
         });
         return;
       }
-      console.log(data);
       res.send({
         success: true,
         message: "Uspešno dodat album.",
@@ -106,6 +105,38 @@ app.post("/getAlbumByProductId", upload.none(), (req, res) => {
   }
 });
 
+
+// remove album by id
+app.post("/removeAlbumById", upload.none(), (req, res) => {
+  try{
+    const removePromise = database.removeAlbum(req.body.albumId);
+    removePromise.then((data) => {
+      console.log(data);
+          if(data === false){
+            res.status(500).send({
+              success: false,
+              message: "Error 017",
+              data: [],
+            });
+          }
+          else{
+            res.send({
+              success: true,
+              message: "Uspešno izbrisan album.",
+              data: data,
+            });
+          }
+      }
+    )
+  }
+  catch(error){
+    res.status(500).send({
+      success: false,
+      message: "Error 016",
+      data: [],
+    });
+  }
+});
 
 // PRODUCTS
 // adding product with multer middleware for image storing
