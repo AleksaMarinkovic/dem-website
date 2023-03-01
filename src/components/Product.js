@@ -1,26 +1,22 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const Product = (props) => {
-  const [product, setProduct] = useState(props);
   const navigate = useNavigate();
   const onClickProduct = () => {
-    navigate("/products/"+product._id);
+    navigate("/products/" + props._id);
   };
   return (
-    <div className="product-item-wrapper" onClick={onClickProduct}>
-      <div className="product-item-image-wrapper">
+    <div className="product-item-wrapper">
+      <div className="product-secondary-wrapper" onClick={onClickProduct}>
         <img
-          src={product.productImageUrl}
-          alt={product.productName}
+          src={props.productImageUrl}
+          alt={props.productName}
           className="product-item-image"
-        ></img>
-      </div>
-      <div className="product-item">
-        <div className="product-item-name">{product.productName}</div>
-        <div className="product-item-category">{product.productCategory}</div>
-        <div className="product-item-description">
-          {product.productDescription}
+        >          
+        </img>
+        <div className="text-background-wrapper">
+            <div className="product-item-name">{props.productName}</div>
         </div>
       </div>
     </div>

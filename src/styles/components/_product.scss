@@ -3,43 +3,30 @@
     padding: $padding-smaller;
 }
 
-.product-item-wrapper:hover{
-    box-shadow: 1px 1px 70px grey;
-    outline: 1px solid $dem-orange;
+.product-secondary-wrapper{
+    width:100%;    
 }
 
-.product-item{
-    font-size: $font-size-large;
+.text-background-wrapper{
+    background-color: $dem-blue;
+    width: 100%;
+    min-height: 20%;
+    color: $off-white;
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+    align-items: center;
 }
 
 .product-item-name{
-    background-color: $light-grey;
-    border-bottom: 1px solid darken($light-grey,10);
-    font-size: $font-size-large;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.product-item-description{
-    background-color: lighten($light-grey,10);
-    border-bottom: 1px solid darken($light-grey,10);
-    font-size: $font-size-small;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-}
-
-.product-item-category{
-    background-color: lighten($light-grey,10);
-    border-bottom: 1px solid darken($light-grey,10);
     font-size: $font-size-medium;
 }
 
-.product-item-image-wrapper{
-    max-width: 100%;
-    max-height: auto;
+.product-secondary-wrapper:hover > .text-background-wrapper{
+    background-color: ligthen($dem-blue, 40);
 }
 
 .product-item-image{
-    max-width: 100%;
+    width: 100%;
+    height: auto;
 }

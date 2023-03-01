@@ -11,7 +11,7 @@ const ProductsPage = () => {
 
   useEffect(() => {
     async function fetchData() {
-      await Axios.get("/getCategories")
+      await Axios.get("/getAvailableProducts")
         .then((response) => {
           if (response.data.success) {
             setData(response.data.data);
@@ -49,7 +49,7 @@ const ProductsPage = () => {
       {!isBusy && (
         <div className="product-list-container">
           {data.map((item) => {
-            return <Category {...item} />;
+            return <Product {...item} />;
           })}
         </div>
       )}
