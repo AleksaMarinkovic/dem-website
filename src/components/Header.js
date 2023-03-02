@@ -16,7 +16,6 @@ const Header = () => {
         .then((response) => {
           if (response.data.success) {
             setCategories(response.data.data);
-            console.log(response.data.data);
             setIsBusy(false);
           }
         })

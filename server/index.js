@@ -34,15 +34,11 @@ const fileStorageEngine = multer.diskStorage({
 });
 const upload = multer({ storage: fileStorageEngine });
 
-// potential further implementation with multer middleware for supporting multimple images
-app.post("/multiple", upload.array("images", 3), (req, res) => {
-  res.send("Multiple files upload success");
-});
-
 //ALBUMS
 app.post("/addAlbum", upload.array("images", 5), (req, res) => {
   try {
     let imagesUrls = "";
+    console.log(req.body);
     if (req.files) {
       req.files.forEach((image) => {
         imagesUrls += image.path + "|";
@@ -77,13 +73,44 @@ app.post("/addAlbum", upload.array("images", 5), (req, res) => {
   }
 });
 
+// get all albums
+app.get("/getAllAlbums", (req, res) => {
+  try {
+    const dataPromise = database.getAllAlbums();
+    dataPromise.then((data) => {
+      if (data === false) {
+        res.status(500).send({
+          success: false,
+          message: "Error 018",
+          data: [],
+        });
+        return;
+      }
+      else{
+        res.send({
+          success: true,
+          message: "Uspešno dobavljanje albuma.",
+          data: data,
+        });
+      }
+    });
+  } catch (error){
+    res.status(500).send({
+      success: false,
+      message: "Error 019",
+      data: [],
+    });
+    return;
+  }
+});
+
 // get album by productId
 app.post("/getAlbumByProductId", upload.none(), (req, res) => {
   try {
     const dataPromise = database.getAlbumByProductId(req.body.productId);
     dataPromise.then((data) => {
       if (data === false) {
-        res.status(500).send({
+        res.send({
           success: false,
           message: "Nema albuma za dati proizvod",
           data: [],

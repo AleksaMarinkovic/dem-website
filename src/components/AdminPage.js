@@ -8,14 +8,17 @@ import { NavLink } from "react-router-dom";
 import ProductForm from "./ProductForm";
 import AdminPageCategories from "./AdminPageCategories";
 import AdminPageManufacturers from "./AdminPageManufacturers";
+import AdminPageAlbums from "./AdminPageAlbums";
+import Collapsible from "react-collapsible";
+import { CollapsibleTriggerOpened, CollapsibleTrigger } from "./CollapsibleTrigger";
 
-const AdminPage = () => {  
+const AdminPage = () => {
   const [password, setPassword, { removeItem }] = useLocalStorageState(
     "password",
     {
       defaultValue: "",
     }
-  );  
+  );
   const productToAddDefault = {
     productName: "",
     productDescription: "",
@@ -37,7 +40,7 @@ const AdminPage = () => {
   const [fetchedManufacturers, setFetchedManufacturers] = useState(false);
 
   //state for adding or changing products
-  const [productToChange, setProductToChange] = useState();  
+  const [productToChange, setProductToChange] = useState();
   const [productToAdd, setProductToAdd] = useState(productToAddDefault);
 
   //state for image data for adding or changing products
@@ -117,7 +120,9 @@ const AdminPage = () => {
           })
           .catch((error) => {
             if (error.response) {
-              setFetchErrorProducts(error.response.data.message + ' - proizvodi');
+              setFetchErrorProducts(
+                error.response.data.message + " - proizvodi"
+              );
               setProductToChange();
             } else if (error.request) {
               // request made no response from server
@@ -143,7 +148,9 @@ const AdminPage = () => {
           })
           .catch((error) => {
             if (error.response) {
-              setFetchErrorCategories(error.response.data.message + ' - kategorije');
+              setFetchErrorCategories(
+                error.response.data.message + " - kategorije"
+              );
             } else if (error.request) {
               // request made no response from server
               setFetchErrorCategories("Error 003 - kategorije");
@@ -167,7 +174,9 @@ const AdminPage = () => {
           })
           .catch((error) => {
             if (error.response) {
-              setFetchErrorManufacturers(error.response.data.message + ' - proizvođači');
+              setFetchErrorManufacturers(
+                error.response.data.message + " - proizvođači"
+              );
             } else if (error.request) {
               // request made no response from server
               setFetchErrorManufacturers("Error 003 - proizvođači");
@@ -182,16 +191,23 @@ const AdminPage = () => {
     if (fetchedCategories && fetchedProducts && fetchedManufacturers) {
       setIsBusy(false);
     }
-  }, [productToChange, productToAdd, fetchedCategories, fetchedProducts, fetchedManufacturers]);
+  }, [
+    productToChange,
+    productToAdd,
+    fetchedCategories,
+    fetchedProducts,
+    fetchedManufacturers,
+  ]);
 
   // When a row in the table of categories is selected, set ProductToChange state to the row values
   const onRowChange = (product) => {
     setProductToChange(product);
     setSuccessMessageChange();
     setChangeError();
-    document.getElementById("izmenaProduct").scrollIntoView({behavior: "smooth", block:"center"});
+    document
+      .getElementById("izmenaProduct")
+      .scrollIntoView({ behavior: "smooth", block: "center" });
   };
-
 
   // When a product image is uploaded in add product form, sets state to uploaded image
   const addFileChangeHandler = (e) => {
@@ -227,7 +243,6 @@ const AdminPage = () => {
     data.append("productAvailability", productToAdd.productAvailability);
     data.append("productDescription", productToAdd.productDescription);
     data.append("productManufacturer", productToAdd.productManufacturer);
-
 
     Axios.post("/addProduct", data)
       .then((response) => {
@@ -275,14 +290,15 @@ const AdminPage = () => {
       productAvailability: checked,
     });
   };
-  
+
   // Triggers when submit is pressed on change product form
   const onChangeProductClick = (e) => {
     e.preventDefault();
 
     const data = new FormData();
     data.append("_id", productToChange._id);
-    if (productToChangeImageData) data.append("image", productToChangeImageData);
+    if (productToChangeImageData)
+      data.append("image", productToChangeImageData);
     data.append("productName", productToChange.productName);
     data.append("productCategory", productToChange.productCategory);
     data.append("productAvailability", productToChange.productAvailability);
@@ -326,7 +342,10 @@ const AdminPage = () => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      {isBusy && !fetchErrorProducts && !fetchErrorCategories && !fetchErrorManufacturers && <div>Loading</div>}
+      {isBusy &&
+        !fetchErrorProducts &&
+        !fetchErrorCategories &&
+        !fetchErrorManufacturers && <div>Loading</div>}
       {fetchErrorProducts ? (
         <div className="error-message">{fetchErrorProducts}</div>
       ) : (
@@ -344,90 +363,125 @@ const AdminPage = () => {
       )}
       {!isBusy && (
         <div style={{ maxWidth: "100%" }} className="vertical-container-admin">
-          <div className="vertical-admin-page-container">
-            <div className="form-container">
-              <div className="form-header-text">
-                IZMENA PODATAKA POSTOJEĆEG PROIZVODA:{" "}
-              </div>
-              <Table
-                columns={columns}
-                data={products}
-                onRowSelect={onRowChange}
-              />
-              <div id="izmenaProduct" visibility="hidden"></div>
-              {productToChange ? (
-                <div className="form-container-inner">
-                  <ProductForm
-                    onSubmit={onChangeProductClick}
-                    valueName={productToChange.productName}
-                    valueCategory={productToChange.productCategory}
-                    valueDescription={productToChange.productDescription}
-                    valueAvailability={productToChange.productAvailability}
-                    valueManufacturer={productToChange.productManufacturer}
-                    onFormInputChange={onChangeFormInputChange}
-                    onFormInputChangeCheckbox={onChangeFormInputChangeCheckbox}
-                    buttonText="IZMENI"
-                    fileChangeHandler={changeFileChangeHandler}
-                    categories={categories}
-                    manufacturers={manufacturers}
-                    isAdd={false}
-                  ></ProductForm>
-                </div>
-              ) : (
+          <Collapsible
+            trigger={<CollapsibleTrigger text="PROIZVODI"/>}
+            triggerWhenOpen ={<CollapsibleTriggerOpened text="PROIZVODI"/>}
+            className="collapsible-wrapper"
+            openedClassName="collapsible-wrapper-opened"
+          >
+            <div className="vertical-admin-page-container">
+              <div className="form-container">
                 <div className="form-header-text">
-                  Kliknite na proizvod u tabeli da ga izmenite
+                  IZMENA PODATAKA POSTOJEĆEG PROIZVODA:{" "}
                 </div>
-              )}
-            </div>
-            {successMessageChange ? (
-              <div className="success-message">{successMessageChange}</div>
-            ) : (
-              <div style={{ visibility: "hidden" }}></div>
-            )}
-            {changeError ? (
-              <div className="error-message">{changeError}</div>
-            ) : (
-              <div style={{ visibility: "hidden" }}></div>
-            )}
-          </div>
-          <div className="separator"></div>
-          <div className="vertical-admin-page-container">
-            <div className="form-container">
-              <div className="form-header-text">
-                UNESITE PODATKE DA DODATE NOVI PROIZVOD:
+                <Table
+                  columns={columns}
+                  data={products}
+                  onRowSelect={onRowChange}
+                />
+                <div id="izmenaProduct" visibility="hidden"></div>
+                {productToChange ? (
+                  <div className="form-container-inner">
+                    <ProductForm
+                      onSubmit={onChangeProductClick}
+                      valueName={productToChange.productName}
+                      valueCategory={productToChange.productCategory}
+                      valueDescription={productToChange.productDescription}
+                      valueAvailability={productToChange.productAvailability}
+                      valueManufacturer={productToChange.productManufacturer}
+                      onFormInputChange={onChangeFormInputChange}
+                      onFormInputChangeCheckbox={
+                        onChangeFormInputChangeCheckbox
+                      }
+                      buttonText="IZMENI"
+                      fileChangeHandler={changeFileChangeHandler}
+                      categories={categories}
+                      manufacturers={manufacturers}
+                      isAdd={false}
+                    ></ProductForm>
+                  </div>
+                ) : (
+                  <div className="form-header-text">
+                    Kliknite na proizvod u tabeli da ga izmenite
+                  </div>
+                )}
               </div>
-              <ProductForm
-                onSubmit={onAddProductClick}
-                valueName={productToAdd.productName}
-                valueCategory={productToAdd.productCategory}
-                valueDescription={productToAdd.productDescription}
-                valueAvailability={productToAdd.productAvailability}
-                valueManufacturer={productToAdd.productManufacturer}
-                onFormInputChange={onAddFormInputChange}
-                onFormInputChangeCheckbox={onAddFormInputChangeCheckbox}
-                buttonText="DODAJ"
-                fileChangeHandler={addFileChangeHandler}
-                categories={categories}
-                manufacturers={manufacturers}
-                isAdd={true}
-              ></ProductForm>
-              {successMessageAdd ? (
-                <div className="success-message">{successMessageAdd}</div>
+              {successMessageChange ? (
+                <div className="success-message">{successMessageChange}</div>
               ) : (
                 <div style={{ visibility: "hidden" }}></div>
               )}
-              {addError ? (
-                <div className="error-message">{addError}</div>
+              {changeError ? (
+                <div className="error-message">{changeError}</div>
               ) : (
                 <div style={{ visibility: "hidden" }}></div>
               )}
             </div>
-          </div>
-          <div className="separator"></div>
-          <AdminPageCategories></AdminPageCategories>
-          <div className="separator"></div>
-          <AdminPageManufacturers></AdminPageManufacturers>
-          <div className="separator"></div>
+            <div className="separator" style={{ width: "100%" }}></div>
+            <div className="vertical-admin-page-container">
+              <div className="form-container">
+                <div className="form-header-text">
+                  UNESITE PODATKE DA DODATE NOVI PROIZVOD:
+                </div>
+                <ProductForm
+                  onSubmit={onAddProductClick}
+                  valueName={productToAdd.productName}
+                  valueCategory={productToAdd.productCategory}
+                  valueDescription={productToAdd.productDescription}
+                  valueAvailability={productToAdd.productAvailability}
+                  valueManufacturer={productToAdd.productManufacturer}
+                  onFormInputChange={onAddFormInputChange}
+                  onFormInputChangeCheckbox={onAddFormInputChangeCheckbox}
+                  buttonText="DODAJ"
+                  fileChangeHandler={addFileChangeHandler}
+                  categories={categories}
+                  manufacturers={manufacturers}
+                  isAdd={true}
+                ></ProductForm>
+                {successMessageAdd ? (
+                  <div className="success-message">{successMessageAdd}</div>
+                ) : (
+                  <div style={{ visibility: "hidden" }}></div>
+                )}
+                {addError ? (
+                  <div className="error-message">{addError}</div>
+                ) : (
+                  <div style={{ visibility: "hidden" }}></div>
+                )}
+              </div>
+            </div>
+          </Collapsible>
+          <Collapsible
+            trigger={
+              <CollapsibleTrigger text="KATEGORIJE"></CollapsibleTrigger>
+            }
+            triggerWhenOpen ={<CollapsibleTriggerOpened text="KATEGORIJE"/>}
+            className="collapsible-wrapper"
+            openedClassName="collapsible-wrapper-opened"
+          >
+            <AdminPageCategories></AdminPageCategories>
+          </Collapsible>
+          <Collapsible
+            trigger={
+              <CollapsibleTrigger text="PROIZVOĐAČI"></CollapsibleTrigger>
+            }
+            triggerWhenOpen ={<CollapsibleTriggerOpened text="PROIZVOĐAČI"/>}
+            className="collapsible-wrapper"
+            openedClassName="collapsible-wrapper-opened"
+          >
+            <AdminPageManufacturers></AdminPageManufacturers>
+          </Collapsible>
+
+          <Collapsible
+            trigger={
+              <CollapsibleTrigger text="ALBUMI"></CollapsibleTrigger>
+            }
+            triggerWhenOpen ={<CollapsibleTriggerOpened text="ALBUMI"/>}
+            className="collapsible-wrapper"
+            openedClassName="collapsible-wrapper-opened"
+          >
+            <AdminPageAlbums></AdminPageAlbums>
+          </Collapsible>
           <NavLink onClick={logout} to="/" className="logout-adminpage">
             IZLOGUJ SE
           </NavLink>

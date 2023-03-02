@@ -4,3 +4,5 @@
 4. Change loading to gif loading
 5. Add wrapper to every page so that the footer is at the bottom
 6. Make form upload to email
+
+x. REFACTOR CODE SO THAT ADMIN PAGE DOES ALL THE FETCHING AND SENDS DATA TO CHILDREN

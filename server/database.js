@@ -387,6 +387,16 @@ const getAlbumByProductId = async (productId) => {
   }
 };
 
+const getAllAlbums = async () => {
+  try{
+    const data = await album.find();
+    return data;
+  }
+  catch{
+    return false;
+  }
+}
+
 const splitImageUrls = (imagesUrls) => {
   let imageUrlArray = [];
   imagesUrls
@@ -426,3 +436,4 @@ exports.removeManufacturer = removeManufacturer;
 exports.addAlbum = addAlbum;
 exports.removeAlbum = removeAlbum;
 exports.getAlbumByProductId = getAlbumByProductId;
+exports.getAllAlbums = getAllAlbums;

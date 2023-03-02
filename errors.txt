@@ -15,3 +15,5 @@
 015 - Server pukao na RemoveManufacturer
 016 - Server pukao na removeAlbumByID
 017 - Baza nije nasla album sa tim ID-em
+018 - Neuspeo getAllAlbums u bazi
+019 - Server pukao na getAllAlbums
