@@ -3,6 +3,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Axios from "axios";
+import LoadingSpinner from "./LoadingSpinner";
 
 const Partners = () => {
   const settings = {
@@ -12,7 +13,7 @@ const Partners = () => {
     slidesToShow: 5,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 4000,
+    autoplaySpeed: 3000,
     pauseOnHover: true,
   };
   const [isBusy, setIsBusy] = useState(true);
@@ -45,7 +46,7 @@ const Partners = () => {
 
   return (
     <div>
-      {isBusy && !fetchError && <div>Loading manufacturers</div>}
+      {isBusy && !fetchError && <LoadingSpinner/>}
       {fetchError && <div className="error-message">{fetchError}</div>}
       {!isBusy && (
         <div>
@@ -62,6 +63,7 @@ const Partners = () => {
                       target="_blank"
                       rel="noreferrer"
                       draggable={false}
+                      title="Kliknite da posetite website proizvođača"
                     >
                       <img src={item.manufacturerImageUrl} alt={item.manufacturerName}></img>
                     </a>

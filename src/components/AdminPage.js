@@ -11,14 +11,19 @@ import AdminPageManufacturers from "./AdminPageManufacturers";
 import AdminPageAlbums from "./AdminPageAlbums";
 import Collapsible from "react-collapsible";
 import { CollapsibleTriggerOpened, CollapsibleTrigger } from "./CollapsibleTrigger";
+import LoadingSpinner from "./LoadingSpinner";
 
 const AdminPage = () => {
-  const [password, setPassword, { removeItem }] = useLocalStorageState(
-    "password",
+  const [loggedinUser, setLoggedinUser, { removeItem}] = useLocalStorageState(
+    "user",
     {
-      defaultValue: "",
+      defaultValue: {
+        username: '',
+        password: ''
+      }
     }
   );
+
   const productToAddDefault = {
     productName: "",
     productDescription: "",
@@ -55,6 +60,10 @@ const AdminPage = () => {
   const [fetchErrorProducts, setFetchErrorProducts] = useState(null);
   const [fetchErrorCategories, setFetchErrorCategories] = useState(null);
   const [fetchErrorManufacturers, setFetchErrorManufacturers] = useState(null);
+
+  //error message on login
+  const [loginError, setLoginError] = useState(null);
+
 
   //success message if change or add executed properly
   const [successMessageChange, setSuccessMessageChange] = useState(null);
@@ -106,8 +115,40 @@ const AdminPage = () => {
   );
   //On first load ask for password if its not in local storage, otherwise fetch data
   useEffect(() => {
-    if (password !== "admin") {
-      setPassword(prompt("Password: "));
+    if (!loggedinUser.username || !loggedinUser.password) {
+      // setPassword(prompt("Password: "));
+      let insertedUsername = prompt("Username: ");
+      let insertedPassword = prompt("Password: ");
+      async function checkUser(user,pass) {
+        const data = new FormData();
+        data.append("user", user);
+        data.append("password", pass);
+        await Axios.post('/adminLogin', data)
+        .then((response) => {
+          if (response.data.success) {
+            setLoggedinUser({
+              username: user,
+              password: pass
+            })
+          }
+        })
+        .catch((error) => {
+          if (error.response) {
+            // request made and server responded
+            setLoginError(error.response.data.message);
+            return;
+          } else if (error.request) {
+            // request made no response from server
+            setLoginError("Error 003");
+            return;
+          } else {
+            // request setup failed
+            setLoginError("Error 004");
+            return;
+          }
+        });
+      }
+      checkUser(insertedUsername, insertedPassword);
     }
     if (!fetchedProducts) {
       async function fetchData() {
@@ -198,6 +239,10 @@ const AdminPage = () => {
     fetchedProducts,
     fetchedManufacturers,
   ]);
+
+  const fetchAllData = () => {
+    
+  }
 
   // When a row in the table of categories is selected, set ProductToChange state to the row values
   const onRowChange = (product) => {
@@ -335,7 +380,7 @@ const AdminPage = () => {
     removeItem();
   };
 
-  return password === "admin" ? (
+  return (loggedinUser.username && loggedinUser.password) ? (
     <motion.div
       key="adminPage"
       initial={{ opacity: 0 }}
@@ -345,7 +390,7 @@ const AdminPage = () => {
       {isBusy &&
         !fetchErrorProducts &&
         !fetchErrorCategories &&
-        !fetchErrorManufacturers && <div>Loading</div>}
+        !fetchErrorManufacturers && <LoadingSpinner/>}
       {fetchErrorProducts ? (
         <div className="error-message">{fetchErrorProducts}</div>
       ) : (
@@ -489,7 +534,7 @@ const AdminPage = () => {
       )}
     </motion.div>
   ) : (
-    <div>Neispravan password: {password}</div>
+    <div className="error-message">{loginError}</div>
   );
 };
 

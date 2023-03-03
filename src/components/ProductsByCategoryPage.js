@@ -3,6 +3,7 @@ import Axios from "axios";
 import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import Product from "./Product";
+import LoadingSpinner from "./LoadingSpinner";
 
 const ProductsByCategoryPage = () => {
   let { category } = useParams();
@@ -46,7 +47,7 @@ const ProductsByCategoryPage = () => {
       className="page-padding"
     >
       <div id="top" className="top-anchor" />
-      {isBusy && !fetchError && <div>Loading</div>}
+      {isBusy && !fetchError && <LoadingSpinner/>}
       {fetchError ? (
         <div className="error-message">{fetchError}</div>
       ) : (

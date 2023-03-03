@@ -1,5 +1,5 @@
 1. Change password in admin page to send password to backend to be validated
-2. When doing mobile integration make carousel responsive (has responsive property)
+2. Make it mobile friendly. When doing mobile integration make carousel responsive (has responsive property)
 3. Clear image input on form submit
 4. Change loading to gif loading
 5. Add wrapper to every page so that the footer is at the bottom

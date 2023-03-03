@@ -34,6 +34,37 @@ const fileStorageEngine = multer.diskStorage({
 });
 const upload = multer({ storage: fileStorageEngine });
 
+//LOGIN
+app.post("/adminLogin", upload.none(), (req,res) => {
+  try{
+    const loginPromise = database.checkUser(req.body.user, req.body.password);
+    loginPromise.then((data) => {
+      console.log(data);
+      if (data === false) {
+        res.status(500).send({
+          success: false,
+          message: "Neispravna lozinka ili username"
+        });
+        return;
+      }
+      else{
+        res.send({
+          success: true,
+          message: "Uspešan login"
+        });
+        return;
+      }
+    })
+  }
+  catch(error){
+    res.status(500).send({
+      success: false,
+      message: "Error 020"
+    });
+  }
+})
+
+
 //ALBUMS
 app.post("/addAlbum", upload.array("images", 5), (req, res) => {
   try {
@@ -201,6 +232,7 @@ app.post("/addProduct", upload.single("image"), (req, res) => {
 
 // get all products which should be available on website (productAvailability is true)
 app.get("/getAvailableProducts", (req, res) => {
+  sleep(5000);
   try {
     const dataPromise = database.getAvailableProducts();
     dataPromise.then((data) => {
@@ -230,6 +262,7 @@ app.get("/getAvailableProducts", (req, res) => {
 
 // get all products in db
 app.get("/getProducts", (req, res) => {
+  sleep(5000);
   try {
     const dataPromise = database.getAllProducts();
     dataPromise.then((data) => {
@@ -259,6 +292,7 @@ app.get("/getProducts", (req, res) => {
 
 // get all products in db by filter
 app.post("/getProductsByFilter", upload.none(), (req, res) => {
+  sleep(5000);
   try {
     const dataPromise = database.getProductsByFilter(req.body.filter);
     dataPromise.then((data) => {
@@ -335,7 +369,8 @@ app.post("/updateProductWithId", upload.single("image"), (req, res) => {
 });
 
 // get a specific product with a given id
-app.post("/getProductById", upload.none(), (req, res) => {
+app.post("/getProductById", upload.none(), (req, res) => {  
+  sleep(5000);
   try {
     const getPromise = database.getProduct(req.body._id);
     getPromise.then((data) => {
@@ -396,7 +431,8 @@ app.post("/addCategory", upload.single("image"), (req, res) => {
 });
 
 // get all categories
-app.get("/getCategories", (req, res) => {
+app.get("/getCategories", (req, res) => {  
+  sleep(5000);
   try {
     const dataPromise = database.getAllCategories();
     dataPromise.then((data) => {
@@ -516,7 +552,8 @@ app.post("/addManufacturer", upload.single("image"), (req, res) => {
 });
 
 // get all manufacturers
-app.get("/getManufacturers", (req, res) => {
+app.get("/getManufacturers", (req, res) => {  
+  sleep(5000);
   try {
     const dataPromise = database.getAllManufacturers();
     dataPromise.then((data) => {

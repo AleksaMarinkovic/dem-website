@@ -2,6 +2,7 @@ import Axios from "axios";
 import React, { useState, useMemo } from "react";
 import { useEffect } from "react";
 import AlbumsForm from "./AlbumsForm";
+import LoadingSpinner from "./LoadingSpinner";
 import Table from "./TableAdmin";
 
 const AdminPageAlbums = () => {
@@ -177,7 +178,7 @@ const AdminPageAlbums = () => {
 
   return (
     <div>
-      {isBusy && !fetchErrorAlbums && !fetchErrorProducts && <div>Loading</div>}
+      {isBusy && !fetchErrorAlbums && !fetchErrorProducts && <LoadingSpinner/>}
       {fetchErrorAlbums && (
         <div className="error-message">{fetchErrorAlbums}</div>
       )}

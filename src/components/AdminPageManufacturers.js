@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import Axios from "axios";
 import Table from "./TableAdmin";
 import ManufacturerForm from "./ManufacturerForm";
+import LoadingSpinner from "./LoadingSpinner";
 
 const AdminPageManufacturers = () => {
   const [manufacturers, setManufacturers] = useState([]);
@@ -243,7 +244,7 @@ const AdminPageManufacturers = () => {
 
   return (
     <div>
-      {isBusy && !fetchError && <div>Loading manufacturers</div>}
+      {isBusy && !fetchError && <LoadingSpinner/>}
       {fetchError && <div className="error-message">{fetchError}</div>}
       {!isBusy && (
         <div style={{ maxWidth: "100%" }} className="vertical-container-admin">

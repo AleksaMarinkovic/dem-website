@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import Axios from "axios";
 import Table from "./TableAdmin";
 import CategoryForm from "./CategoryForm";
+import LoadingSpinner from "./LoadingSpinner";
 
 const AdminPageCategories = () => {
   const [categories, setCategories] = useState([]);
@@ -180,7 +181,7 @@ const AdminPageCategories = () => {
 
   return (
     <div>
-      {isBusy && !fetchError && <div>Loading categories</div>}
+      {isBusy && !fetchError && <LoadingSpinner/>}
       {fetchError && <div className="error-message">{fetchError}</div>}
       {!isBusy && (
         <div style={{ maxWidth: "100%" }} className="vertical-container-admin">

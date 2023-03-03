@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import Axios from "axios";
 import Product from "./Product";
 import Category from "./Category";
+import LoadingSpinner from "./LoadingSpinner";
 
 const ProductsPage = () => {
   const [data, setData] = useState([]);
@@ -40,7 +41,7 @@ const ProductsPage = () => {
       className="products-page-wrapper"
     >
       <div id="top" className="top-anchor" />
-      {isBusy && !fetchError && <div>Loading</div>}
+      {isBusy && !fetchError && <LoadingSpinner/>}
       {fetchError ? (
         <div className="error-message">{fetchError}</div>
       ) : (
