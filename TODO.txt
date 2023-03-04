@@ -3,6 +3,6 @@
 3. Clear image input on form submit
 4. Change loading to gif loading
 5. Add wrapper to every page so that the footer is at the bottom
-6. Make form upload to email
+6. Change email and password to be used from .env not from local variables
 
 x. REFACTOR CODE SO THAT ADMIN PAGE DOES ALL THE FETCHING AND SENDS DATA TO CHILDREN

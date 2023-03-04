@@ -137,49 +137,6 @@ const Header = () => {
         </NavHashLink>
       </div>
     </Navbar>
-    /*
-    <div
-      className={`${
-        small ? "header-container-wrapper-small" : "header-container-wrapper"
-      }`}
-    >
-      <HashLink
-        smooth
-        to="/#top"
-        className={`${
-          small ? "header-image-container-small" : "header-image-container"
-        }`}
-      >
-        <img
-          src={require("../images/dem-logo-desktop.webp")}
-          className="header-logo-image"
-          alt="HOME"
-        ></img>
-      </HashLink>
-      <div className="header-horizontal-container">
-        <NavHashLink smooth to={"/#top"} className="header-item-container">
-          NASLOVNA
-        </NavHashLink>
-        <NavHashLink
-          smooth
-          to={"/products#top"}
-          className="header-item-container"
-        >
-          PROIZVODI
-        </NavHashLink>
-        <NavHashLink smooth to={"/info#top"} className="header-item-container">
-          KONTAKT
-        </NavHashLink>
-        <NavHashLink
-          smooth
-          to={"/service#top"}
-          className="header-item-container"
-        >
-          SERVIS
-        </NavHashLink>
-      </div>
-    </div>
-    */
   );
 };
 export default Header;

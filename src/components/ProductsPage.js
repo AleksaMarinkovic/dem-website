@@ -31,6 +31,7 @@ const ProductsPage = () => {
     }
     fetchData();
   }, []);
+  
   return (
     <motion.div
       key="productsPage"
