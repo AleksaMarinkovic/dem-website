@@ -5,6 +5,7 @@ var product;
 var category;
 var manufacturer;
 var album;
+var user;
 
 // for simulating delay in db acess
 function sleep(milliseconds) {
@@ -52,6 +53,32 @@ const connectDB = async () => {
     albumProductName: String,
   });
   album = mongoose.model("albums", albumSchema);
+
+  const userSchema = new mongoose.Schema({
+    userName: String,
+    userPassword: String,
+  });
+  user = mongoose.model("users", userSchema);
+};
+
+// USERS
+
+const checkUser = async (username, password) => {
+  console.log(username, password);
+  try {
+    const data = await user.findOne({ userName: username }).exec();
+    console.log(data);
+    if (!data) {
+      return false;
+    }
+    if (data.userPassword === password) {
+
+      return true;
+    }
+    return false;
+  } catch (error) {
+    return error;
+  }
 };
 
 // PRODUCTS
@@ -144,7 +171,7 @@ const setProduct = async (id, update) => {
     if (!mongoose.Types.ObjectId.isValid(id)) return false;
     await product.findByIdAndUpdate(id, update, (err, document) => {
       if (document) {
-        if(update.productImageUrl){
+        if (update.productImageUrl) {
           fileHandler.deleteFile(document.productImageUrl);
         }
         return true;
@@ -241,19 +268,18 @@ const addCategory = async (categoryToAdd) => {
 
 // update a category by ID with update object
 const setCategory = async (id, update) => {
-  try{
+  try {
     if (!mongoose.Types.ObjectId.isValid(id)) return false;
     await category.findByIdAndUpdate(id, update, (err, document) => {
-      if(document){
-        if(update.categoryImageUrl){
+      if (document) {
+        if (update.categoryImageUrl) {
           fileHandler.deleteFile(document.categoryImageUrl);
         }
         return true;
       }
       if (err) return err;
     });
-  }
-  catch(error){
+  } catch (error) {
     return error;
   }
 };
@@ -287,23 +313,20 @@ const addManufacturer = async (manufacturerToAdd) => {
 
 // update a manufacturer by ID with update object
 const setManufacturer = async (id, update) => {
-  try{
+  try {
     if (!mongoose.Types.ObjectId.isValid(id)) return false;
     manufacturer.findByIdAndUpdate(id, update, (err, document) => {
-      if(document){
-        if(update.manufacturerImageUrl){
+      if (document) {
+        if (update.manufacturerImageUrl) {
           fileHandler.deleteFile(document.manufacturerImageUrl);
         }
         return true;
       }
       if (err) return err;
     });
-  }
-  catch(error){
+  } catch (error) {
     return error;
   }
-  
-  
 };
 
 // remove a manufacturer
@@ -312,7 +335,7 @@ const removeManufacturer = async (manufacturerId) => {
     if (err) {
       return false;
     } else {
-      if(document.manufacturerImageUrl){
+      if (document.manufacturerImageUrl) {
         fileHandler.deleteFile(document.manufacturerImageUrl);
       }
       console.log(document);
@@ -388,14 +411,13 @@ const getAlbumByProductId = async (productId) => {
 };
 
 const getAllAlbums = async () => {
-  try{
+  try {
     const data = await album.find();
     return data;
-  }
-  catch{
+  } catch {
     return false;
   }
-}
+};
 
 const splitImageUrls = (imagesUrls) => {
   let imageUrlArray = [];
@@ -409,6 +431,9 @@ const splitImageUrls = (imagesUrls) => {
 };
 
 exports.connectDB = connectDB;
+
+// users
+exports.checkUser = checkUser;
 
 // products
 exports.getAllProducts = getAllProducts;

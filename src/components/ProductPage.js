@@ -7,6 +7,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
+import LoadingSpinner from "./LoadingSpinner";
 
 const ProductPage = () => {
   let { id } = useParams();
@@ -95,7 +96,7 @@ const ProductPage = () => {
       exit={{ opacity: 0 }}
       className="page-padding"
     >
-      {!fetchedProduct && <div>Loading</div>}
+      {!fetchedProduct && <LoadingSpinner/>}
       {fetchErrorProduct ? (
         <div className="error-message">{fetchErrorProduct}</div>
       ) : (

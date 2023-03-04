@@ -1,11 +1,17 @@
 const path = require("path");
 require("dotenv").config({ path: "../.env" });
 const database = require("../server/database");
+const transporter = require('./nodemailerConfig');
 const express = require("express");
 const buildPath = path.join(__dirname, "..", "build");
 const multer = require("multer");
 const port = 8080;
 const app = express();
+var randomToken = require('random-token');
+var tokenSession;
+
+// TEMP CONSTANTS FOR MAIL AND PASSWORD
+const emailTemp = "contact.zipsoft@gmail.com";
 
 // for simulating delay in server
 function sleep(milliseconds) {
@@ -33,6 +39,83 @@ const fileStorageEngine = multer.diskStorage({
   },
 });
 const upload = multer({ storage: fileStorageEngine });
+
+//MAIL HANDLING
+
+app.post("/sendEmail",upload.none(), (req, res) => {
+  try {
+    const mailOptions = {
+      from: emailTemp,
+      to: "aleksa.marinkovic456@gmail.com",
+      subject: req.body.naslov,
+      html: `
+                <p>Imate novi zahtev za kontakt.</p>
+                <h3>Detalji: </h3>
+                <ul>
+                    <li>Ime: ${req.body.imePrezime}</li>
+                    <li>Email: ${req.body.email}</li>
+                    <li>Poruka: ${req.body.tekst}</li>
+                </ul>
+            `,
+    };
+
+    transporter.sendMail(mailOptions, function (err, info) {
+      if (err) {
+        res.send({
+          success: false,
+          message:
+            "Slanje email-a nije prošlo. Pokušajte ponovo kasnije. Error",
+          details: err.code,
+        });
+      } else {
+        res.send({
+          success: true,
+          message:
+            "Hvala Vam na interesovanju. Javićemo Vam se u najkraćem roku.",
+        });
+      }
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Slanje email-a nije prošlo. Pokušajte ponovo kasnije.",
+    });
+  }
+});
+
+
+//LOGIN
+app.post("/adminLogin", upload.none(), (req,res) => {
+  try{
+    const loginPromise = database.checkUser(req.body.user, req.body.password);
+    loginPromise.then((data) => {
+      console.log(data);
+      if (data === false) {
+        res.send({
+          success: false,
+          message: "Neispravna lozinka ili username"
+        });
+        return;
+      }
+      else{
+        tokenSession = randomToken(16);
+        res.send({
+          success: true,
+          message: "Uspešan login",
+          data: tokenSession
+        });
+        return;
+      }
+    })
+  }
+  catch(error){
+    res.status(500).send({
+      success: false,
+      message: "Error 020"
+    });
+  }
+})
+
 
 //ALBUMS
 app.post("/addAlbum", upload.array("images", 5), (req, res) => {
@@ -119,7 +202,7 @@ app.post("/getAlbumByProductId", upload.none(), (req, res) => {
       } else {
         res.send({
           success: true,
-          message: "Successfully retrieved data.",
+          message: "Uspešno dobavljanje albuma.",
           data: data,
         });
       }
@@ -138,7 +221,6 @@ app.post("/removeAlbumById", upload.none(), (req, res) => {
   try {
     const removePromise = database.removeAlbum(req.body.albumId);
     removePromise.then((data) => {
-      console.log(data);
       if (data === false) {
         res.status(500).send({
           success: false,
@@ -214,7 +296,7 @@ app.get("/getAvailableProducts", (req, res) => {
       } else {
         res.send({
           success: true,
-          message: "Successfully retrieved data.",
+          message: "Uspešno dobavljanje proizvoda.",
           data: data,
         });
       }
@@ -243,7 +325,7 @@ app.get("/getProducts", (req, res) => {
       } else {
         res.send({
           success: true,
-          message: "Successfully retrieved data.",
+          message: "Uspešno dobavljanje proizvoda.",
           data: data,
         });
       }
@@ -272,7 +354,7 @@ app.post("/getProductsByFilter", upload.none(), (req, res) => {
       } else {
         res.send({
           success: true,
-          message: "Successfully retrieved data.",
+          message: "Uspešno dobavljanje proizvoda.",
           data: data,
         });
       }
@@ -349,7 +431,7 @@ app.post("/getProductById", upload.none(), (req, res) => {
       }
       res.send({
         success: true,
-        message: "Uspešno uhvacen proizvod.",
+        message: "Uspešno dobavljen proizvod.",
         data: data,
       });
     });
@@ -410,7 +492,7 @@ app.get("/getCategories", (req, res) => {
       } else {
         res.send({
           success: true,
-          message: "Successfully retrieved data.",
+          message: "Uspešno dobavljanje kategorija.",
           data: data,
         });
       }
@@ -516,7 +598,7 @@ app.post("/addManufacturer", upload.single("image"), (req, res) => {
 });
 
 // get all manufacturers
-app.get("/getManufacturers", (req, res) => {
+app.get("/getManufacturers", (req, res) => { 
   try {
     const dataPromise = database.getAllManufacturers();
     dataPromise.then((data) => {
@@ -530,7 +612,7 @@ app.get("/getManufacturers", (req, res) => {
       } else {
         res.send({
           success: true,
-          message: "Successfully retrieved data.",
+          message: "Uspešno dobavljanje proizvođača.",
           data: data,
         });
       }

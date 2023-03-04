@@ -17,3 +17,4 @@
 017 - Baza nije nasla album sa tim ID-em
 018 - Neuspeo getAllAlbums u bazi
 019 - Server pukao na getAllAlbums
+020 - Server pukao pri loginu

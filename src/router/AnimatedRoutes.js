@@ -3,7 +3,6 @@ import { Route, Routes } from "react-router-dom";
 import HomePage from "../components/HomePage";
 import ProductsPage from "../components/ProductsPage";
 import Info from "../components/Info";
-import Blog from "../components/Blog";
 import { useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import AdminPage from "../components/AdminPage";

@@ -1,7 +1,60 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
+import Axios from "axios";
+
+const defaultContactValue = {
+  imePrezime: "",
+  email: "",
+  naslov: "",
+  tekst: "",
+};
 
 const Info = () => {
+  const [contactInfo, setContactInfo] = useState(defaultContactValue);
+  const [errorMessageContact, setErrorMessageContact] = useState(null);
+  const [successMessageContact, setSuccessMessageContact] = useState(null);
+
+  const onSendMailClick = (e) => {
+    e.preventDefault();
+    const data = new FormData();
+    data.append("imePrezime", contactInfo.imePrezime);
+    data.append("email", contactInfo.email);
+    data.append("naslov", contactInfo.naslov);
+    data.append("tekst", contactInfo.tekst);
+    Axios.post("/sendEmail", data)
+      .then((response) => {
+        if (response.data.success) {
+          setSuccessMessageContact(response.data.message);
+          setContactInfo(defaultContactValue);
+        } else {
+          setErrorMessageContact(response.data.message);
+        }
+      })
+      .catch((error) => {
+        if (error.response) {
+          // request made and server responded
+          setErrorMessageContact(error.response.data.message);
+          return;
+        } else if (error.request) {
+          // request made no response from server
+          setErrorMessageContact("Error 003");
+          return;
+        } else {
+          // request setup failed
+          setErrorMessageContact("Error 004");
+          return;
+        }
+      });
+  };
+
+  const onContactFormInputChange = (e) => {
+    const {name, value} = e.target;
+    setContactInfo({
+      ...contactInfo,
+      [name]: value
+    })
+  }
+
   return (
     <motion.div
       key="info"
@@ -24,31 +77,31 @@ const Info = () => {
       <div className="info-horizontal-container">
         <div className="info-vertical-form-container">
           <div className="form-header">Pošaljite nam poruku</div>
-          <form>
+          <form onSubmit={onSendMailClick}>
             <div className="form-field">
               <label htmlFor="imePrezime">
                 Ime i prezime (obavezno polje):
               </label>
-              <input type="text" required="required" id="imePrezime"></input>
+              <input type="text" required="required" id="imePrezime" name="imePrezime" value={contactInfo.imePrezime} onChange={onContactFormInputChange}></input>
             </div>
             <div className="form-field">
               <label htmlFor="email">Email adresa (obavezno polje):</label>
-              <input type="email" required="required" id="email"></input>
+              <input type="email" required="required" id="email" name="email" value={contactInfo.email} onChange={onContactFormInputChange}></input>
             </div>
             <div className="form-field">
               <label htmlFor="naslov">Naslov:</label>
-              <input type="text" id="naslov"></input>
+              <input type="text" required="required" id="naslov" name="naslov" value={contactInfo.naslov} onChange={onContactFormInputChange}></input>
             </div>
             <div className="form-field">
               <label htmlFor="tekst">Tekst:</label>
-              <textarea id="tekst" style={{ resize: "none" }}></textarea>
+              <textarea id="tekst" style={{ resize: "none" }}  name="tekst" value={contactInfo.tekst} onChange={onContactFormInputChange}></textarea>
             </div>
-            <div>
               <button className="form-button" type="submit">
                 POŠALJI
               </button>
-            </div>
           </form>
+              {successMessageContact && <div className="success-message">{successMessageContact}</div>}
+              {errorMessageContact && <div className="error-message">{errorMessageContact}</div>}
         </div>
         <div className="info-vertical-text-container">
           <div className="contact-header">Informacije</div>

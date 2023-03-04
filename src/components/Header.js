@@ -91,7 +91,7 @@ const Header = () => {
           NASLOVNA
         </NavHashLink>
         {isBusy && !fetchError && (
-          <div className="header-item-container">Loading</div>
+          <div className="header-item-container" disabled>PROIZVODI</div>
         )}
         {fetchError && (
           <NavHashLink
@@ -109,9 +109,15 @@ const Header = () => {
             className="header-item-container"
           >
             <NavDropdown.Item className="header-item-container-collapsable" href="/#/products#top">
-              Sve kategorije
+              SVI PROIZVODI
             </NavDropdown.Item>
             <NavDropdown.Divider />
+            <NavDropdown.Item
+                  className="header-item-container-collapsable"
+                  disabled
+                >
+                  PO KATEGORIJAMA:
+                </NavDropdown.Item>
             {categories.map((category) => {
               const url = "/#/products/categories/" + category.categoryName;
               return (

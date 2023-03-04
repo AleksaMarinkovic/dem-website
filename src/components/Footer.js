@@ -10,6 +10,7 @@ const Footer = () => {
             target="_blank"
             rel="noreferrer"
             className="footer-icon"
+            title="Instagram"
           >
             <img
               src={require("../images/Instagram.webp")}
@@ -22,6 +23,7 @@ const Footer = () => {
             target="_blank"
             rel="noreferrer"
             className="footer-icon"
+            title="LinkedIn"
           >
             <img
               src={require("../images/LinkedIn.webp")}
@@ -34,6 +36,7 @@ const Footer = () => {
             target="_blank"
             rel="noreferrer"
             className="footer-icon"
+            title="Facebook"
           >
             <img
               src={require("../images/Facebook.webp")}
@@ -46,6 +49,7 @@ const Footer = () => {
             target="_blank"
             rel="noreferrer"
             className="footer-icon"
+            title="Mail"
           >
             <img
               src={require("../images/Email.webp")}
@@ -58,6 +62,7 @@ const Footer = () => {
             target="_blank"
             rel="noreferrer"
             className="footer-icon"
+            title="Telefon"
           >
             <img
               src={require("../images/Telefon.webp")}
@@ -78,6 +83,7 @@ const Footer = () => {
               src={require("../images/SGS-ISO-9001.webp")}
               className="footer-logo-image-certificate"
               alt="Politika kvaliteta"
+              title="Sertifikat politike kvaliteta"
             ></img>
           <div>Politika kvaliteta</div>          
           </div>
@@ -85,7 +91,8 @@ const Footer = () => {
           <img
               src={require("../images/SGS-ISO-14001_1.webp")}
               className="footer-logo-image-certificate"
-              alt="Politika zaštite životne sredine"
+              alt="Politika zaštite životne sredine"              
+              title="Sertifikat politike zaštite životne sredine"
             ></img>
           <div>Politika zaštite životne sredine</div>          
           </div>
@@ -94,6 +101,7 @@ const Footer = () => {
               src={require("../images/SGS-ISO-45001_1.webp")}
               className="footer-logo-image-certificate"
               alt="Politika zaštite na radu"
+              title="Sertifikat politike zaštite na radu"
             ></img>
           <div>Politika zaštite na radu</div>          
           </div>
