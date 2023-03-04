@@ -1,6 +1,7 @@
 const path = require("path");
 require("dotenv").config({ path: "../.env" });
 const database = require("../server/database");
+const transporter = require('./nodemailerConfig');
 const express = require("express");
 const buildPath = path.join(__dirname, "..", "build");
 const multer = require("multer");
@@ -8,6 +9,9 @@ const port = 8080;
 const app = express();
 var randomToken = require('random-token');
 var tokenSession;
+
+// TEMP CONSTANTS FOR MAIL AND PASSWORD
+const emailTemp = "contact.zipsoft@gmail.com";
 
 // for simulating delay in server
 function sleep(milliseconds) {
@@ -35,6 +39,50 @@ const fileStorageEngine = multer.diskStorage({
   },
 });
 const upload = multer({ storage: fileStorageEngine });
+
+//MAIL HANDLING
+
+app.post("/sendEmail",upload.none(), (req, res) => {
+  try {
+    const mailOptions = {
+      from: emailTemp,
+      to: "aleksa.marinkovic456@gmail.com",
+      subject: req.body.naslov,
+      html: `
+                <p>Imate novi zahtev za kontakt.</p>
+                <h3>Detalji: </h3>
+                <ul>
+                    <li>Ime: ${req.body.imePrezime}</li>
+                    <li>Email: ${req.body.email}</li>
+                    <li>Poruka: ${req.body.tekst}</li>
+                </ul>
+            `,
+    };
+
+    transporter.sendMail(mailOptions, function (err, info) {
+      if (err) {
+        res.send({
+          success: false,
+          message:
+            "Slanje email-a nije prošlo. Pokušajte ponovo kasnije. Error",
+          details: err.code,
+        });
+      } else {
+        res.send({
+          success: true,
+          message:
+            "Hvala Vam na interesovanju. Javićemo Vam se u najkraćem roku.",
+        });
+      }
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Slanje email-a nije prošlo. Pokušajte ponovo kasnije.",
+    });
+  }
+});
+
 
 //LOGIN
 app.post("/adminLogin", upload.none(), (req,res) => {
