@@ -9,10 +9,11 @@ const AdminPageAlbums = () => {
   // states
   const [albums, setAlbums] = useState([]);
   const [selectedAlbum, setSelectedAlbum] = useState(null);
-  const [products, setProducts] = useState([1,2,3]);
+  const [products, setProducts] = useState([1, 2, 3]);
   const [isBusy, setIsBusy] = useState(true);
   const [fetchedAlbums, setFetchedAlbums] = useState(false);
   const [fetchedProducts, setFetchedProducts] = useState(false);
+  const [changedData, setChangedData] = useState(false);
 
   const albumToAddDefault = {
     albumName: "",
@@ -59,12 +60,12 @@ const AdminPageAlbums = () => {
 
   useEffect(() => {
     async function fetchDataAlbums() {
+      console.log("got data albums");
       await Axios.get("/getAllAlbums")
         .then((response) => {
           if (response.data.success) {
             setAlbums(response.data.data);
             setFetchedAlbums(true);
-            console.log(response.data.data + ' albumi');
           }
         })
         .catch((error) => {
@@ -80,17 +81,16 @@ const AdminPageAlbums = () => {
         });
     }
     fetchDataAlbums();
-  }, []);
+  }, [changedData]);
 
   useEffect(() => {
     async function fetchDataProducts() {
+      console.log("got data products");
       await Axios.get("/getAvailableProducts")
         .then((response) => {
           if (response.data.success) {
             setProducts(response.data.data);
             setFetchedProducts(true);
-            console.log(response.data.data + ' proizvodi');
-
           }
         })
         .catch((error) => {
@@ -106,13 +106,13 @@ const AdminPageAlbums = () => {
         });
     }
     fetchDataProducts();
-  }, []);
+  }, [changedData]);
 
   useEffect(() => {
     if (fetchedProducts && fetchedAlbums) {
       setIsBusy(false);
     }
-  }, [fetchedProducts, fetchedAlbums]);
+  }, [fetchedProducts, fetchedAlbums, changedData]);
 
   const onRowChange = (album) => {
     setSelectedAlbum(album);
@@ -136,8 +136,32 @@ const AdminPageAlbums = () => {
   };
 
   const onDeleteAlbumClick = (e) => {
-    // delete album with axios call
-    console.log("Delete album");
+    e.preventDefault();
+    const data = new FormData();
+    data.append("albumId", selectedAlbum._id);
+    Axios.post("/removeAlbumById", data)
+      .then((response) => {
+        if (response.data.success) {
+          setSuccessMessageDeleteAlbum(response.data.message);
+          setSelectedAlbum();
+          setChangedData(!changedData);
+        }
+      })
+      .catch((error) => {
+        if (error.response) {
+          // request made and server responded
+          setDeleteAlbumError(error.response.data.message);
+          setSelectedAlbum();
+        } else if (error.request) {
+          // request made no response from server
+          setDeleteAlbumError("Error 003");
+          setSelectedAlbum();
+        } else {
+          // request setup failed
+          setDeleteAlbumError("Error 004");
+          setSelectedAlbum();
+        }
+      });
   };
 
   const onAddAlbumClick = (e) => {
@@ -146,39 +170,40 @@ const AdminPageAlbums = () => {
     const data = new FormData();
 
     for (let i = 0; i < albumToAddImagesData.length; i++) {
-        data.append('images', albumToAddImagesData[i]);
-      }
+      data.append("images", albumToAddImagesData[i]);
+    }
     //data.append("images", albumToAddImagesData);
     data.append("albumName", albumToAdd.albumName);
     data.append("albumProduct", albumToAdd.albumProduct);
 
     Axios.post("/addAlbum", data)
-    .then((response) => {
-      if(response.data.success){
-        setAlbumToAdd(albumToAddDefault);
-        setSuccessMessageAddAlbum("Uspešno dodat nov album.")
-      }
-    })
-    .catch((error) => {
+      .then((response) => {
+        if (response.data.success) {
+          setAlbumToAdd(albumToAddDefault);
+          setSuccessMessageAddAlbum(response.data.message);
+          setChangedData(!changedData);
+        }
+      })
+      .catch((error) => {
         if (error.response) {
-            // request made and server responded
-            setAddAlbumError(error.response.data.message);
-            setAlbumToAdd(albumToAddDefault);
-          } else if (error.request) {
-            // request made no response from server
-            setAddAlbumError("Error 003");
-            setAlbumToAdd(albumToAddDefault);
-          } else {
-            // request setup failed
-            setAddAlbumError("Error 004");
-            setAlbumToAdd(albumToAddDefault);
-          }
-    })
+          // request made and server responded
+          setAddAlbumError(error.response.data.message);
+          setAlbumToAdd(albumToAddDefault);
+        } else if (error.request) {
+          // request made no response from server
+          setAddAlbumError("Error 003");
+          setAlbumToAdd(albumToAddDefault);
+        } else {
+          // request setup failed
+          setAddAlbumError("Error 004");
+          setAlbumToAdd(albumToAddDefault);
+        }
+      });
   };
 
   return (
     <div>
-      {isBusy && !fetchErrorAlbums && !fetchErrorProducts && <LoadingSpinner/>}
+      {isBusy && !fetchErrorAlbums && !fetchErrorProducts && <LoadingSpinner />}
       {fetchErrorAlbums && (
         <div className="error-message">{fetchErrorAlbums}</div>
       )}
@@ -200,7 +225,7 @@ const AdminPageAlbums = () => {
                 <div className="form-container-inner">
                   <div>
                     Obrišite album: {selectedAlbum.albumName} za proivod:{" "}
-                    {selectedAlbum.albumProduct}
+                    {selectedAlbum.albumProductName}
                   </div>
                   <button onClick={onDeleteAlbumClick}>Obriši</button>
                 </div>

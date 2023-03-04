@@ -2,7 +2,6 @@ import React, { useEffect, useState, useMemo } from "react";
 import { motion } from "framer-motion";
 import Axios from "axios";
 import Table from "./TableAdmin";
-import useLocalStorageState from "use-local-storage-state";
 import { redirect } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import ProductForm from "./ProductForm";
@@ -10,19 +9,14 @@ import AdminPageCategories from "./AdminPageCategories";
 import AdminPageManufacturers from "./AdminPageManufacturers";
 import AdminPageAlbums from "./AdminPageAlbums";
 import Collapsible from "react-collapsible";
-import { CollapsibleTriggerOpened, CollapsibleTrigger } from "./CollapsibleTrigger";
+import {
+  CollapsibleTriggerOpened,
+  CollapsibleTrigger,
+} from "./CollapsibleTrigger";
 import LoadingSpinner from "./LoadingSpinner";
 
 const AdminPage = () => {
-  const [loggedinUser, setLoggedinUser, { removeItem}] = useLocalStorageState(
-    "user",
-    {
-      defaultValue: {
-        username: '',
-        password: ''
-      }
-    }
-  );
+  const [tokenSession, setSetTokenSession] = useState(null);
 
   const productToAddDefault = {
     productName: "",
@@ -32,6 +26,9 @@ const AdminPage = () => {
     productCategory: "",
     productImageUrl: "",
   };
+
+  //data changed 
+  const [changedData, setChangedData] = useState(false);
   //fetched products
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -63,7 +60,6 @@ const AdminPage = () => {
 
   //error message on login
   const [loginError, setLoginError] = useState(null);
-
 
   //success message if change or add executed properly
   const [successMessageChange, setSuccessMessageChange] = useState(null);
@@ -113,44 +109,48 @@ const AdminPage = () => {
     ],
     []
   );
-  //On first load ask for password if its not in local storage, otherwise fetch data
+
+  // login
   useEffect(() => {
-    if (!loggedinUser.username || !loggedinUser.password) {
-      // setPassword(prompt("Password: "));
+    if (tokenSession === null) {
       let insertedUsername = prompt("Username: ");
       let insertedPassword = prompt("Password: ");
-      async function checkUser(user,pass) {
+      async function checkUser(user, pass) {
         const data = new FormData();
         data.append("user", user);
         data.append("password", pass);
-        await Axios.post('/adminLogin', data)
-        .then((response) => {
-          if (response.data.success) {
-            setLoggedinUser({
-              username: user,
-              password: pass
-            })
-          }
-        })
-        .catch((error) => {
-          if (error.response) {
-            // request made and server responded
-            setLoginError(error.response.data.message);
-            return;
-          } else if (error.request) {
-            // request made no response from server
-            setLoginError("Error 003");
-            return;
-          } else {
-            // request setup failed
-            setLoginError("Error 004");
-            return;
-          }
-        });
+        await Axios.post("/adminLogin", data)
+          .then((response) => {
+            if (response.data.success && response.data.data !== undefined) {
+              setSetTokenSession(response.data.data);
+            }
+            if(!response.data.success){
+              setLoginError(response.data.message);
+            }
+          })
+          .catch((error) => {
+            if (error.response) {
+              // request made and server responded
+              setLoginError(error.response.data.message);
+              return;
+            } else if (error.request) {
+              // request made no response from server
+              setLoginError("Error 003");
+              return;
+            } else {
+              // request setup failed
+              setLoginError("Error 004");
+              return;
+            }
+          });
       }
       checkUser(insertedUsername, insertedPassword);
     }
-    if (!fetchedProducts) {
+  }, [tokenSession, setSetTokenSession]);
+
+  // fetch data
+  useEffect(() => {
+    if (tokenSession) {
       async function fetchData() {
         await Axios.get("/getProducts")
           .then((response) => {
@@ -177,8 +177,7 @@ const AdminPage = () => {
           });
       }
       fetchData();
-    }
-    if (!fetchedCategories) {
+
       async function fetchCategoryData() {
         await Axios.get("/getCategories")
           .then((response) => {
@@ -202,9 +201,7 @@ const AdminPage = () => {
           });
       }
       fetchCategoryData();
-    }
 
-    if (!fetchedManufacturers) {
       async function fetchManufacturerData() {
         await Axios.get("/getManufacturers")
           .then((response) => {
@@ -229,20 +226,14 @@ const AdminPage = () => {
       }
       fetchManufacturerData();
     }
+  }, [tokenSession, changedData]);
+
+  // allow render when all is fetched
+  useEffect(() => {
     if (fetchedCategories && fetchedProducts && fetchedManufacturers) {
       setIsBusy(false);
     }
-  }, [
-    productToChange,
-    productToAdd,
-    fetchedCategories,
-    fetchedProducts,
-    fetchedManufacturers,
-  ]);
-
-  const fetchAllData = () => {
-    
-  }
+  }, [fetchedCategories, fetchedProducts, fetchedManufacturers, changedData]);
 
   // When a row in the table of categories is selected, set ProductToChange state to the row values
   const onRowChange = (product) => {
@@ -293,7 +284,8 @@ const AdminPage = () => {
       .then((response) => {
         if (response.data.success) {
           setProductToAdd(productToAddDefault);
-          setSuccessMessageAdd("Uspešno dodat proizvod.");
+          setSuccessMessageAdd(response.data.message);
+          setChangedData(!changedData);
         }
       })
       .catch((error) => {
@@ -354,7 +346,8 @@ const AdminPage = () => {
       .then((response) => {
         if (response.data.success) {
           setProductToChange();
-          setSuccessMessageChange("Uspešno izmenjen proizvod");
+          setSuccessMessageChange(response.data.message);
+          setChangedData(!changedData);
         }
       })
       .catch((error) => {
@@ -377,10 +370,9 @@ const AdminPage = () => {
   // Triggers when logout button is pressed. Removes password from localstorage
   const logout = () => {
     redirect("./");
-    removeItem();
   };
 
-  return (loggedinUser.username && loggedinUser.password) ? (
+  return tokenSession ? (
     <motion.div
       key="adminPage"
       initial={{ opacity: 0 }}
@@ -390,7 +382,7 @@ const AdminPage = () => {
       {isBusy &&
         !fetchErrorProducts &&
         !fetchErrorCategories &&
-        !fetchErrorManufacturers && <LoadingSpinner/>}
+        !fetchErrorManufacturers && <LoadingSpinner />}
       {fetchErrorProducts ? (
         <div className="error-message">{fetchErrorProducts}</div>
       ) : (
@@ -409,8 +401,8 @@ const AdminPage = () => {
       {!isBusy && (
         <div style={{ maxWidth: "100%" }} className="vertical-container-admin">
           <Collapsible
-            trigger={<CollapsibleTrigger text="PROIZVODI"/>}
-            triggerWhenOpen ={<CollapsibleTriggerOpened text="PROIZVODI"/>}
+            trigger={<CollapsibleTrigger text="PROIZVODI" />}
+            triggerWhenOpen={<CollapsibleTriggerOpened text="PROIZVODI" />}
             className="collapsible-wrapper"
             openedClassName="collapsible-wrapper-opened"
           >
@@ -500,7 +492,7 @@ const AdminPage = () => {
             trigger={
               <CollapsibleTrigger text="KATEGORIJE"></CollapsibleTrigger>
             }
-            triggerWhenOpen ={<CollapsibleTriggerOpened text="KATEGORIJE"/>}
+            triggerWhenOpen={<CollapsibleTriggerOpened text="KATEGORIJE" />}
             className="collapsible-wrapper"
             openedClassName="collapsible-wrapper-opened"
           >
@@ -510,7 +502,7 @@ const AdminPage = () => {
             trigger={
               <CollapsibleTrigger text="PROIZVOĐAČI"></CollapsibleTrigger>
             }
-            triggerWhenOpen ={<CollapsibleTriggerOpened text="PROIZVOĐAČI"/>}
+            triggerWhenOpen={<CollapsibleTriggerOpened text="PROIZVOĐAČI" />}
             className="collapsible-wrapper"
             openedClassName="collapsible-wrapper-opened"
           >
@@ -518,10 +510,8 @@ const AdminPage = () => {
           </Collapsible>
 
           <Collapsible
-            trigger={
-              <CollapsibleTrigger text="ALBUMI"></CollapsibleTrigger>
-            }
-            triggerWhenOpen ={<CollapsibleTriggerOpened text="ALBUMI"/>}
+            trigger={<CollapsibleTrigger text="ALBUMI"></CollapsibleTrigger>}
+            triggerWhenOpen={<CollapsibleTriggerOpened text="ALBUMI" />}
             className="collapsible-wrapper"
             openedClassName="collapsible-wrapper-opened"
           >

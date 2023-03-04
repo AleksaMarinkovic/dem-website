@@ -6,6 +6,8 @@ const buildPath = path.join(__dirname, "..", "build");
 const multer = require("multer");
 const port = 8080;
 const app = express();
+var randomToken = require('random-token');
+var tokenSession;
 
 // for simulating delay in server
 function sleep(milliseconds) {
@@ -41,16 +43,18 @@ app.post("/adminLogin", upload.none(), (req,res) => {
     loginPromise.then((data) => {
       console.log(data);
       if (data === false) {
-        res.status(500).send({
+        res.send({
           success: false,
           message: "Neispravna lozinka ili username"
         });
         return;
       }
       else{
+        tokenSession = randomToken(16);
         res.send({
           success: true,
-          message: "Uspešan login"
+          message: "Uspešan login",
+          data: tokenSession
         });
         return;
       }
@@ -150,7 +154,7 @@ app.post("/getAlbumByProductId", upload.none(), (req, res) => {
       } else {
         res.send({
           success: true,
-          message: "Successfully retrieved data.",
+          message: "Uspešno dobavljanje albuma.",
           data: data,
         });
       }
@@ -169,7 +173,6 @@ app.post("/removeAlbumById", upload.none(), (req, res) => {
   try {
     const removePromise = database.removeAlbum(req.body.albumId);
     removePromise.then((data) => {
-      console.log(data);
       if (data === false) {
         res.status(500).send({
           success: false,
@@ -232,7 +235,6 @@ app.post("/addProduct", upload.single("image"), (req, res) => {
 
 // get all products which should be available on website (productAvailability is true)
 app.get("/getAvailableProducts", (req, res) => {
-  sleep(5000);
   try {
     const dataPromise = database.getAvailableProducts();
     dataPromise.then((data) => {
@@ -246,7 +248,7 @@ app.get("/getAvailableProducts", (req, res) => {
       } else {
         res.send({
           success: true,
-          message: "Successfully retrieved data.",
+          message: "Uspešno dobavljanje proizvoda.",
           data: data,
         });
       }
@@ -262,7 +264,6 @@ app.get("/getAvailableProducts", (req, res) => {
 
 // get all products in db
 app.get("/getProducts", (req, res) => {
-  sleep(5000);
   try {
     const dataPromise = database.getAllProducts();
     dataPromise.then((data) => {
@@ -276,7 +277,7 @@ app.get("/getProducts", (req, res) => {
       } else {
         res.send({
           success: true,
-          message: "Successfully retrieved data.",
+          message: "Uspešno dobavljanje proizvoda.",
           data: data,
         });
       }
@@ -292,7 +293,6 @@ app.get("/getProducts", (req, res) => {
 
 // get all products in db by filter
 app.post("/getProductsByFilter", upload.none(), (req, res) => {
-  sleep(5000);
   try {
     const dataPromise = database.getProductsByFilter(req.body.filter);
     dataPromise.then((data) => {
@@ -306,7 +306,7 @@ app.post("/getProductsByFilter", upload.none(), (req, res) => {
       } else {
         res.send({
           success: true,
-          message: "Successfully retrieved data.",
+          message: "Uspešno dobavljanje proizvoda.",
           data: data,
         });
       }
@@ -369,8 +369,7 @@ app.post("/updateProductWithId", upload.single("image"), (req, res) => {
 });
 
 // get a specific product with a given id
-app.post("/getProductById", upload.none(), (req, res) => {  
-  sleep(5000);
+app.post("/getProductById", upload.none(), (req, res) => {
   try {
     const getPromise = database.getProduct(req.body._id);
     getPromise.then((data) => {
@@ -384,7 +383,7 @@ app.post("/getProductById", upload.none(), (req, res) => {
       }
       res.send({
         success: true,
-        message: "Uspešno uhvacen proizvod.",
+        message: "Uspešno dobavljen proizvod.",
         data: data,
       });
     });
@@ -431,8 +430,7 @@ app.post("/addCategory", upload.single("image"), (req, res) => {
 });
 
 // get all categories
-app.get("/getCategories", (req, res) => {  
-  sleep(5000);
+app.get("/getCategories", (req, res) => {
   try {
     const dataPromise = database.getAllCategories();
     dataPromise.then((data) => {
@@ -446,7 +444,7 @@ app.get("/getCategories", (req, res) => {
       } else {
         res.send({
           success: true,
-          message: "Successfully retrieved data.",
+          message: "Uspešno dobavljanje kategorija.",
           data: data,
         });
       }
@@ -552,8 +550,7 @@ app.post("/addManufacturer", upload.single("image"), (req, res) => {
 });
 
 // get all manufacturers
-app.get("/getManufacturers", (req, res) => {  
-  sleep(5000);
+app.get("/getManufacturers", (req, res) => { 
   try {
     const dataPromise = database.getAllManufacturers();
     dataPromise.then((data) => {
@@ -567,7 +564,7 @@ app.get("/getManufacturers", (req, res) => {
       } else {
         res.send({
           success: true,
-          message: "Successfully retrieved data.",
+          message: "Uspešno dobavljanje proizvođača.",
           data: data,
         });
       }

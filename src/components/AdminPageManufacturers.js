@@ -13,6 +13,10 @@ const AdminPageManufacturers = () => {
     manufacturerWebsiteUrl: "",
     manufacturerImageUrl: "",
   };
+
+  // changedData
+  const [changedData, setChangedData] = useState(false);
+
   // errors
   const [fetchError, setFetchError] = useState(null);
   const [addError, setAddError] = useState(null);
@@ -26,7 +30,6 @@ const AdminPageManufacturers = () => {
   );
 
   // form data change
-
   const [manufacturerToChangeImageData, setManufacturerToChangeImageData] =
     useState();
   const [manufacturerToChange, setManufacturerToChange] = useState();
@@ -100,7 +103,7 @@ const AdminPageManufacturers = () => {
         });
     }
     fetchData();
-  }, [manufacturerToAdd]);
+  }, [changedData]);
 
   // When a row in the table of manufacturers is selected, set ManufacturerToChange state to the row values
   const onRowChange = (manufacturer) => {
@@ -139,7 +142,8 @@ const AdminPageManufacturers = () => {
       .then((response) => {
         if (response.data.success) {
           setManufacturerToChange();
-          setSuccessMessageManufacturerAdd("Uspešno izbrisan proizvođač.");
+          setSuccessMessageManufacturerAdd(response.data.message);
+          setChangedData(!changedData);
         }
       })
       .catch((error) => {
@@ -175,7 +179,8 @@ const AdminPageManufacturers = () => {
       .then((response) => {
         if (response.data.success) {
           setManufacturerToAdd(manufacturerToAddDefault);
-          setSuccessMessageManufacturerAdd("Uspešno dodat nov proizvođač.");
+          setSuccessMessageManufacturerAdd(response.data.message);
+          setChangedData(!changedData);
         }
       })
       .catch((error) => {

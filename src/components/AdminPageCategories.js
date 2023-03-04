@@ -22,6 +22,7 @@ const AdminPageCategories = () => {
   const [categoryToChange, setCategoryToChange] = useState();
   const [categoryToChangeImageData, setCategoryToChangeImageData] = useState();
   const [oldCategoryName, setOldCategoryName] = useState();
+  const [changedData,setChangedData] = useState();
 
   //setup columns for table
   const columns = useMemo(
@@ -75,7 +76,7 @@ const AdminPageCategories = () => {
         });
     }
     fetchData();
-  }, [categoryToAdd]);
+  }, [changedData]);
 
   // When a row in the table of categories is selected, set CategoryToChange state to the row values
   const onRowChange = (category) => {
@@ -112,7 +113,8 @@ const AdminPageCategories = () => {
       .then((response) => {
         if (response.data.success) {
           setCategoryToAdd(categoryToAddDefault);
-          setSuccessMessageCategoryAdd("Uspešno dodata nova kategorija.");
+          setSuccessMessageCategoryAdd(response.data.message);
+          setChangedData(!changedData);
         }
       })
       .catch((error) => {
@@ -158,7 +160,8 @@ const AdminPageCategories = () => {
       .then((response) => {
         if (response.data.success) {
           setCategoryToChange();
-          setSuccessMessageCategoryChange("Uspešno izmenjena kategorija.");
+          setSuccessMessageCategoryChange(response.data.message);
+          setChangedData(!changedData);
         }
       })
       .catch((error) => {
