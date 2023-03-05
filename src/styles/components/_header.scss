@@ -1,7 +1,7 @@
 .header-container-wrapper{
     display: flex;
     flex-flow: row wrap;
-    background-color: rgba(lighten($light-grey, 30), 0.4);
+    background-color: rgba(white, 0.9);
     position: sticky;
     width: 100%;
     top: 0;
@@ -9,7 +9,6 @@
     justify-content: space-between;
     font-size: $font-size-ml;
     backdrop-filter: blur(6px);
-    font-weight: bold;
     transition: 0.4s;
     -webkit-box-shadow: 0 3px 7px rgba(57, 63, 72, 0.3);
     -moz-box-shadow: 0 3px 7px rgba(57, 63, 72, 0.3);
@@ -26,7 +25,6 @@
     z-index: 100;
     justify-content: space-between;
     font-size: $font-size-medium;
-    font-weight: bold;
     transition: 0.4s;
     -webkit-box-shadow: 0 3px 7px rgba(57, 63, 72, 0.3);
     -moz-box-shadow: 0 3px 7px rgba(57, 63, 72, 0.3);
@@ -83,7 +81,7 @@
     flex-flow: column wrap;
     justify-content: center;
     text-decoration: none !important;    
-    color: $dark-grey;
+    color: darken($dark-grey,10);
     margin-left: $margin-smallest-sides;
 }
 
@@ -99,7 +97,8 @@
     flex-flow: column wrap;
     justify-content: center;
     text-decoration: none !important;    
-    color: $dark-grey;
+    color: $dark-grey;    
+    transition: 0.3s;
 }
 
 .header-item-container-collapsable:hover{ 

@@ -7,8 +7,8 @@ html {
 body {
     height: 100vh;
     margin: 0;
-    background-color: $off-white;
-    font-family: "Roboto";    
+    background-color: darken($off-white,3);
+    font-family: "PT Sans";    
     overflow: overlay;
 }
 

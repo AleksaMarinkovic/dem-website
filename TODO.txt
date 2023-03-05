@@ -1,8 +1,12 @@
-1. Change password in admin page to send password to backend to be validated
-2. Make it mobile friendly. When doing mobile integration make carousel responsive (has responsive property)
-3. Clear image input on form submit
-4. Change loading to gif loading
-5. Add wrapper to every page so that the footer is at the bottom
-6. Change email and password to be used from .env not from local variables
+- Add service page
+- Redesign contact page
+- Add content to homepage
+- Redesign product page
+- Add header and styling to search and filter for products page
+- Make it mobile friendly. When doing mobile integration make carousel responsive (has responsive property)
+- Clear image input on form submit
+- Add wrapper to every page so that the footer is at the bottom
+- Change email and password to be used from .env not from local variables
+- Decide on font
 
 x. REFACTOR CODE SO THAT ADMIN PAGE DOES ALL THE FETCHING AND SENDS DATA TO CHILDREN

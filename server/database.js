@@ -103,10 +103,10 @@ const getAvailableProducts = async () => {
   }
 };
 
-// get all products that should be available on website
+// get all products that should be available on website by Filter
 const getProductsByFilter = async (filter) => {
   try {
-    const data = await product.find(filter).exec();
+    const data = await product.find({...filter, productAvailability: true}).exec();
     return data;
   } catch {
     return false;

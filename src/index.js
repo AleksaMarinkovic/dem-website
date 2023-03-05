@@ -5,6 +5,9 @@ import reportWebVitals from './reportWebVitals';
 import AppRouter from './router/AppRouter';
 import './fonts/Roboto/Roboto-Light.ttf';
 import './fonts/Roboto/Roboto-Regular.ttf';
+import './fonts/PT_Sans/PTSans-Regular.ttf';
+import './fonts/PT_Sans/PTSans-Bold.ttf';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

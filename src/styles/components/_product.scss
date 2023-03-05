@@ -1,30 +1,14 @@
-// .text-background-wrapper{
-//     background-color: $dem-blue;
-//     width: 100%;
-//     min-height: 20%;
-//     color: $off-white;
-//     display: flex;
-//     flex-flow: column wrap;
-//     justify-content: center;
-//     align-items: center;
-// }
-
-// .product-item-name{
-//     font-size: $font-size-medium;
-// }
-
-// .product-secondary-wrapper:hover > .text-background-wrapper{
-//     background-color: ligthen($dem-blue, 40);
-// }
 .product-item-wrapper {
     border-radius: 5px;
     border: 1px solid lighten($light-grey, 5);
     background-color: white;
+    padding-bottom: 1rem;
 }
 
 .img-box {
     display: inline-block;
     overflow: hidden;
+    border-bottom: 1px solid lighten($light-grey,10);
 }
 
 .img-box img {
@@ -44,10 +28,10 @@
     flex-flow: row wrap;
     justify-content: flex-start;
     align-items: center;
+    padding: 1rem 2rem 1rem 2rem;
 }
 
 .product-small-text {
-    padding-left: 1rem;
     color: $dark-grey;
     font-size: $font-size-small*1.8;
 }
@@ -65,23 +49,55 @@
 }
 
 .product-small-link {
-    padding-left: 1rem;
     color: $dark-grey;
     text-decoration: none;
     font-size: $font-size-small*1.8;
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: flex-start;
-    align-items: end;
+    transition: .3s
 }
 
 .product-small-link:hover {
-    color: darken($dem-blue, 2);
+    color: $dem-blue-brigther;
 }
 
 .product-small-text-separator {
     margin-left: 1rem;
+    margin-right: 1rem;
     color: lighten($dark-grey, 3);
+}
+
+.divider{
+    border-bottom: 1px solid $light-grey;
+    width: 80%;
+    align-self: center;
+    margin-bottom: 1rem;
+}
+
+.product-big-link {
+    color: black;
+    font-weight: bold;
+    text-decoration: none;
+    font-size: $font-size-ml;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    align-items: end;
+    transition: .3s
+}
+
+.product-big-link:hover {
+    color: $dem-blue-brigther;
+}
+
+.product-small-link-alt {
+    color: $dem-blue-brigther;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: $font-size-small*1.8;
+    transition: .3s
+}
+
+.product-small-link-alt:hover {
+    color: black;
 }
 
 /*
