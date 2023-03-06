@@ -9,7 +9,9 @@ const AppRouter = () => {
     <div>
       <HashRouter>
         <Header />
+        <div className="page-container">
           <AnimatedRoutes />
+        </div>
         <Footer />
       </HashRouter>
     </div>

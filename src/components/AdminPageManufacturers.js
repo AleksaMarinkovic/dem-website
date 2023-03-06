@@ -29,6 +29,10 @@ const AdminPageManufacturers = () => {
     manufacturerToAddDefault
   );
 
+  // random string for key of file input
+  const [randomStringAdd, setRandomStringAdd] = useState(Math.random().toString(36));
+  const [randomStringChange, setRandomStringChange] = useState(Math.random().toString(36));
+
   // form data change
   const [manufacturerToChangeImageData, setManufacturerToChangeImageData] =
     useState();
@@ -44,7 +48,6 @@ const AdminPageManufacturers = () => {
 
   //old name and website url for changing manufacturer
   const [oldManufacturerName, setOldManufacturerName] = useState();
-  const [oldManufacturerWebsiteUrl, setOldManufacturerWebsiteUrl] = useState();
 
   //setup columns for table
   const columns = useMemo(
@@ -198,6 +201,7 @@ const AdminPageManufacturers = () => {
           setManufacturerToAdd(manufacturerToAddDefault);
         }
       });
+      setRandomStringAdd(Math.random().toString(36));
   };
 
   // When a manufacturer image is uploaded in change manufacturer form, sets state to uploaded image
@@ -245,6 +249,7 @@ const AdminPageManufacturers = () => {
           setManufacturerToAdd(manufacturerToAddDefault);
         }
       });
+      setRandomStringChange(Math.random().toString(36));
   };
 
   return (
@@ -275,6 +280,7 @@ const AdminPageManufacturers = () => {
                     fileChangeHandler={changeFileChangeHandler}
                     isAdd={false}
                     deleteClick={onDeleteManufacturerClick}
+                    randomString={randomStringChange}
                   ></ManufacturerForm>
                 </div>
               ) : (
@@ -310,6 +316,7 @@ const AdminPageManufacturers = () => {
                 buttonText="DODAJ PROIZVOĐAČA"
                 fileChangeHandler={addFileChangeHandler}
                 isAdd={true}
+                randomString={randomStringAdd}
               ></ManufacturerForm>
             </div>
             {successMessageManufacturerAdd ? (

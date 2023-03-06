@@ -8,7 +8,8 @@ const ManufacturerForm = ({
   fileChangeHandler,
   buttonText,
   isAdd,
-  deleteClick
+  deleteClick,
+  randomString
 }) => {
   return (
     <div>
@@ -47,6 +48,7 @@ const ManufacturerForm = ({
           onChange={fileChangeHandler}
           className="category-form-image-input"
           required={isAdd}
+          key={randomString}
         ></input>
         <button className="button-category-form-adminpage" type="submit">
           {buttonText}

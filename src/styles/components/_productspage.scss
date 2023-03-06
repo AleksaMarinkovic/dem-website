@@ -1,3 +1,32 @@
+.products-header{
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: center;
+    align-items: start;
+    font-size: $font-size-ml;
+    padding: 5vh 0 0 15vw;
+    font-weight: bold;
+}
+
+.divider-products-page{
+    border-bottom: 1px solid $light-grey;
+    width: 60vw;
+}
+
+.search-and-filter-container{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: start;
+    align-items: center;
+    gap: $font-size-ml;
+    color: $dem-blue;
+    padding: 5vh 0 0 15vw;
+    font-size: $font-size-medium;
+}
+.search-and-filter-padding{
+    padding-right: $font-size-small;
+}
+
 .product-list-container{
     display: grid;
     gap:5rem;

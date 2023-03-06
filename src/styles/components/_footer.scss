@@ -1,7 +1,7 @@
 .footer-container{
     display: flex;
-    flex-flow: column wrap;
-    min-height: $footer-height;
+    flex-flow: column;
+    height: $footer-height;
     column-gap: 0;
 }
 
@@ -69,4 +69,13 @@
 .footer-logo-image-certificate{
     width: 2vw;
     height: auto;
+}
+
+.link-footer{
+    text-decoration: none;
+    color: $light-grey;
+}
+
+.link-footer:hover{
+    color: lighten($dem-blue-brigther,10);
 }

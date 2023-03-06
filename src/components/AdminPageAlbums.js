@@ -14,6 +14,7 @@ const AdminPageAlbums = () => {
   const [fetchedAlbums, setFetchedAlbums] = useState(false);
   const [fetchedProducts, setFetchedProducts] = useState(false);
   const [changedData, setChangedData] = useState(false);
+  const [randomStringAdd, setRandomStringAdd] = useState(Math.random().toString(36));
 
   const albumToAddDefault = {
     albumName: "",
@@ -199,6 +200,7 @@ const AdminPageAlbums = () => {
           setAlbumToAdd(albumToAddDefault);
         }
       });
+      setRandomStringAdd(Math.random().toString(36));
   };
 
   return (
@@ -255,6 +257,7 @@ const AdminPageAlbums = () => {
                 onFormInputChange={onAddFormInputChange}
                 fileChangeHandler={addFilesChangeHandler}
                 products={products}
+                randomString={randomStringAdd}
               ></AlbumsForm>
             </div>
             {successMessageAddAlbum && (

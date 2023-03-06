@@ -4,7 +4,7 @@ const Footer = () => {
   return (
     <div className="footer-container">
       <div className="footer-section-one">
-        <div className="footer-horizontal-container" style={{gap: "3rem"}}>
+        <div className="footer-horizontal-container" style={{ gap: "3rem" }}>
           <a
             href="https://www.instagram.com/dem.rs/"
             target="_blank"
@@ -74,36 +74,59 @@ const Footer = () => {
         <div className="footer-vertical-container">
           <div>DEM d.o.o.</div>
           <div>21000, Novi Sad, Serbia</div>
-          <div>Tel: +381 (21) 6300 101</div>
-          <div>Email: office@dem.rs</div>
+          <a
+            href="tel:+381216300101"
+            target="_blank"
+            rel="noreferrer"
+            title="Telefon"
+            className="link-footer"
+          >
+            Tel: +381 (21) 6300 101
+          </a>
+          <a
+            href="mailto:office@dem.rs"
+            target="_blank"
+            rel="noreferrer"
+            title="Mail"
+            className="link-footer"
+          >
+            Email: office@dem.rs
+          </a>
         </div>
-        <div className="footer-vertical-container" style={{alignItems:"flex-start", padding:"2rem 0 2rem 0", gap:"4rem"}}>
+        <div
+          className="footer-vertical-container"
+          style={{
+            alignItems: "flex-start",
+            padding: "2rem 0 2rem 0",
+            gap: "4rem",
+          }}
+        >
           <div className="horizontal-certificate-container">
-          <img
+            <img
               src={require("../images/SGS-ISO-9001.webp")}
               className="footer-logo-image-certificate"
               alt="Politika kvaliteta"
               title="Sertifikat politike kvaliteta"
             ></img>
-          <div>Politika kvaliteta</div>          
+            <div>Politika kvaliteta</div>
           </div>
           <div className="horizontal-certificate-container">
-          <img
+            <img
               src={require("../images/SGS-ISO-14001_1.webp")}
               className="footer-logo-image-certificate"
-              alt="Politika zaštite životne sredine"              
+              alt="Politika zaštite životne sredine"
               title="Sertifikat politike zaštite životne sredine"
             ></img>
-          <div>Politika zaštite životne sredine</div>          
+            <div>Politika zaštite životne sredine</div>
           </div>
           <div className="horizontal-certificate-container">
-          <img
+            <img
               src={require("../images/SGS-ISO-45001_1.webp")}
               className="footer-logo-image-certificate"
               alt="Politika zaštite na radu"
               title="Sertifikat politike zaštite na radu"
             ></img>
-          <div>Politika zaštite na radu</div>          
+            <div>Politika zaštite na radu</div>
           </div>
         </div>
       </div>

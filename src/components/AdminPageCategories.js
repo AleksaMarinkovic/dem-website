@@ -24,6 +24,9 @@ const AdminPageCategories = () => {
   const [oldCategoryName, setOldCategoryName] = useState();
   const [changedData,setChangedData] = useState();
 
+  const [randomStringAdd, setRandomStringAdd] = useState(Math.random().toString(36));
+  const [randomStringChange, setRandomStringChange] = useState(Math.random().toString(36));
+
   //setup columns for table
   const columns = useMemo(
     () => [
@@ -133,6 +136,7 @@ const AdminPageCategories = () => {
           setCategoryToAdd(categoryToAddDefault);
         }
       });
+      setRandomStringAdd(Math.random().toString(36));
   };
 
   // When a category image is uploaded in change category form, sets state to uploaded image
@@ -180,6 +184,7 @@ const AdminPageCategories = () => {
           setCategoryToAdd(categoryToAddDefault);
         }
       });
+      setRandomStringChange(Math.random().toString(36));
   };
 
   return (
@@ -208,6 +213,7 @@ const AdminPageCategories = () => {
                     buttonText="IZMENI KATEGORIJU"
                     fileChangeHandler={changeFileChangeHandler}
                     isAdd={false}
+                    randomString={randomStringChange}
                   ></CategoryForm>
                 </div>
               ) : (
@@ -242,6 +248,7 @@ const AdminPageCategories = () => {
                 buttonText="DODAJ KATEGORIJU"
                 fileChangeHandler={addFileChangeHandler}
                 isAdd={true}
+                randomString={randomStringAdd}
               ></CategoryForm>
             </div>
             {successMessageCategoryAdd ? (

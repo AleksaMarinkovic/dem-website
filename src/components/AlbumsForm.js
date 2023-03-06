@@ -7,6 +7,7 @@ const AlbumsForm = ({
   onFormInputChange,
   fileChangeHandler,
   products,
+  randomString
 }) => {
 
   return (
@@ -56,6 +57,7 @@ const AlbumsForm = ({
           className="form-image-input"
           required
           multiple
+          key={randomString}
         ></input>
         <button className="button-form-adminpage" type="submit">
           DODAJ ALBUM

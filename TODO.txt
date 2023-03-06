@@ -2,11 +2,9 @@
 - Redesign contact page
 - Add content to homepage
 - Redesign product page
-- Add header and styling to search and filter for products page
 - Make it mobile friendly. When doing mobile integration make carousel responsive (has responsive property)
-- Clear image input on form submit
-- Add wrapper to every page so that the footer is at the bottom
 - Change email and password to be used from .env not from local variables
 - Decide on font
+- Add support for adding certificates
 
 x. REFACTOR CODE SO THAT ADMIN PAGE DOES ALL THE FETCHING AND SENDS DATA TO CHILDREN

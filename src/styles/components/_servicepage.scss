@@ -1,0 +1,5 @@
+.wrapper{
+    min-height: 100vh - $footer-and-header-height;
+    display: flex;
+    flex-flow: column wrap;
+}

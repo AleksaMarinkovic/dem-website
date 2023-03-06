@@ -6,7 +6,8 @@ const CategoryForm = ({
   onFormInputChange,
   fileChangeHandler,
   buttonText,
-  isAdd
+  isAdd,
+  randomString
 }) => {
   return (
     <div>
@@ -27,7 +28,7 @@ const CategoryForm = ({
           required
           onChange={onFormInputChange}
         ></input>
-        <input type="file" name="image" onChange={fileChangeHandler} className="category-form-image-input" required={isAdd}></input>
+        <input type="file" name="image" onChange={fileChangeHandler} className="category-form-image-input" required={isAdd} key={randomString}></input>
         <button className="button-category-form-adminpage" type="submit">
           {buttonText}
         </button>

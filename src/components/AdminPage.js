@@ -17,6 +17,8 @@ import LoadingSpinner from "./LoadingSpinner";
 
 const AdminPage = () => {
   const [tokenSession, setSetTokenSession] = useState(null);
+  const [randomStringAdd, setRandomStringAdd] = useState(Math.random().toString(36));
+  const [randomStringChange, setRandomStringChange] = useState(Math.random().toString(36));
 
   const productToAddDefault = {
     productName: "",
@@ -27,7 +29,7 @@ const AdminPage = () => {
     productImageUrl: "",
   };
 
-  //data changed 
+  //data changed
   const [changedData, setChangedData] = useState(false);
   //fetched products
   const [products, setProducts] = useState([]);
@@ -124,7 +126,7 @@ const AdminPage = () => {
             if (response.data.success && response.data.data !== undefined) {
               setSetTokenSession(response.data.data);
             }
-            if(!response.data.success){
+            if (!response.data.success) {
               setLoginError(response.data.message);
             }
           })
@@ -271,7 +273,7 @@ const AdminPage = () => {
   // Triggers when submit is pressed on add product form
   const onAddProductClick = (e) => {
     e.preventDefault();
-
+    console.log(e);
     const data = new FormData();
     data.append("image", productToAddImageData);
     data.append("productName", productToAdd.productName);
@@ -303,6 +305,7 @@ const AdminPage = () => {
           setProductToAdd(productToAddDefault);
         }
       });
+      setRandomStringAdd(Math.random().toString(36));
   };
 
   // When a product image is uploaded in change product form, sets state to uploaded image
@@ -365,6 +368,7 @@ const AdminPage = () => {
           setProductToChange();
         }
       });
+      setRandomStringChange(Math.random().toString(36));
   };
 
   // Triggers when logout button is pressed. Removes password from localstorage
@@ -435,6 +439,7 @@ const AdminPage = () => {
                       categories={categories}
                       manufacturers={manufacturers}
                       isAdd={false}
+                      randomString = {randomStringChange}
                     ></ProductForm>
                   </div>
                 ) : (
@@ -474,6 +479,7 @@ const AdminPage = () => {
                   categories={categories}
                   manufacturers={manufacturers}
                   isAdd={true}
+                  randomString={randomStringAdd}
                 ></ProductForm>
                 {successMessageAdd ? (
                   <div className="success-message">{successMessageAdd}</div>

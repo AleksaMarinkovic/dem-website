@@ -14,6 +14,7 @@ const ProductForm = ({
   categories,
   manufacturers,
   isAdd,
+  randomString
 }) => {
   return (
     <div>
@@ -57,31 +58,32 @@ const ProductForm = ({
             );
           })}
         </select>
-
-
         <label className="form-text" htmlFor="proizvodjac">
-        Proizvođač:
-      </label>
-      <select
-        id="proizvodjac"
-        name="productManufacturer"
-        required
-        onChange={onFormInputChange}
-        value={valueManufacturer}
-      >
-        {isAdd && (
-          <option defaultValue={true} value={""}>
-            -- izaberite proizvođača --
-          </option>
-        )}
-        {manufacturers.map((manufacturer) => {
-          return (
-            <option value={manufacturer.manufacturerName} key={manufacturer.manufacturerName}>
-              {manufacturer.manufacturerName}
+          Proizvođač:
+        </label>
+        <select
+          id="proizvodjac"
+          name="productManufacturer"
+          required
+          onChange={onFormInputChange}
+          value={valueManufacturer}
+        >
+          {isAdd && (
+            <option defaultValue={true} value={""}>
+              -- izaberite proizvođača --
             </option>
-          );
-        })}
-      </select>
+          )}
+          {manufacturers.map((manufacturer) => {
+            return (
+              <option
+                value={manufacturer.manufacturerName}
+                key={manufacturer.manufacturerName}
+              >
+                {manufacturer.manufacturerName}
+              </option>
+            );
+          })}
+        </select>
 
         <label className="form-text" htmlFor="opis">
           Opis:
@@ -113,6 +115,7 @@ const ProductForm = ({
           onChange={fileChangeHandler}
           className="form-image-input"
           required={isAdd}
+          key={randomString}
         ></input>
         <button className="button-form-adminpage" type="submit">
           {buttonText}

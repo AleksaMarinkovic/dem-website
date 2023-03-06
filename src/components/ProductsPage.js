@@ -38,10 +38,16 @@ const ProductsPage = () => {
   useEffect(() => {
     let filteredData = data.filter(
       (item) =>
-        item.productCategory.toLowerCase().includes(searchFilter.toLowerCase()) ||
-        item.productManufacturer.toLowerCase().includes(searchFilter.toLowerCase()) ||
+        item.productCategory
+          .toLowerCase()
+          .includes(searchFilter.toLowerCase()) ||
+        item.productManufacturer
+          .toLowerCase()
+          .includes(searchFilter.toLowerCase()) ||
         item.productName.toLowerCase().includes(searchFilter.toLowerCase()) ||
-        item.productDescription.toLowerCase().includes(searchFilter.toLowerCase())
+        item.productDescription
+          .toLowerCase()
+          .includes(searchFilter.toLowerCase())
     );
     setDataToDisplay(sortProducts(sortBy, filteredData));
   }, [sortBy, searchFilter, data]);
@@ -89,27 +95,42 @@ const ProductsPage = () => {
       )}
       {!isBusy && (
         <div>
-          <label htmlFor="sort">Sortiraj po:</label>
-          <select id="sort" name="sort" onChange={onSortChange} value={sortBy}>
-            <option value="name" key="name">
-              Nazivu
-            </option>
-            <option value="manufacturer" key="manufacturer">
-              Proizvođaču
-            </option>
-            <option value="category" key="category">
-              Kategoriji
-            </option>
-          </select>
-          <label htmlFor="naziv">Pretraga:</label>
-          <input
-            style={{ width: "200px" }}
-            value={searchFilter}
-            type="text"
-            id="filter"
-            name="filter"
-            onChange={onSearchFilterChange}
-          ></input>
+          <div className="products-header">
+            <div>SVI PROIZVODI</div>
+            <div className="divider-products-page"></div>
+          </div>
+          <div className="search-and-filter-container">
+            <div>
+              <label htmlFor="sort" className="search-and-filter-padding">Sortiraj po:</label>
+              <select
+                id="sort"
+                name="sort"
+                onChange={onSortChange}
+                value={sortBy}
+              >
+                <option value="name" key="name">
+                  Nazivu
+                </option>
+                <option value="manufacturer" key="manufacturer">
+                  Proizvođaču
+                </option>
+                <option value="category" key="category">
+                  Kategoriji
+                </option>
+              </select>
+            </div>
+            <div>
+              <label htmlFor="naziv" className="search-and-filter-padding">Pretraga:</label>
+              <input
+                style={{ width: "200px" }}
+                value={searchFilter}
+                type="text"
+                id="filter"
+                name="filter"
+                onChange={onSearchFilterChange}
+              ></input>
+            </div>
+          </div>
           <div className="product-list-container">
             {dataToDisplay.map((item) => {
               return <Product {...item} />;

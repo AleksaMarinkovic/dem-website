@@ -89,7 +89,6 @@ app.post("/adminLogin", upload.none(), (req,res) => {
   try{
     const loginPromise = database.checkUser(req.body.user, req.body.password);
     loginPromise.then((data) => {
-      console.log(data);
       if (data === false) {
         res.send({
           success: false,
@@ -121,7 +120,6 @@ app.post("/adminLogin", upload.none(), (req,res) => {
 app.post("/addAlbum", upload.array("images", 5), (req, res) => {
   try {
     let imagesUrls = "";
-    console.log(req.body);
     if (req.files) {
       req.files.forEach((image) => {
         imagesUrls += image.path + "|";

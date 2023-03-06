@@ -64,10 +64,8 @@ const connectDB = async () => {
 // USERS
 
 const checkUser = async (username, password) => {
-  console.log(username, password);
   try {
     const data = await user.findOne({ userName: username }).exec();
-    console.log(data);
     if (!data) {
       return false;
     }
@@ -338,7 +336,6 @@ const removeManufacturer = async (manufacturerId) => {
       if (document.manufacturerImageUrl) {
         fileHandler.deleteFile(document.manufacturerImageUrl);
       }
-      console.log(document);
       return true;
     }
   });
@@ -378,7 +375,6 @@ const removeAlbum = async (albumId) => {
       imageUrlsArray.forEach((url) => {
         fileHandler.deleteFile(url);
       });
-      console.log(imageUrlsArray);
       return true;
     } else {
       return false;

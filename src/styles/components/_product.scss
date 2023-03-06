@@ -3,6 +3,7 @@
     border: 1px solid lighten($light-grey, 5);
     background-color: white;
     padding-bottom: 1rem;
+    max-width: 30vw;
 }
 
 .img-box {
@@ -91,7 +92,6 @@
 .product-small-link-alt {
     color: $dem-blue-brigther;
     text-decoration: none;
-    font-weight: bold;
     font-size: $font-size-small*1.8;
     transition: .3s
 }
