@@ -6,6 +6,7 @@ var category;
 var manufacturer;
 var album;
 var user;
+let certificate;
 
 // for simulating delay in db acess
 function sleep(milliseconds) {
@@ -59,6 +60,71 @@ const connectDB = async () => {
     userPassword: String,
   });
   user = mongoose.model("users", userSchema);
+
+  const certificateSchema = new mongoose.Schema({
+    certificateName: String,
+    certificateUrl1: String,
+    certificateUrl2: String,
+    certificateImageUrl: String,
+  });
+  certificate = mongoose.model("certificates", certificateSchema);
+};
+
+// CERTIFICATES
+
+// add a certificate
+const addCertificate = async (certificateToAdd) => {
+  console.log(certificateToAdd);
+  const newCertificate = new certificate({
+    certificateName: certificateToAdd.certificateName,
+    certificateUrl1: certificateToAdd.certificateUrl1,
+    certificateUrl2: certificateToAdd.certificateUrl2,
+    certificateImageUrl: certificateToAdd.certificateImageUrl,
+  });
+  console.log(newCertificate);
+  newCertificate.save((err, res) => {
+    if (err) {
+      return false;
+    }
+    return res;
+  });
+};
+
+// remove a certificate
+const removeCertificate = async (certificateId) => {
+  try {
+    const data = await certificate
+      .findOneAndDelete({ _id: certificateId })
+      .exec();
+    if (!data) {
+      return false;
+    } else {
+      if (
+        data &&
+        data.certificateImageUrl &&
+        data.certificateUrl1 &&
+        data.certificateUrl1
+      ) {
+        fileHandler.deleteFile(data.certificateImageUrl);
+        fileHandler.deleteFile(data.certificateUrl1);
+        fileHandler.deleteFile(data.certificateUrl2);
+      }
+      return data;
+    }
+  } catch (error) {
+    return error;
+  }
+};
+
+// get certificate
+
+const getCertificates = async () => {
+  try {
+    const data = certificate.find();
+    return data;
+  } catch {
+    return false;
+  }
 };
 
 // USERS
@@ -70,7 +136,6 @@ const checkUser = async (username, password) => {
       return false;
     }
     if (data.userPassword === password) {
-
       return true;
     }
     return false;
@@ -104,7 +169,9 @@ const getAvailableProducts = async () => {
 // get all products that should be available on website by Filter
 const getProductsByFilter = async (filter) => {
   try {
-    const data = await product.find({...filter, productAvailability: true}).exec();
+    const data = await product
+      .find({ ...filter, productAvailability: true })
+      .exec();
     return data;
   } catch {
     return false;
@@ -458,3 +525,8 @@ exports.addAlbum = addAlbum;
 exports.removeAlbum = removeAlbum;
 exports.getAlbumByProductId = getAlbumByProductId;
 exports.getAllAlbums = getAllAlbums;
+
+// certificates
+exports.addCertificate = addCertificate;
+exports.removeCertificate = removeCertificate;
+exports.getCertificates = getCertificates;

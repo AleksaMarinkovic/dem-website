@@ -18,3 +18,7 @@
 018 - Neuspeo getAllAlbums u bazi
 019 - Server pukao na getAllAlbums
 020 - Server pukao pri loginu
+021 - Baza nije nasla sertifikat sa tim ID-em
+022 - Server pukao na removeCertificate
+023 - Get za sertifikate nije prosao
+024 - Get za sertifikate pukao na serveru

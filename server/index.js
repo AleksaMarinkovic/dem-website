@@ -1,13 +1,13 @@
 const path = require("path");
 require("dotenv").config({ path: "../.env" });
 const database = require("../server/database");
-const transporter = require('./nodemailerConfig');
+const transporter = require("./nodemailerConfig");
 const express = require("express");
 const buildPath = path.join(__dirname, "..", "build");
 const multer = require("multer");
 const port = 8080;
 const app = express();
-var randomToken = require('random-token');
+var randomToken = require("random-token");
 var tokenSession;
 
 // TEMP CONSTANTS FOR MAIL AND PASSWORD
@@ -42,7 +42,7 @@ const upload = multer({ storage: fileStorageEngine });
 
 //MAIL HANDLING
 
-app.post("/sendEmail",upload.none(), (req, res) => {
+app.post("/sendEmail", upload.none(), (req, res) => {
   try {
     const mailOptions = {
       from: emailTemp,
@@ -83,38 +83,154 @@ app.post("/sendEmail",upload.none(), (req, res) => {
   }
 });
 
+// CERTIFICATES
 
-//LOGIN
-app.post("/adminLogin", upload.none(), (req,res) => {
-  try{
+
+// add new certificate 
+
+app.post(
+  "/addCertificate",
+  upload.fields([
+    {
+      name: "image",
+      maxCount: 1,
+    },
+    {
+      name: "url1",
+      maxCount: 1,
+    },
+    {
+      name: "url2",
+      maxCount: 1,
+    },
+  ]),
+  (req, res) => {
+    try {
+      let imageUrl = req.files['image'][0].path;
+      let url1 = req.files['url1'][0].path;
+      let url2 = req.files['url2'][0].path;
+
+      const addPromise = database.addCertificate({
+        certificateName: req.body.certificateName,
+        certificateUrl1: url1,
+        certificateUrl2: url2,
+        certificateImageUrl: imageUrl,
+      });
+
+      addPromise.then((data) => {
+        if (data === false) {
+          res.status(500).send({
+            success: false,
+            message: "Error 008",
+            data: [],
+          });
+          return;
+        }
+        res.send({
+          success: true,
+          message: "Uspešno dodat sertifikat.",
+          data: data,
+        });
+      });
+    } catch (error) {
+      res.status(500).send({
+        success: false,
+        message: "Error 002",
+        data: [],
+      });
+    }
+  }
+);
+
+// remove certificate by ID
+
+app.post("/removeCertificate", upload.none(), (req,res) => {
+  try {
+    const removePromise = database.removeCertificate(req.body.certificateId);
+    removePromise.then((data) => {
+      if (data === false) {
+        res.status(500).send({
+          success: false,
+          message: "Error 021",
+          data: [],
+        });
+      } else {
+        res.send({
+          success: true,
+          message: "Uspešno izbrisan sertifikat.",
+          data: data,
+        });
+      }
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Error 022",
+      data: [],
+    });
+  }
+});
+
+
+// get all certificates in db
+
+app.get("/getCertificates", (req, res) => {
+  try {
+    const dataPromise = database.getCertificates();
+    dataPromise.then((data) => {
+      if (data === false) {
+        res.status(500).send({
+          success: false,
+          message: "Error 023",
+          data: [],
+        });
+        return;
+      } else {
+        res.send({
+          success: true,
+          message: "Uspešno dobavljanje sertifikata.",
+          data: data,
+        });
+      }
+    });
+  } catch (error) {
+    res.status(500).send({
+      success: false,
+      message: "Error 024",
+      data: [],
+    });
+  }
+});
+
+
+// USERS
+app.post("/adminLogin", upload.none(), (req, res) => {
+  try {
     const loginPromise = database.checkUser(req.body.user, req.body.password);
     loginPromise.then((data) => {
       if (data === false) {
         res.send({
           success: false,
-          message: "Neispravna lozinka ili username"
+          message: "Neispravna lozinka ili username",
         });
         return;
-      }
-      else{
+      } else {
         tokenSession = randomToken(16);
         res.send({
           success: true,
           message: "Uspešan login",
-          data: tokenSession
+          data: tokenSession,
         });
         return;
       }
-    })
-  }
-  catch(error){
+    });
+  } catch (error) {
     res.status(500).send({
       success: false,
-      message: "Error 020"
+      message: "Error 020",
     });
   }
-})
-
+});
 
 //ALBUMS
 app.post("/addAlbum", upload.array("images", 5), (req, res) => {
@@ -166,8 +282,7 @@ app.get("/getAllAlbums", (req, res) => {
           data: [],
         });
         return;
-      }
-      else{
+      } else {
         res.send({
           success: true,
           message: "Uspešno dobavljanje albuma.",
@@ -175,7 +290,7 @@ app.get("/getAllAlbums", (req, res) => {
         });
       }
     });
-  } catch (error){
+  } catch (error) {
     res.status(500).send({
       success: false,
       message: "Error 019",
@@ -596,7 +711,7 @@ app.post("/addManufacturer", upload.single("image"), (req, res) => {
 });
 
 // get all manufacturers
-app.get("/getManufacturers", (req, res) => { 
+app.get("/getManufacturers", (req, res) => {
   try {
     const dataPromise = database.getAllManufacturers();
     dataPromise.then((data) => {
