@@ -94,48 +94,66 @@ const ProductPage = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="page-padding"
     >
-      {!fetchedProduct && <LoadingSpinner/>}
+      {!fetchedProduct && <LoadingSpinner />}
       {fetchErrorProduct ? (
         <div className="error-message">{fetchErrorProduct}</div>
       ) : (
         <div style={{ visibility: "hidden" }}></div>
       )}
       {fetchedProduct && (
-        <div className="product-details-page-vertical-container">
-          <div className="product-details-page-name">{product.productName}</div>
-          <div className="product-details-page-horizontal-container">
-            <img src={product.productImageUrl} alt={product.productName}></img>
-            <div className="product-details-page-vertical-content-container">
-              <div className="product-details-page-category">
-                Kategorija: {product.productCategory}
-              </div>
-              <div className="product-details-page-description">
-                Opis: {product.productDescription}
+        <div className="parent">
+          <div className="productpage-main-horizontal-container">
+            <div className="main">
+              <div className="productpage-image-album-and-description-container">
+                <div className="productpage-image-and-album-container">
+                  <div className="productpage-productname">{product.productName}</div>
+                  <div className="productpage-image-wrapper">
+                    <img
+                      src={product.productImageUrl}
+                      alt={product.productName}
+                      className="productpage-image"
+                    ></img>
+                  </div>
+                  {fetchedAlbum && (
+                    <div>
+                      <div className="container-carousel-product">
+                        <Slider {...settings}>
+                          {album.map((item) => {
+                            return (
+                              <div>
+                                <Zoom>
+                                  <img
+                                    src={item}
+                                    alt={item}
+                                    className="carousel-image"
+                                  ></img>
+                                </Zoom>
+                              </div>
+                            );
+                          })}
+                        </Slider>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div className="productpage-description-container">
+                 {product.productDescription}
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      )}
-      {fetchedAlbum && (
-        <div>
-          <div className="container-carousel-product">
-            <Slider {...settings}>
-              {album.map((item) => {
-                return (
-                  <div>
-                    <Zoom>
-                      <img
-                        src={item}
-                        alt={item}
-                        className="carousel-image"
-                      ></img>
-                    </Zoom>
-                  </div>
-                );
-              })}
-            </Slider>
+            <div className="sidebar">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
+              hendrerit ut nibh vitae commodo. Aliquam in feugiat ligula, eu
+              imperdiet eros. Proin pretium nibh rhoncus eros hendrerit iaculis.
+              Proin bibendum maximus turpis, elementum rhoncus nisl elementum
+              non. Mauris diam dui, iaculis nec finibus imperdiet, mattis eu
+              tortor. Praesent sed velit purus. Vivamus pharetra, odio sit amet
+              mollis venenatis, sapien sem vulputate nisl, sit amet ultrices
+              tortor erat quis dui. Phasellus scelerisque odio urna, vitae
+              consequat ipsum molestie ut. Praesent suscipit finibus diam,
+              varius dapibus risus pellentesque eu.
+            </div>
           </div>
         </div>
       )}

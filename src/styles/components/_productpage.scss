@@ -1,41 +1,79 @@
-.product-details-page-vertical-container{
+.parent{
+    padding: 1rem;
+}
+
+.productpage-main-horizontal-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: start;
+    gap: $font-size-small;
+
+}
+
+.main {
+    flex-basis: 500px;
+    flex-grow: 9999;
+    padding: 20px;
+}
+
+.sidebar {
+    flex-basis: 200px;
+    flex-grow: 1;
+    padding: 20px;
+}
+
+.productpage-image-album-and-description-container {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: start;
+    gap: $font-size-small;
+}
+
+.productpage-image-and-album-container {
     display: flex;
     flex-flow: column wrap;
     align-items: center;
+    flex-basis: 500px;
+    flex-grow: 1;
 }
 
-.product-details-page-horizontal-container{
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-between;
+.productpage-image-wrapper {
+    max-height: 500px;
+    max-width: 500px;
 }
 
-.product-details-page-vertical-content-container{
+.productpage-image{
+    width: 100%;
+    aspect-ratio: 1/1;
+}
+
+.productpage-description-container{
+    padding-top: 10vh;
     display: flex;
     flex-flow: column wrap;
-    max-width: 40%;
-    justify-content: space-around;
-}
-
-.product-details-page-name{
-    font-size: $font-size-large;
-}
-
-.product-details-page-category{
+    flex-basis: 500px;
+    flex-grow: 2;
+    color: $dem-blue;
     font-size: $font-size-medium;
 }
-
-.product-details-page-description{
-    font-size: $font-size-small;
+.productpage-productname{
+    font-size: $font-size-medium;
+    color: $dem-blue;
+    font-weight: bold;
 }
 
-.container-carousel-product {
-    padding: 40px;
-    background: $light-grey;
-    width: 30vw;
+.container-carousel-product{
+    padding: 20px;
+    background: darken($off-white, 3);
+    max-width: 300px;
+    max-height: 300px;
 }
-
 .carousel-image{
-    width: 20vw;
-    height: 20vw;
+    height: 150px !important;
+    width: 150px !important;
+}
+
+.slick-prev::before,
+.slick-next:before {
+    color: black !important
 }
