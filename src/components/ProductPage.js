@@ -8,6 +8,7 @@ import "slick-carousel/slick/slick-theme.css";
 import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
 import LoadingSpinner from "./LoadingSpinner";
+import { ReactMarkdown } from "react-markdown/lib/react-markdown";
 
 const ProductPage = () => {
   let { id } = useParams();
@@ -138,7 +139,9 @@ const ProductPage = () => {
                   )}
                 </div>
                 <div className="productpage-description-container">
-                 {product.productDescription}
+                <ReactMarkdown>
+                {product.productDescription}
+                </ReactMarkdown>
                 </div>
               </div>
             </div>
