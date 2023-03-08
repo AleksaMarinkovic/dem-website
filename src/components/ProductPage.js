@@ -9,6 +9,7 @@ import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
 import LoadingSpinner from "./LoadingSpinner";
 import { ReactMarkdown } from "react-markdown/lib/react-markdown";
+import { NavHashLink } from "react-router-hash-link";
 
 const ProductPage = () => {
   let { id } = useParams();
@@ -22,12 +23,30 @@ const ProductPage = () => {
     autoplaySpeed: 4000,
     pauseOnHover: true,
   };
+
+  const [settingsOtherProducts, setSettingsOtherProducts] = useState({
+    infinite: true,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 4000,
+    pauseOnHover: true,
+    vertical: true,
+    verticalSwiping: true,
+    arrows: false,
+  });
+
+  const [otherProducts, setOtherProducts] = useState([]);
   const [product, setProduct] = useState();
   const [album, setAlbum] = useState();
   const [fetchedProduct, setFetchedProduct] = useState(false);
   const [fetchedAlbum, setFetchedAlbum] = useState(false);
+  const [fetchedOtherProducts, setFetchedOtherProducts] = useState(false);
   const [fetchErrorProduct, setFetchErrorProduct] = useState();
   const [fetchErrorAlbum, setFetchErrorAlbum] = useState();
+  const [isBusyOtherProducts, setIsBusyOtherProducts] = useState(true);
+  const [showOtherProducts, setShowOtherProducts] = useState(false);
 
   useEffect(() => {
     async function fetchDataProduct() {
@@ -60,6 +79,46 @@ const ProductPage = () => {
   }, []);
 
   useEffect(() => {
+    if (fetchedProduct) {
+      async function fetchOtherProducts() {
+        await Axios.post("getProductsByFilter", {
+          filter: {
+            productCategory: product.productCategory,
+          },
+        })
+          .then((response) => {
+            if (response.data.success) {
+              if (response.data.data.length > 1) {
+                setShowOtherProducts(true);
+                setSettingsOtherProducts({
+                  ...settingsOtherProducts,
+                  slidesToShow: Math.min(3, response.data.data.length - 1),
+                });
+                setOtherProducts(
+                  response.data.data.filter((item) => {
+                    return item._id !== product._id;
+                  })
+                );
+              }
+              setFetchedOtherProducts();
+              setIsBusyOtherProducts(false);
+            }
+          })
+          .catch((error) => {
+            if (error.response) {
+              setFetchedOtherProducts(error.response.data.message);
+            } else if (error.request) {
+              setFetchedOtherProducts("Error 003");
+            } else {
+              setFetchedOtherProducts("Error 004");
+            }
+          });
+      }
+      fetchOtherProducts();
+    }
+  }, [fetchedProduct]);
+
+  useEffect(() => {
     async function fetchData() {
       Axios.post("/getAlbumByProductId", {
         productId: id,
@@ -74,7 +133,6 @@ const ProductPage = () => {
           if (error.response) {
             // request made and server responded
             setFetchErrorAlbum(error.response.data.message);
-            console.log(error.response.data.message);
           } else if (error.request) {
             // request made no response from server
             setFetchErrorAlbum("Error 003");
@@ -108,12 +166,15 @@ const ProductPage = () => {
             <div className="main">
               <div className="productpage-image-album-and-description-container">
                 <div className="productpage-image-and-album-container">
-                  <div className="productpage-productname">{product.productName}</div>
+                  <div className="productpage-productname">
+                    {product.productName}
+                  </div>
                   <div className="productpage-image-wrapper">
                     <img
                       src={product.productImageUrl}
                       alt={product.productName}
                       className="productpage-image"
+                      draggable="false"
                     ></img>
                   </div>
                   {fetchedAlbum && (
@@ -139,24 +200,51 @@ const ProductPage = () => {
                   )}
                 </div>
                 <div className="productpage-description-container">
-                <ReactMarkdown>
-                {product.productDescription}
-                </ReactMarkdown>
+                  <ReactMarkdown>{product.productDescription}</ReactMarkdown>
                 </div>
               </div>
             </div>
-            <div className="sidebar">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer
-              hendrerit ut nibh vitae commodo. Aliquam in feugiat ligula, eu
-              imperdiet eros. Proin pretium nibh rhoncus eros hendrerit iaculis.
-              Proin bibendum maximus turpis, elementum rhoncus nisl elementum
-              non. Mauris diam dui, iaculis nec finibus imperdiet, mattis eu
-              tortor. Praesent sed velit purus. Vivamus pharetra, odio sit amet
-              mollis venenatis, sapien sem vulputate nisl, sit amet ultrices
-              tortor erat quis dui. Phasellus scelerisque odio urna, vitae
-              consequat ipsum molestie ut. Praesent suscipit finibus diam,
-              varius dapibus risus pellentesque eu.
-            </div>
+            {!isBusyOtherProducts ? (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                {showOtherProducts && (
+                  <div className="sidebar">
+                    <div className="carousel-header">SLIČNI PROIZVODI</div>
+                    <div className="container-carousel-other-products">
+                      <Slider {...settingsOtherProducts}>
+                        {otherProducts.map((item) => {
+                          return (
+                            <div className="carousel-item-wrapper">
+                              <div className="carousel-item-header">
+                                {item.productName}
+                              </div>
+                              <NavHashLink
+                                smooth
+                                to={"/products/" + item._id}
+                                title="Kliknite da otvorite stranicu proizvoda"
+                              >
+                                <img
+                                  src={item.productImageUrl}
+                                  alt={item.productName}
+                                  className="carousel-image"
+                                ></img>
+                              </NavHashLink>
+                            </div>
+                          );
+                        })}
+                      </Slider>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <LoadingSpinner></LoadingSpinner>
+            )}
           </div>
         </div>
       )}

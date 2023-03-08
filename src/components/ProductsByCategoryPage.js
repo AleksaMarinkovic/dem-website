@@ -12,7 +12,6 @@ const ProductsByCategoryPage = () => {
   const [fetchError, setFetchError] = useState();
 
   useEffect(() => {
-    console.log(category);
     async function fetchData() {
       await Axios.post("/getProductsByFilter", {
         filter:{

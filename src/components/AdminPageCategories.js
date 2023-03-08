@@ -85,7 +85,6 @@ const AdminPageCategories = () => {
   const onRowChange = (category) => {
     setCategoryToChange(category);
     setOldCategoryName(category.categoryName);
-    console.log(category);
     setSuccessMessageCategoryAdd();
     setSuccessMessageCategoryChange();
     setAddError();
@@ -121,7 +120,6 @@ const AdminPageCategories = () => {
         }
       })
       .catch((error) => {
-        console.log(error);
         if (error.response) {
           // request made and server responded
           setAddError(error.response.data.message);

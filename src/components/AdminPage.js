@@ -8,6 +8,7 @@ import ProductForm from "./ProductForm";
 import AdminPageCategories from "./AdminPageCategories";
 import AdminPageManufacturers from "./AdminPageManufacturers";
 import AdminPageAlbums from "./AdminPageAlbums";
+import AdminPageCertificates from "./AdminPageCertificates";
 import Collapsible from "react-collapsible";
 import {
   CollapsibleTriggerOpened,
@@ -523,6 +524,14 @@ const AdminPage = () => {
           >
             <AdminPageAlbums></AdminPageAlbums>
           </Collapsible>
+          <Collapsible
+          trigger={<CollapsibleTrigger text="SERTIFIKATI"></CollapsibleTrigger>}
+          triggerWhenOpen={<CollapsibleTriggerOpened text="SERTIFIKATI" />}
+          className="collapsible-wrapper"
+          openedClassName="collapsible-wrapper-opened"
+        >
+          <AdminPageCertificates></AdminPageCertificates>
+        </Collapsible>
           <NavLink onClick={logout} to="/" className="logout-adminpage">
             IZLOGUJ SE
           </NavLink>

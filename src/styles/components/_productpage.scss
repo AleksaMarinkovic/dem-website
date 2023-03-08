@@ -1,5 +1,6 @@
 .parent{
     padding: $font-size-medium;
+    padding-right: $font-size-large;
 }
 
 .productpage-main-horizontal-container {
@@ -11,7 +12,7 @@
 }
 
 .main {
-    flex-basis: 800px;
+    flex-basis: 600px;
     flex-grow: 9999;
     padding: 20px;
 }
@@ -19,44 +20,52 @@
 .sidebar {
     flex-basis: 300px;
     flex-grow: 1;
+    display: flex;
+    align-items: center;
+    flex-flow: column wrap;
     padding: 20px;
+    background-color: $light-grey;
+    color: $dem-blue;
+    gap: $font-size-medium;
+    border-radius: 10px;
 }
 
 .productpage-image-album-and-description-container {
     display: flex;
     flex-flow: row wrap;
     align-items: start;
-    gap: $font-size-small;
+    gap: $font-size-medium;
 }
 
 .productpage-image-and-album-container {
     display: flex;
     flex-flow: column wrap;
     align-items: center;
-    flex-basis: 600px;
+    flex-basis: 400px;
     flex-grow: 1;
 }
 
 .productpage-image-wrapper {
-    max-width: 100%;
+    max-width: 600px;
+    max-height: 600px;
     aspect-ratio: 1/1;
     border: 1px solid rgba($dem-blue, 0.2);
-    border-radius: 3px;
+    border-radius: 5px;
 }
 
 .productpage-image{
     width: 100%;
-    border-radius: 3px;
+    border-radius: 5px;
     aspect-ratio: 1/1;
 }
 
 .productpage-description-container{
-    padding-top: 10vh;
+    margin-top: $font-size-ml*1.5;
+    margin-right: $font-size-ml*1.5;
     display: flex;
     flex-flow: column wrap;
-    flex-basis: 500px;
+    flex-basis: 400px;
     flex-grow: 2;
-    color: $dem-blue;
     font-size: $font-size-medium;
     white-space: pre-wrap;
 }
@@ -66,13 +75,39 @@
     font-weight: bold;
 }
 
+.carousel-header{
+    font-size: $font-size-medium;
+    color: black;
+}
+
 .container-carousel-product{
     padding: 20px;
     background: darken($off-white, 3);
     max-width: 300px;
     max-height: 300px;
 }
+
+.container-carousel-other-products{
+    padding: 20px;
+    background: darken($off-white, 3);
+    max-width: 200px;
+    overflow: hidden;
+    max-height: 80vh;
+    height: 100%;
+}
+.carousel-item-header{
+    font-size: $font-size-sm;
+    color: black;
+    margin-bottom: $font-size-small;
+}
+
+.carousel-item-wrapper{
+    min-height: 200px;
+    padding: auto;
+}
+
 .carousel-image{
+    border-radius: 5px;
     height: 150px !important;
     width: 150px !important;
 }
