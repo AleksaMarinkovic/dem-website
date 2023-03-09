@@ -61,22 +61,21 @@ const Info = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="page-padding"
-      style={{ display: "flex", flexFlow: "column wrap" }}
+      style={{ display: "flex", flexFlow: "column wrap", alignItems: "center" }}
     >
       <div className="contactpage-vertical-container">
-        <div className="contactpage-header">KONTAKTIRAJTE NAS</div>
-        <div className="info-image-stripe">
+        <div className="contactpage-text-header">KONTAKTIRAJTE NAS</div>
+        <div className="contactpage-image-stripe">
           <img
             src={require("../images/dem-stripe.webp")}
             alt="KONTAKTIRAJTE NAS"
-            className="info-image"
+            className="contactpage-image"
           ></img>
         </div>
         <div className="contact-page-horizontal-container">
           <form
             onSubmit={onSendMailClick}
-            className="info-vertical-form-container"
+            className="contactpage-vertical-form-container"
           >
             <div className="form-header">Pošaljite nam poruku</div>
             <div className="form-field">
@@ -136,25 +135,39 @@ const Info = () => {
               <div className="error-message-email">{errorMessageContact}</div>
             )}
           </form>
-          <div className="info-vertical-text-container">
-            <div className="contact-header">Informacije</div>
-            <div className="contact-field">Rakovačka 32, Novi Sad, Srbija</div>
-            <div className="contact-field">
-              <div>
-                Kontakt telefoni:
-                <ul>
-                  <li>+381 21 6300 101</li>
-                  <li>+381 21 6395 339</li>
-                  <li>+381 21 6403 790</li>
-                  <li>+381 21 6497 514</li>
-                  <li>+381 63 545 402</li>
-                </ul>
+          <div className="contactpage-vertical-text-container">
+            <div className="contactpage-vertical-text-div">
+              <div className="contactpage-text-header">Informacije</div>
+              <div className="contact-text">Rakovačka 32, Novi Sad, Srbija</div>
+              <div className="contact-text">
+                <div>
+                  Kontakt telefoni:
+                  <ul>
+                    <li>+381 21 6300 101</li>
+                    <li>+381 21 6395 339</li>
+                    <li>+381 21 6403 790</li>
+                    <li>+381 21 6497 514</li>
+                    <li>+381 63 545 402</li>
+                  </ul>
+                </div>
+              </div>
+              <div className="contact-text">EMAIL: office@dem.rs</div>
+              <div className="contact-text">PRODAJA: prodaja@dem.rs</div>
+              <div className="contact-text">
+                TEHNIČKA PODRŠKA: servis@dem.rs
               </div>
             </div>
-            <div className="contact-field">EMAIL: office@dem.rs</div>
-            <div className="contact-field">PRODAJA: prodaja@dem.rs</div>
-            <div className="contact-field">TEHNIČKA PODRŠKA: servis@dem.rs</div>
           </div>
+        </div>
+        <div className="contactpage-map-container">
+          <div className="contactpage-map-header">Gde se nalazimo?</div>
+          <iframe
+            title="Dem d.o.o."
+            src="https://www.google.com/maps/d/embed?mid=1vtXF5hYFPRU41HRi76OjtWe97vk15FM&ehbc=2E312F"
+            width="640"
+            height="480"
+            className="contactpage-map"
+          ></iframe>
         </div>
       </div>
     </motion.div>

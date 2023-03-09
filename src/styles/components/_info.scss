@@ -1,4 +1,39 @@
-.info-vertical-form-container {
+.contactpage-vertical-container {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: center;
+    gap: $font-size-large;
+    width: 90%;
+}
+
+.contactpage-header {
+    color: $dem-blue;
+    font-size: $font-size-large;
+    font-weight: bold;
+}
+
+.contactpage-image-stripe {
+    width: 100%;
+    height: auto;
+}
+
+.contactpage-image {
+    width: 100%;
+    height: auto;
+}
+
+.contact-page-horizontal-container {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    gap: 10rem;
+    width: 100%;
+}
+
+.contactpage-vertical-form-container {
     display: flex;
     flex-flow: column wrap;
     font-size: $font-size-medium;
@@ -10,25 +45,11 @@
     background-color: lighten($off-white, 2);
     flex-basis: 800px;
     flex-grow: 1;
-}
-
-// .info-vertical-form-container:hover {
-//     box-shadow: 1px 1px 70px grey;
-//     border: 1px solid $dem-orange;
-// }
-
-.info-vertical-text-container {
-    display: flex;
-    flex-flow: column wrap;
-    font-size: $font-size-medium;
-    align-items: flex-start;
-    justify-content: center;
-    flex-basis: 800px;
-    flex-grow: 1;
+    gap: 1rem;
 }
 
 .form-header {
-    margin-bottom: 5vh;
+    margin-bottom: 5rem;
     font-size: $font-size-large;
     color: $dem-blue;
 }
@@ -37,24 +58,24 @@
     display: flex;
     flex-flow: column wrap;
     align-items: flex-start;
-}
-
-.form-field>label {
-    margin-bottom: 1vh;
+    width: 80%;
 }
 
 .form-field>input {
     border: none;
     outline: 1px solid lighten($light-grey, 3);
-    margin-bottom: 2vh;
+    margin-bottom: 2rem;
     font-size: $font-size-medium;
+    width: 100%;
 }
 
 .form-field>textarea {
     border: none;
-    margin-bottom: 2vh;
+    margin-bottom: 2rem;
     font-size: $font-size-medium;
     outline: 1px solid lighten($light-grey, 3);
+    width: 100%;
+    min-height: 30vh;
 }
 
 .form-button {
@@ -67,77 +88,64 @@
     background-color: darken($light-grey, 10);
 }
 
+.contactpage-vertical-text-container {
+    display: flex;
+    flex-flow: column wrap;
+    font-size: $font-size-medium;
+    align-items: center;
+    justify-content: center;
+    flex-basis: 600px;
+    flex-grow: 1;
+    width: auto;
+}
 
-.contact-header {
+.contactpage-vertical-text-div{
+    display: flex;
+    flex-flow: column wrap;
+    align-items: start;
+    justify-content: center;
+}
+
+.contactpage-text-header {
     color: $dem-blue;
     font-weight: bold;
     font-size: $font-size-large;
 }
 
-.contact-field {
+.contact-text {
     color: darken($dark-grey, 10);
 }
 
-// .map-header {
-//     color: $dem-blue;
-//     font-size: $font-size-large;
-//     margin-top: 10vh;
-//     font-weight: bold;
-// }
-
-// .break {
-//     flex-basis: 100%;
-//     height: 0;
-// }
-
-.contactpage-vertical-container{
+.contactpage-map-container{
     display: flex;
-    flex-direction: column;
+    flex-flow: column wrap;
     justify-content: start;
     align-items: center;
-    gap: $font-size-large;
+    width: 100%;
 }
 
-.contact-page-horizontal-container{
-    display: flex;
-    flex-wrap: wrap;
-    align-items: start;
-    gap: $font-size-small;
-}
-
-.contactpage-header{
+.contactpage-map-header {
     color: $dem-blue;
     font-size: $font-size-large;
+    margin-top: 10rem;
     font-weight: bold;
 }
 
-.info-image-stripe{
-    max-width: 100%;
-    height: auto;
-}
-
-.info-image{
+.contactpage-map{
+    border: 1px solid lighten($light-grey, 3);
+    margin-top: 5rem;
     width: 100%;
-    height: auto;
+    min-height: 30vh;
 }
 
-.success-message-email{
+.success-message-email {
     font-size: $font-size-large;
     color: green;
-    display: block;
-    flex-flow: column wrap;
-    justify-content: center;
-    align-items: center;
     max-width: 80%;
-    margin: 0 auto;
 }
 
-.error-message-email{
+.error-message-email {
     font-size: $font-size-large;
     color: red;
-    display: block;
-    flex-flow: column wrap;
-    justify-content: center;
-    align-items: center;
     max-width: 80%;
 }
