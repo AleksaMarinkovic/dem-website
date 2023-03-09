@@ -11,37 +11,37 @@
     flex-flow: row wrap;
     background-color: darken($dark-grey, 10);
     color: $light-grey;
-    padding: 3rem 10rem;
     justify-content: flex-start;
     align-items: stretch;
     font-size: $font-size-medium;
     min-height: $footer-section-one-height;
+    padding: 3rem 10rem;
     gap: 20rem;
     width: 100%;
 }
 
 .footer-horizontal-container-social {
-    order:1;
     display: flex;
     flex-flow: row;
     align-items: center;
     justify-content: space-between;
     min-width: auto;
     gap: 2rem;
-    flex-basis: 100%;
+    flex-basis: 200px;
+    flex-grow: 1;
 }
 
 .footer-icon {
-    width: 2.5vw;
+    width: $font-size-xxlarge;
     height: auto;
 }
 
 .footer-logo-image {
-    max-width: 100%;
+    width: 100%;
+    height: auto;
 }
 
 .footer-vertical-container-info {
-    order:2;
     display: flex;
     flex-flow: column wrap;
     align-items: center;
@@ -50,7 +50,8 @@
     min-height: auto;
     width: auto;
     gap: 1rem;
-    flex-basis: 100%;
+    flex-basis: 200px;
+    flex-grow: 1;
 }
 
 .footer-info-text{
@@ -71,27 +72,27 @@
 }
 
 .footer-vertical-container-certificates {
-    order: 3;
     display: flex;
     flex-flow: column wrap;
-    align-items: start;
+    align-items: center;
     justify-content: center;
     min-height: auto;
-    flex-basis: 100%;
+    flex-basis: 200px;
+    flex-grow: 1;
     width: auto;
 }
 
 .horizontal-individual-certificate-container {
     display: flex;
     flex-flow: row;
-    justify-content: start;
+    justify-content: center;
     align-items: center;
     gap:1rem;
     width: 100%;
 }
 
 .footer-logo-image-certificate {
-    width: 2vw;
+    width: $font-size-xxlarge;
     height: auto;
 }
 
@@ -112,20 +113,10 @@
     -ms-user-select: none;
 }
 
-@media screen and (min-width:600px) {
+@media (max-width:600px), (orientation: portrait), (pointer: coarse), (pointer: none) {
     .footer-section-one {
-      flex-wrap: nowrap;
+      flex-flow: column;
+      padding: $font-size-medium $font-size-large;
+      gap: $font-size-xxlarge;
     }
-    .footer-horizontal-container-social {
-      flex-basis: 25%;
-      order: 1;
-    }
-    .footer-vertical-container-info {
-      flex-basis: 25%;
-      order: 2;
-    }
-    .footer-vertical-container-certificates {
-      flex-basis: 25%;
-      order: 3;
-    }
-  }
+}

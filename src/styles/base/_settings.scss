@@ -1,4 +1,5 @@
 // font sizes 
+$font-size-xxlarge: 5rem;
 $font-size-xlarge: 4rem;
 $font-size-large: 3rem;
 $font-size-ml: 2.5rem;
@@ -36,7 +37,10 @@ $margin-xxlarge-sides: 20vw;
 
 
 //image sizes
-$header-logo-image-height: 10vh;
-$header-logo-image-height-small: 7vh;
+$header-logo-image-width: 15%;
+$header-logo-image-width-small: 10%;
+
+$header-logo-image-width-mobile: 40%;
+$header-logo-image-width-small-mobile: 20%;
 
 $column-width-size : 25rem;
