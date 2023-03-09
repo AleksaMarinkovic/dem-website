@@ -4,7 +4,10 @@ const Footer = () => {
   return (
     <div className="footer-container">
       <div className="footer-section-one">
-        <div className="footer-horizontal-container" style={{ gap: "3rem" }}>
+        <div
+          className="footer-horizontal-container-social"
+          style={{ gap: "3rem" }}
+        >
           <a
             href="https://www.instagram.com/dem.rs/"
             target="_blank"
@@ -71,37 +74,41 @@ const Footer = () => {
             ></img>
           </a>
         </div>
-        <div className="footer-vertical-container">
-          <div>DEM d.o.o.</div>
-          <div>21000, Novi Sad, Serbia</div>
-          <a
-            href="tel:+381216300101"
-            target="_blank"
-            rel="noreferrer"
-            title="Telefon"
-            className="link-footer"
-          >
-            Tel: +381 (21) 6300 101
-          </a>
-          <a
-            href="mailto:office@dem.rs"
-            target="_blank"
-            rel="noreferrer"
-            title="Mail"
-            className="link-footer"
-          >
-            Email: office@dem.rs
-          </a>
+        <div className="footer-vertical-container-info">
+          <div className="footer-info-text">DEM d.o.o.</div>
+          <div className="footer-info-text">21000, Novi Sad, Serbia</div>
+          <div className="footer-link-wrapper">
+            <a
+              href="tel:+381216300101"
+              target="_blank"
+              rel="noreferrer"
+              title="Telefon"
+              className="footer-link"
+            >
+              Tel: +381 (21) 6300 101
+            </a>
+          </div>
+          <div className="footer-link-wrapper">
+            <a
+              href="mailto:office@dem.rs"
+              target="_blank"
+              rel="noreferrer"
+              title="Mail"
+              className="footer-link"
+            >
+              Email: office@dem.rs
+            </a>
+          </div>
         </div>
         <div
-          className="footer-vertical-container"
+          className="footer-vertical-container-certificates"
           style={{
             alignItems: "flex-start",
             padding: "2rem 0 2rem 0",
             gap: "4rem",
           }}
         >
-          <div className="horizontal-certificate-container">
+          <div className="horizontal-individual-certificate-container">
             <img
               src={require("../images/SGS-ISO-9001.webp")}
               className="footer-logo-image-certificate"
@@ -110,7 +117,7 @@ const Footer = () => {
             ></img>
             <div>Politika kvaliteta</div>
           </div>
-          <div className="horizontal-certificate-container">
+          <div className="horizontal-individual-certificate-container">
             <img
               src={require("../images/SGS-ISO-14001_1.webp")}
               className="footer-logo-image-certificate"
@@ -119,7 +126,7 @@ const Footer = () => {
             ></img>
             <div>Politika zaštite životne sredine</div>
           </div>
-          <div className="horizontal-certificate-container">
+          <div className="horizontal-individual-certificate-container">
             <img
               src={require("../images/SGS-ISO-45001_1.webp")}
               className="footer-logo-image-certificate"

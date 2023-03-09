@@ -1,9 +1,8 @@
 - Add service page
-- Redesign contact page
 - Add content to homepage
 - Make it mobile friendly. When doing mobile integration make carousel responsive (has responsive property)
 - Change email and password to be used from .env not from local variables
-- Decide on font
 - Maybe convert to webp image before saving
+- Add header, search and filter to productsByCategoryPage
 
 x. REFACTOR CODE SO THAT ADMIN PAGE DOES ALL THE FETCHING AND SENDS DATA TO CHILDREN
