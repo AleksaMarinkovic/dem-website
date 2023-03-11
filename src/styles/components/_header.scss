@@ -112,8 +112,9 @@
 }
 
 @media (max-width:600px), (orientation: portrait), (pointer: coarse), (pointer: none) {
-    .header-image-container{    
-        padding:0;
+    .header-image-container{
+        padding-left: 2rem;
+        padding-top: 1rem;
         margin-left: 0;    
         width: $header-logo-image-width-mobile;
         display: flex;
@@ -124,7 +125,8 @@
     }
     
     .header-image-container-small{
-        padding: 0;
+        padding-left: 2rem;
+        padding-top: 1rem;
         margin-left: 0;
         width: $header-logo-image-width-small-mobile;
         display: flex;
@@ -132,5 +134,9 @@
         justify-content: center;
         align-items: center;
         transition: 0.4s;
+    }
+
+    .header-container-wrapper{
+        padding-right: 2rem;
     }
 }

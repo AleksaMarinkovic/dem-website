@@ -35,6 +35,26 @@ const ProductPage = () => {
     vertical: true,
     verticalSwiping: true,
     arrows: false,
+    responsive: [
+      {
+        breakpoint: 1200,
+        settings: {
+          slidesToShow: 2,
+          arrows: true,
+          vertical: false,
+          verticalSwiping: false,
+        },
+      },
+      {
+        breakpoint: 767,
+        settings: {
+          slidesToShow: 1,
+          arrows: true,
+          vertical: false,
+          verticalSwiping: false,
+        },
+      },
+    ],
   });
 
   const [otherProducts, setOtherProducts] = useState([]);
@@ -94,6 +114,7 @@ const ProductPage = () => {
                   ...settingsOtherProducts,
                   slidesToShow: Math.min(3, response.data.data.length - 1),
                 });
+                console.log(settingsOtherProducts)
                 setOtherProducts(
                   response.data.data.filter((item) => {
                     return item._id !== product._id;
@@ -183,12 +204,12 @@ const ProductPage = () => {
                         <Slider {...settings}>
                           {album.map((item) => {
                             return (
-                              <div>
+                              <div className="carousel-album-image-wrapper">
                                 <Zoom>
                                   <img
                                     src={item}
                                     alt={item}
-                                    className="carousel-image"
+                                    className="carousel-album-image"
                                   ></img>
                                 </Zoom>
                               </div>
@@ -205,15 +226,10 @@ const ProductPage = () => {
               </div>
             </div>
             {!isBusyOtherProducts ? (
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
+              <div className="sidebar"
               >
                 {showOtherProducts && (
-                  <div className="sidebar">
+                  <div className="sidebar-inner">
                     <div className="carousel-header">SLIČNI PROIZVODI</div>
                     <div className="container-carousel-other-products">
                       <Slider {...settingsOtherProducts}>
@@ -227,6 +243,7 @@ const ProductPage = () => {
                                 smooth
                                 to={"/products/" + item._id}
                                 title="Kliknite da otvorite stranicu proizvoda"
+                                className="carousel-products-image-wrapper"
                               >
                                 <img
                                   src={item.productImageUrl}

@@ -8,7 +8,7 @@
     flex-wrap: wrap;
     align-items: start;
     gap: $font-size-small;
-
+    max-width: 100%;
 }
 
 .main {
@@ -17,9 +17,15 @@
     padding: 20px;
 }
 
-.sidebar {
+.sidebar{
     flex-basis: 300px;
     flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.sidebar-inner {
     display: flex;
     align-items: center;
     flex-flow: column wrap;
@@ -87,6 +93,18 @@
     max-height: 300px;
 }
 
+.carousel-album-image-wrapper{
+    border-radius: 5px;
+    width: 200px !important;
+    aspect-ratio: 1/1 !important;
+}
+
+.carousel-album-image{
+    border-radius: 5px;
+    max-width: 100%;
+    max-height: 100%;
+}
+
 .container-carousel-other-products{
     padding: 20px;
     background: darken($off-white, 3);
@@ -106,13 +124,44 @@
     padding: auto;
 }
 
-.carousel-image{
+.carousel-products-image-wrapper{
     border-radius: 5px;
     height: 150px !important;
     width: 150px !important;
+
+}
+
+.carousel-image{
+    border-radius: 5px;
+    max-width: 100%;
+    max-height: 100%;
 }
 
 .slick-prev::before,
 .slick-next:before {
     color: black !important
+}
+
+
+@media only screen and (max-width: 1200px) {
+    .productpage-main-horizontal-container {
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        gap: $font-size-small;
+    }
+    .sidebar{
+        max-width: 100%;
+    }
+    .sidebar-inner{
+        max-width: 100%;
+    }
+    .container-carousel-other-products{
+        padding: 40px;
+        max-width: 100%;
+    }
+    .carousel-item-wrapper{
+        min-height: 100px;
+        padding: auto;
+    }
 }

@@ -15,6 +15,28 @@ const Partners = () => {
     autoplay: true,
     autoplaySpeed: 3000,
     pauseOnHover: true,
+    responsive: [
+    {
+      breakpoint: 1200,
+      settings:{
+        slidesToShow: 4
+      }
+    },
+    {
+      breakpoint: 768,
+      settings:{
+        slidesToShow: 3,
+        dots: false
+      }
+    },
+    {
+      breakpoint: 600,
+      settings:{
+        slidesToShow: 2,
+        dots: false
+      }
+    },
+    ]
   };
   const [isBusy, setIsBusy] = useState(true);
   const [manufacturers, setManufacturers] = useState([]);
