@@ -8,8 +8,11 @@ import LoadingSpinner from "./LoadingSpinner";
 const ProductsByCategoryPage = () => {
   let { category } = useParams();
   const [data, setData] = useState([]);
+  const [dataToDisplay, setDataToDisplay] = useState([]);
   const [isBusy, setIsBusy] = useState(true);
   const [fetchError, setFetchError] = useState();
+  const [sortBy, setSortBy] = useState("name");
+  const [searchFilter, setSearchFilter] = useState("");
 
   useEffect(() => {
     async function fetchData() {
@@ -37,13 +40,56 @@ const ProductsByCategoryPage = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    let filteredData = data.filter(
+      (item) =>
+        item.productCategory
+          .toLowerCase()
+          .includes(searchFilter.toLowerCase()) ||
+        item.productManufacturer
+          .toLowerCase()
+          .includes(searchFilter.toLowerCase()) ||
+        item.productName.toLowerCase().includes(searchFilter.toLowerCase()) ||
+        item.productDescription
+          .toLowerCase()
+          .includes(searchFilter.toLowerCase())
+    );
+    setDataToDisplay(sortProducts(sortBy, filteredData));
+  }, [sortBy, searchFilter, data]);
+
+  const onSortChange = (event) => {
+    const { value } = event.target;
+    setSortBy(value);
+  };
+
+  const sortProducts = (typeOfSort, array) => {
+    switch (typeOfSort) {
+      case "name":
+        return array.sort((a, b) => a.productName.localeCompare(b.productName));
+      case "manufacturer":
+        return array.sort((a, b) =>
+          a.productManufacturer.localeCompare(b.productManufacturer)
+        );
+      case "category":
+        return array.sort((a, b) =>
+          a.productCategory.localeCompare(b.productCategory)
+        );
+      default:
+        return array.sort((a, b) => a.productName.localeCompare(b.productName));
+    }
+  };
+
+  const onSearchFilterChange = (event) => {
+    const { value } = event.target;
+    setSearchFilter(value);
+  };
+
   return (
     <motion.div
       key="productsByCategoryPage"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="page-padding"
     >
       <div id="top" className="top-anchor" />
       {isBusy && !fetchError && <LoadingSpinner/>}
@@ -53,11 +99,54 @@ const ProductsByCategoryPage = () => {
         <div style={{ visibility: "hidden" }}></div>
       )}
       {!isBusy && (
-        <div className="product-list-container">
-          {data.map((item) => {
-            return <Product {...item} />;
-          })}
+        <div>
+          <div className="products-header">
+            <div>PROIZVODI IZ KATEGORIJE: {category}</div>
+            <div className="divider-products-page"></div>
+          </div>
+          <div className="search-and-filter-container">
+            <div>
+              <label htmlFor="sort" className="search-and-filter-padding">Sortiraj po:</label>
+              <select
+                id="sort"
+                name="sort"
+                onChange={onSortChange}
+                value={sortBy}
+              >
+                <option value="name" key="name">
+                  Nazivu
+                </option>
+                <option value="manufacturer" key="manufacturer">
+                  Proizvođaču
+                </option>
+                <option value="category" key="category">
+                  Kategoriji
+                </option>
+              </select>
+            </div>
+            <div>
+              <label htmlFor="naziv" className="search-and-filter-padding">Pretraga:</label>
+              <input
+                style={{ width: "200px" }}
+                value={searchFilter}
+                type="text"
+                id="filter"
+                name="filter"
+                onChange={onSearchFilterChange}
+              ></input>
+            </div>
+          </div>
+          <div className="product-list-container">
+            {dataToDisplay.map((item) => {
+              return <Product {...item} />;
+            })}
+          </div>
         </div>
+        // <div className="product-list-container">
+        //   {data.map((item) => {
+        //     return <Product {...item} />;
+        //   })}
+        // </div>
       )}
     </motion.div>
   );

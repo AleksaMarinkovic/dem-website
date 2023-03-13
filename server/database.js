@@ -29,6 +29,7 @@ const connectDB = async () => {
     productImageUrl: String,
     productAvailability: Boolean,
     productManufacturer: String,
+    productHighlighted: Boolean
   });
   product = mongoose.model("products", productSchema);
 
@@ -221,6 +222,7 @@ const addProduct = async (productToAdd) => {
     productImageUrl: productToAdd.productImageUrl,
     productAvailability: productToAdd.productAvailability,
     productManufacturer: productToAdd.productManufacturer,
+    productHighlighted: productToAdd.productHighlighted
   });
   newProduct.save((err, res) => {
     if (err) {

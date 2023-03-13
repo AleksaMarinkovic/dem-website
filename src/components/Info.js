@@ -103,7 +103,7 @@ const Info = () => {
               ></input>
             </div>
             <div className="form-field">
-              <label htmlFor="naslov">Naslov:</label>
+              <label htmlFor="naslov">Naslov (obavezno polje):</label>
               <input
                 type="text"
                 required="required"
@@ -138,8 +138,8 @@ const Info = () => {
           <div className="contactpage-vertical-text-container">
             <div className="contactpage-vertical-text-div">
               <div className="contactpage-text-header">Informacije</div>
-              <div className="contact-text">Rakovačka 32, Novi Sad, Srbija</div>
-              <div className="contact-text">
+              <div className="contact-text" style={{marginBottom:"2rem"}}>Rakovačka 32, Novi Sad, Srbija</div>
+              <div className="contact-text" style={{ marginBottom: "2rem" }}>
                 <div>
                   Kontakt telefoni:
                   <ul>
@@ -151,10 +151,41 @@ const Info = () => {
                   </ul>
                 </div>
               </div>
-              <div className="contact-text">EMAIL: office@dem.rs</div>
-              <div className="contact-text">PRODAJA: prodaja@dem.rs</div>
               <div className="contact-text">
-                TEHNIČKA PODRŠKA: servis@dem.rs
+                EMAIL:{" "}
+                <a
+                  href="mailto:office@dem.rs"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="contact-text-hyperlink"
+                  title="office@dem.rs"
+                >
+                  office@dem.rs
+                </a>
+              </div>
+              <div className="contact-text">
+                PRODAJA:{" "}
+                <a
+                  href="mailto:prodaja@dem.rs"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="contact-text-hyperlink"
+                  title="prodaja@dem.rs"
+                >
+                  prodaja@dem.rs
+                </a>
+              </div>
+              <div className="contact-text">
+                TEHNIČKA PODRŠKA:{" "}
+                <a
+                  href="mailto:servis@dem.rs"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="contact-text-hyperlink"
+                  title="servis@dem.rs"
+                >
+                  servis@dem.rs
+                </a>
               </div>
             </div>
           </div>
@@ -175,81 +206,3 @@ const Info = () => {
 };
 
 export default Info;
-
-/*
-<div id="top" className="top-anchor" />
-      <div className="info-container">
-        <div className="info-header">KONTAKTIRAJTE NAS</div>
-      </div>
-      <div className="info-image-stripe">
-        <img
-          src={require("../images/dem-stripe.webp")}
-          alt="KONTAKTIRAJTE NAS"
-        ></img>
-      </div>
-      <div className="info-horizontal-container">
-        <div className="info-vertical-form-container">
-          <div className="form-header">Pošaljite nam poruku</div>
-          <form onSubmit={onSendMailClick}>
-            <div className="form-field">
-              <label htmlFor="imePrezime">
-                Ime i prezime (obavezno polje):
-              </label>
-              <input type="text" required="required" id="imePrezime" name="imePrezime" value={contactInfo.imePrezime} onChange={onContactFormInputChange}></input>
-            </div>
-            <div className="form-field">
-              <label htmlFor="email">Email adresa (obavezno polje):</label>
-              <input type="email" required="required" id="email" name="email" value={contactInfo.email} onChange={onContactFormInputChange}></input>
-            </div>
-            <div className="form-field">
-              <label htmlFor="naslov">Naslov:</label>
-              <input type="text" required="required" id="naslov" name="naslov" value={contactInfo.naslov} onChange={onContactFormInputChange}></input>
-            </div>
-            <div className="form-field">
-              <label htmlFor="tekst">Tekst:</label>
-              <textarea id="tekst" style={{ resize: "none" }}  name="tekst" value={contactInfo.tekst} onChange={onContactFormInputChange}></textarea>
-            </div>
-              <button className="form-button" type="submit">
-                POŠALJI
-              </button>
-          </form>
-              {successMessageContact && <div className="success-message">{successMessageContact}</div>}
-              {errorMessageContact && <div className="error-message">{errorMessageContact}</div>}
-        </div>
-        <div className="info-vertical-text-container">
-          <div className="contact-header">Informacije</div>
-          <div className="contact-field">Rakovačka 32, Novi Sad, Srbija</div>
-          <div className="contact-field">
-            <div>
-              Kontakt telefoni:
-              <ul>
-                <li>+381 21 6300 101</li>
-                <li>+381 21 6395 339</li>
-                <li>+381 21 6403 790</li>
-                <li>+381 21 6497 514</li>
-                <li>+381 63 545 402</li>
-              </ul>
-            </div>
-          </div>
-          <div className="contact-field">EMAIL: office@dem.rs</div>
-          <div className="contact-field">PRODAJA: prodaja@dem.rs</div>
-          <div className="contact-field">TEHNIČKA PODRŠKA: servis@dem.rs</div>
-        </div>
-        <div class="break"></div>
-        <div className="info-container">
-          <div className="map-header">Gde se nalazimo?</div>
-          <iframe
-            title="Dem d.o.o."
-            src="https://www.google.com/maps/d/embed?mid=1vtXF5hYFPRU41HRi76OjtWe97vk15FM&ehbc=2E312F"
-            width="640"
-            height="480"
-            style={{
-              width: "70vw",
-              height: "70vh",
-              marginTop: "5vh",
-              border: "1px solid black",
-            }}
-          ></iframe>
-        </div>
-      </div>
-*/

@@ -7,8 +7,10 @@ const ProductForm = ({
   valueDescription,
   valueManufacturer,
   valueAvailability,
+  valueHighlighted,
   onFormInputChange,
   onFormInputChangeCheckbox,
+  onFormInputChangeCheckboxHighlighted,
   fileChangeHandler,
   buttonText,
   categories,
@@ -107,6 +109,18 @@ const ProductForm = ({
             name="productAvailability"
             type="checkbox"
             id="dostupnost"
+          ></input>
+        </div>
+        <div className="form-availability-horizontal">
+          <label className="form-text" htmlFor="istaknutost">
+            Istaknutost:
+          </label>
+          <input
+            checked={valueHighlighted}
+            onClick={onFormInputChangeCheckboxHighlighted}
+            name="productHighlighted"
+            type="checkbox"
+            id="istaknutost"
           ></input>
         </div>
         <input

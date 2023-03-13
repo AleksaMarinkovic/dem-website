@@ -366,6 +366,7 @@ app.post("/addProduct", upload.single("image"), (req, res) => {
       productName: req.body.productName,
       productDescription: req.body.productDescription,
       productAvailability: req.body.productAvailability,
+      productHighlighted: req.body.productHighlighted,
       productCategory: req.body.productCategory,
       productManufacturer: req.body.productManufacturer,
       productImageUrl: req.file.path,
@@ -492,6 +493,7 @@ app.post("/updateProductWithId", upload.single("image"), (req, res) => {
         productDescription: req.body.productDescription,
         productAvailability: req.body.productAvailability,
         productCategory: req.body.productCategory,
+        productHighlighted: req.body.productHighlighted,
         productManufacturer: req.body.productManufacturer,
         productImageUrl: req.file.path,
       });
@@ -500,6 +502,7 @@ app.post("/updateProductWithId", upload.single("image"), (req, res) => {
         productName: req.body.productName,
         productDescription: req.body.productDescription,
         productAvailability: req.body.productAvailability,
+        productHighlighted: req.body.productHighlighted,
         productManufacturer: req.body.productManufacturer,
         productCategory: req.body.productCategory,
       });
@@ -846,7 +849,7 @@ app.post("/updateWithIdManufacturer", upload.single("image"), (req, res) => {
   }
 });
 
-app.listen(port, "localhost", () => {
+app.listen(port, "0.0.0.0", () => {
   console.log("server start on port " + port);
   console.log(process.env.REACT_APP_EMAIL);
   console.log(process.env.REACT_APP_PASSWORD);

@@ -30,6 +30,12 @@
 .product-list-container{
     display: grid;
     gap:5rem;
-    grid-template-columns: repeat(auto-fit, minmax(min($column-width-size, 100%), 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min($column-width-size, 100%), 0.5fr));
     padding: 10vh 15vw 10vh 15vw;
+}
+
+@media only screen and (max-width: 1200px) {
+    .product-list-container{
+        grid-template-columns: repeat(auto-fit, minmax(min($column-width-size, 100%), 1fr));
+    }
 }

@@ -6,7 +6,7 @@
     justify-content: start;
     align-items: center;
     gap: $font-size-large;
-    width: 90%;
+    width: 80%;
 }
 
 .contactpage-header {
@@ -37,21 +37,24 @@
     display: flex;
     flex-flow: column wrap;
     font-size: $font-size-medium;
-    padding: $padding-medium $padding-xlarge $padding-medium $padding-xlarge;
-    align-items: flex-start;
-    justify-content: center;
-    border: 1px solid lighten($dark-grey, 3);
-    border-radius: 10px;
+    align-items: center;
+    justify-content: space-evenly;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border: 1px solid $light-grey;
+    border-radius: 15px;
     background-color: lighten($off-white, 2);
-    flex-basis: 800px;
+    flex-basis: 700px;
     flex-grow: 1;
     gap: 1rem;
 }
 
 .form-header {
     margin-bottom: 5rem;
+    margin-top: 2rem;
     font-size: $font-size-large;
     color: $dem-blue;
+    font-weight: bold;
 }
 
 .form-field {
@@ -69,6 +72,11 @@
     width: 100%;
 }
 
+.form-field>input:focus {
+    background-color: lighten($light-grey,10);
+    outline: 1px solid $dark-grey;
+}
+
 .form-field>textarea {
     border: none;
     margin-bottom: 2rem;
@@ -78,14 +86,24 @@
     min-height: 30vh;
 }
 
+.form-field>textarea:focus {
+    background-color: lighten($light-grey,10);
+    outline: 1px solid $dark-grey;
+}
+
 .form-button {
-    border: 1px solid $light-grey;
-    border-radius: 5px;
-    background-color: $light-grey;
+    color: $off-white;
+    border: 2px solid darken($dem-orange, 7);
+    border-radius: 10px;
+    background-color: $dem-orange;
+    padding: 10px;
+    transition: 0.3s ease;
+    margin-bottom: 2rem;
 }
 
 .form-button:hover {
-    background-color: darken($light-grey, 10);
+    background-color: transparent;
+    color: $dem-orange;
 }
 
 .contactpage-vertical-text-container {
@@ -107,6 +125,7 @@
 }
 
 .contactpage-text-header {
+    margin-bottom: 2rem;
     color: $dem-blue;
     font-weight: bold;
     font-size: $font-size-large;
@@ -114,6 +133,17 @@
 
 .contact-text {
     color: darken($dark-grey, 10);
+}
+
+.contact-text-hyperlink{
+    color: $dem-blue;
+    text-decoration: none;
+    transition: 0.2s ease;
+}
+
+.contact-text-hyperlink:hover{
+    font-weight: bold;
+    color: $dem-blue;
 }
 
 .contactpage-map-container{
@@ -148,4 +178,7 @@
     font-size: $font-size-large;
     color: red;
     max-width: 80%;
+}
+
+@media only screen and (max-width: 1200px) {
 }

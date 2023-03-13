@@ -24,6 +24,7 @@ const AdminPage = () => {
   const productToAddDefault = {
     productName: "",
     productDescription: "",
+    productHighlighted: false,
     productAvailability: true,
     productManufacturer: "",
     productCategory: "",
@@ -97,6 +98,12 @@ const AdminPage = () => {
           },
           {
             id: "col5",
+            Header: "Istaknut",
+            accessor: (row) =>
+              row.productHighlighted ? "Istaknut" : "Nije istaknut",
+          },
+          {
+            id: "col6",
             Header: "Naslovna slika",
             Cell: (tableProps) => (
               <img
@@ -245,7 +252,7 @@ const AdminPage = () => {
     setChangeError();
     document
       .getElementById("izmenaProduct")
-      .scrollIntoView({ behavior: "smooth", block: "center" });
+      .scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   // When a product image is uploaded in add product form, sets state to uploaded image
@@ -271,6 +278,14 @@ const AdminPage = () => {
     });
   };
 
+  const onAddFormInputChangeCheckboxHighlighted = (event) => {
+    const { checked } = event.target;
+    setProductToAdd({
+      ...productToAdd,
+      productHighlighted: checked,
+    });
+  };
+
   // Triggers when submit is pressed on add product form
   const onAddProductClick = (e) => {
     e.preventDefault();
@@ -282,6 +297,7 @@ const AdminPage = () => {
     data.append("productAvailability", productToAdd.productAvailability);
     data.append("productDescription", productToAdd.productDescription);
     data.append("productManufacturer", productToAdd.productManufacturer);
+    data.append("productHighlighted", productToAdd.productHighlighted);
 
     Axios.post("/addProduct", data)
       .then((response) => {
@@ -332,6 +348,14 @@ const AdminPage = () => {
     });
   };
 
+  const onChangeFormInputChangeCheckboxHighlighted = (event) => {
+    const { checked } = event.target;
+    setProductToChange({
+      ...productToChange,
+      productHighlighted: checked,
+    });
+  };
+
   // Triggers when submit is pressed on change product form
   const onChangeProductClick = (e) => {
     e.preventDefault();
@@ -345,6 +369,7 @@ const AdminPage = () => {
     data.append("productAvailability", productToChange.productAvailability);
     data.append("productDescription", productToChange.productDescription);
     data.append("productManufacturer", productToChange.productManufacturer);
+    data.append("productHighlighted", productToChange.productHighlighted);
 
     Axios.post("/updateProductWithId", data)
       .then((response) => {
@@ -430,11 +455,13 @@ const AdminPage = () => {
                       valueCategory={productToChange.productCategory}
                       valueDescription={productToChange.productDescription}
                       valueAvailability={productToChange.productAvailability}
+                      valueHighlighted={productToChange.productHighlighted}
                       valueManufacturer={productToChange.productManufacturer}
                       onFormInputChange={onChangeFormInputChange}
                       onFormInputChangeCheckbox={
                         onChangeFormInputChangeCheckbox
                       }
+                      onFormInputChangeCheckboxHighlighted = {onChangeFormInputChangeCheckboxHighlighted}
                       buttonText="IZMENI"
                       fileChangeHandler={changeFileChangeHandler}
                       categories={categories}
@@ -472,9 +499,11 @@ const AdminPage = () => {
                   valueCategory={productToAdd.productCategory}
                   valueDescription={productToAdd.productDescription}
                   valueAvailability={productToAdd.productAvailability}
+                  valueHighlighted={productToAdd.productHighlighted}
                   valueManufacturer={productToAdd.productManufacturer}
                   onFormInputChange={onAddFormInputChange}
                   onFormInputChangeCheckbox={onAddFormInputChangeCheckbox}
+                  onFormInputChangeCheckboxHighlighted = {onAddFormInputChangeCheckboxHighlighted}
                   buttonText="DODAJ"
                   fileChangeHandler={addFileChangeHandler}
                   categories={categories}

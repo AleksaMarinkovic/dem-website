@@ -9,6 +9,7 @@ const Header = () => {
   const [fetchError, setFetchError] = useState(null);
   const [categories, setCategories] = useState([]);
   const [isBusy, setIsBusy] = useState(true);
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -63,6 +64,7 @@ const Header = () => {
   return (
     <Navbar
       collapseOnSelect
+      expanded={expanded}
       expand="xl"
       sticky="top"
       className={`${
@@ -82,10 +84,10 @@ const Header = () => {
           alt="HOME"
         ></img>
       </HashLink>
-      <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+      <Navbar.Toggle aria-controls="responsive-navbar-nav" onClick={() => setExpanded(expanded ? false : "expanded")} />
       <Navbar.Collapse id="responsive-navbar-nav">
-        <Nav className="me-auto">
-          <NavHashLink smooth to={"/#top"} className="header-item-container">
+        <Nav className="ms-auto">
+          <NavHashLink smooth to={"/#top"} className="header-item-container" onClick={() => setExpanded(false)}>
             NASLOVNA
           </NavHashLink>
           {isBusy && !fetchError && (
@@ -111,6 +113,7 @@ const Header = () => {
               <NavDropdown.Item
                 className="header-item-container-collapsable"
                 href="/#/products#top"
+                onClick={() => setExpanded(false)}
               >
                 SVI PROIZVODI
               </NavDropdown.Item>
@@ -127,6 +130,7 @@ const Header = () => {
                   <NavDropdown.Item
                     href={url}
                     className="header-item-container-collapsable"
+                    onClick={() => setExpanded(false)}
                   >
                     {category.categoryName}
                   </NavDropdown.Item>
@@ -136,18 +140,20 @@ const Header = () => {
           )}
           <NavHashLink
             smooth
-            to={"/info#top"}
-            className="header-item-container"
-          >
-            KONTAKT
-          </NavHashLink>
-          <NavHashLink
-            smooth
             to={"/service#top"}
             className="header-item-container"
+            onClick={() => setExpanded(false)}
           >
             SERVIS
           </NavHashLink>
+          <NavHashLink
+            smooth
+            to={"/info#top"}
+            className="header-contact-button-container"
+            onClick={() => setExpanded(false)}
+          >
+            KONTAKT
+          </NavHashLink>          
         </Nav>
       </Navbar.Collapse>
     </Navbar>

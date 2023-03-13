@@ -32,7 +32,7 @@
 }
 
 .footer-icon {
-    width: $font-size-xxlarge;
+    width: $font-size-xlarge;
     height: auto;
 }
 
@@ -54,11 +54,11 @@
     flex-grow: 1;
 }
 
-.footer-info-text{
+.footer-info-text {
     width: 100%;
 }
 
-.footer-link-wrapper{
+.footer-link-wrapper {
     width: 100%;
 }
 
@@ -87,12 +87,12 @@
     flex-flow: row;
     justify-content: center;
     align-items: center;
-    gap:1rem;
+    gap: 1rem;
     width: 100%;
 }
 
 .footer-logo-image-certificate {
-    width: $font-size-xxlarge;
+    width: $font-size-xlarge;
     height: auto;
 }
 
@@ -104,7 +104,7 @@
     padding: 0 $padding-xlarge 0 $padding-xlarge;
     justify-content: center;
     align-items: center;
-    font-size: $font-size-medium;
+    font-size: $font-size-small;
     min-height: $footer-section-two-height;
     user-select: none;
     -webkit-user-drag: none;
@@ -113,10 +113,19 @@
     -ms-user-select: none;
 }
 
-@media (max-width:600px), (orientation: portrait), (pointer: coarse), (pointer: none) {
+@media (max-width:600px),
+(orientation: portrait),
+(pointer: coarse),
+(pointer: none) {
     .footer-section-one {
-      flex-flow: column;
-      padding: $font-size-medium $font-size-large;
-      gap: $font-size-xxlarge;
+        flex-flow: column;
+        padding: $font-size-medium $font-size-large;
+        gap: $font-size-large;
     }
+
+    .horizontal-individual-certificate-container {
+        justify-content: flex-start;
+        align-items: center;
+    }
+
 }
