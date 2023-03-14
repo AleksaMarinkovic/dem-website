@@ -108,11 +108,11 @@
     justify-content: center;
     text-decoration: none !important;
     color: $off-white;
-    background-color: $dem-orange;
+    background-color: rgba(lighten($dem-orange, 5), 0.8);
     border-radius: 15px;
     padding: 10px;
     margin-left: $margin-smallest-sides;
-    border: 2px solid darken($dem-orange, 7);
+    border: 2px solid rgba(darken($dem-orange, 7), 0.8);
     transition: background-color .3s cubic-bezier(0.46, 0.03, 0.52, 0.96);
 }
 
@@ -190,6 +190,7 @@
         color: darken($dark-grey, 10);
         background-color: transparent;
         border-radius: 0px;
+        border: 0;
         padding: 0px;
     }
 }

@@ -174,7 +174,8 @@ const ProductPage = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-    >
+    > 
+      <div id="top" className="top-anchor" />
       {!fetchedProduct && <LoadingSpinner />}
       {fetchErrorProduct ? (
         <div className="error-message">{fetchErrorProduct}</div>
@@ -241,7 +242,7 @@ const ProductPage = () => {
                               </div>
                               <NavHashLink
                                 smooth
-                                to={"/products/" + item._id}
+                                to={"/products/" + item._id + "/#top"}
                                 title="Kliknite da otvorite stranicu proizvoda"
                                 className="carousel-products-image-wrapper"
                               >

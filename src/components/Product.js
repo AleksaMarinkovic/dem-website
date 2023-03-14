@@ -10,7 +10,7 @@ const Product = (props) => {
   const navigate = useNavigate();
 
   const onClickProduct = () => {
-    navigate("/products/" + props._id);
+    navigate("/products/" + props._id + "/#top");
   };
 
   return (
@@ -41,12 +41,12 @@ const Product = (props) => {
             </div>
           </div>
         </div>
-        <div className='divider'></div>
+        <div className="divider"></div>
         <div className="horizontal-product-text-container">
           <NavHashLink
             className="product-big-link"
             smooth
-            to={"/products/" + props._id}
+            to={"/products/" + props._id + "/#top"}
             title={"Stranica za proizvod: " + props.productName}
           >
             <div className="svg-container">
@@ -54,11 +54,14 @@ const Product = (props) => {
             </div>
           </NavHashLink>
         </div>
-        <div className="horizontal-product-text-container" style={{paddingTop:'0'}}>
+        <div
+          className="horizontal-product-text-container"
+          style={{ paddingTop: "0" }}
+        >
           <NavHashLink
             className="product-small-link-alt"
             smooth
-            to={"/products/" + props._id}
+            to={"/products/" + props._id + "/#top"}
             title="Detaljnije"
           >
             <div className="svg-container">

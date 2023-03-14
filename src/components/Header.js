@@ -88,7 +88,7 @@ const Header = () => {
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="ms-auto">
           <NavHashLink smooth to={"/#top"} className="header-item-container" onClick={() => setExpanded(false)}>
-            NASLOVNA
+            POČETNA
           </NavHashLink>
           {isBusy && !fetchError && (
             <div className="header-item-container" disabled>
@@ -98,7 +98,7 @@ const Header = () => {
           {fetchError && (
             <NavHashLink
               smooth
-              to={"/products#top"}
+              to={"/products/#top"}
               className="header-item-container"
             >
               PROIZVODI
@@ -112,7 +112,7 @@ const Header = () => {
             >
               <NavDropdown.Item
                 className="header-item-container-collapsable"
-                href="/#/products#top"
+                href="/#/products/#top"
                 onClick={() => setExpanded(false)}
               >
                 SVI PROIZVODI
@@ -125,7 +125,7 @@ const Header = () => {
                 PO KATEGORIJAMA:
               </NavDropdown.Item>
               {categories.map((category) => {
-                const url = "/#/products/categories/" + category.categoryName;
+                const url = "/#/products/categories/" + category.categoryName + "/#top";
                 return (
                   <NavDropdown.Item
                     href={url}
@@ -140,7 +140,7 @@ const Header = () => {
           )}
           <NavHashLink
             smooth
-            to={"/service#top"}
+            to={"/service/#top"}
             className="header-item-container"
             onClick={() => setExpanded(false)}
           >
@@ -148,7 +148,7 @@ const Header = () => {
           </NavHashLink>
           <NavHashLink
             smooth
-            to={"/info#top"}
+            to={"/info/#top"}
             className="header-contact-button-container"
             onClick={() => setExpanded(false)}
           >
